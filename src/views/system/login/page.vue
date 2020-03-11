@@ -1,6 +1,6 @@
 <template>
   <div class="page-login">
-    <!-- <div class="page-login--layer page-login--layer-area">
+    <div class="page-login--layer page-login--layer-area">
       <ul class="circles">
         <li v-for="n in 10" :key="n"></li>
       </ul>
@@ -9,7 +9,7 @@
       class="page-login--layer page-login--layer-time"
       flex="main:center cross:center">
       {{time}}
-    </div> -->
+    </div>
     <div class="page-login--layer">
       <div
         class="page-login--content"
@@ -136,9 +136,9 @@ export default {
         password: [
           { required: true, message: '请输入密码', trigger: 'blur' }
         ],
-        // code: [
-        //   { required: true, message: '请输入验证码', trigger: 'blur' }
-        // ]
+        code: [
+          { required: true, message: '请输入验证码', trigger: 'blur' }
+        ]
       },
       mobileLogin: {
         mobile: '13112345678',
@@ -201,15 +201,15 @@ export default {
      * 用户密码登录
      */
     submit () {
-      // if (validatenull(this.tenant)) {
-      //   this.$message({
-      //     title: '警告',
-      //     message: '请选择租户',
-      //     type: 'warning',
-      //     duration: 2000
-      //   })
-      //   return
-      // }
+      if (validatenull(this.tenant)) {
+        this.$message({
+          title: '警告',
+          message: '请选择租户',
+          type: 'warning',
+          duration: 2000
+        })
+        return
+      }
       this.formLogin.tenantId = this.tenant
       this.$refs.loginForm.validate((valid) => {
         if (valid) {
