@@ -184,6 +184,70 @@ const frameIn = [
     ]
   },
   {
+    path: '/user',
+    component: layoutHeaderAside,
+    meta: {
+      auth: true,
+      title: '用户管理'
+    },
+    children: [
+      {
+        path: 'User',
+        name: 'User',
+        meta: {
+          auth: true,
+          title: '用户'
+        },
+        component: () => import('@/views/syplatform/user/User')
+      },
+      {
+        path: 'UserGroup',
+        name: 'UserGroup',
+        meta: {
+          auth: true,
+          title: '用户组'
+        },
+        component: () => import('@/views/syplatform/user/UserGroup')
+      },
+      {
+        path: 'RelationGroup',
+        name: 'RelationGroup',
+        meta: {
+          auth: true,
+          title: '用户/组关系'
+        },
+        component: () => import('@/views/syplatform/user/RelationGroup')
+      },
+      {
+        path: 'AddUser',
+        name: 'AddUser',
+        meta: {
+          auth: true,
+          title: '批量添加用户'
+        },
+        component: () => import('@/views/syplatform/user/AddUser')
+      },
+      {
+        path: 'AddUserGroup',
+        name: 'AddUserGroup',
+        meta: {
+          auth: true,
+          title: '批量添加用户组'
+        },
+        component: () => import('@/views/syplatform/user/User')
+      },
+      {
+        path: 'BatchMaintain',
+        name: 'BatchMaintain',
+        meta: {
+          auth: true,
+          title: '批量用户与用户组关系维护'
+        },
+        component: () => import('@/views/syplatform/user/BatchMaintain')
+      }
+    ]
+  },
+  {
     path: '/sy-admin',
     component: layoutHeaderAside,
     meta: {

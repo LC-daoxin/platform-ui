@@ -3,6 +3,7 @@ import Vue from 'vue'
 import App from './App'
 // 核心插件
 import core from '@/plugin/core'
+import '@/plugin/axios/tempAxios'
 // store
 import store from '@/store/index'
 // 多国语

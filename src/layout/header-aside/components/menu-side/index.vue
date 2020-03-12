@@ -37,12 +37,58 @@ export default {
     return {
       active: '',
       asideHeight: 300,
-      BS: null
+      BS: null,
+      aside: [
+        {
+          icon: '',
+          iconSvg: '',
+          title: '用户管理',
+          path: 'user/User',
+          children: [
+            {
+              icon: '',
+              iconSvg: '',
+              title: '用户',
+              path: 'user/User'
+            },{
+              icon: '',
+              iconSvg: '',
+              title: '用户组',
+              path: 'user/UserGroup'
+            },{
+              icon: '',
+              iconSvg: '',
+              title: '用户/组关系',
+              path: 'user/RelationGroup'
+            },{
+              icon: '',
+              iconSvg: '',
+              title: '批量添加用户',
+              path: 'user/AddUser'
+            },{
+              icon: '',
+              iconSvg: '',
+              title: '批量添加用户组',
+              path: 'user/AddUserGroup'
+            },{
+              icon: '',
+              iconSvg: '',
+              title: '用户与用户组关系维护',
+              path: 'user/RelationGroup'
+            },{
+              icon: '',
+              iconSvg: '',
+              title: '批量用户与用户组关系维护',
+              path: 'user/BatchMaintain'
+            }
+          ]
+        }
+      ]
     }
   },
   computed: {
     ...mapState('sysStore/menu', [
-      'aside',
+      // 'aside',
       'asideCollapse'
     ])
   },
