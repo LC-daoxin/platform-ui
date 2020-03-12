@@ -293,6 +293,15 @@ const frameIn = [
     },
     children: [
       {
+        path: 'process-catalog',
+        name: 'process-catalog',
+        meta: {
+          auth: true,
+          title: '流程目录'
+        },
+        component: () => import('@/views/ProcessCatalog')
+      },
+      {
         path: 'process-admin',
         name: 'process-admin',
         meta: {
