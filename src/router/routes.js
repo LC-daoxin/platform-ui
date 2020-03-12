@@ -219,6 +219,25 @@ const frameIn = [
         component: () => import('@/views/syplatform/service/sentinel')
       }
     ]
+  },
+  {
+    path: '/work-flow',
+    component: layoutHeaderAside,
+    meta: {
+      auth: true,
+      title: '工作流'
+    },
+    children: [
+      {
+        path: 'process-admin',
+        name: 'process-admin',
+        meta: {
+          auth: true,
+          title: '流程管理'
+        },
+        component: () => import('@/views/ProcessManagement')
+      }
+    ]
   }
 ]
 
