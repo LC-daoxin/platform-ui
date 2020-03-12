@@ -1,5 +1,5 @@
 <template>
-  <sy-container>
+  <div class="dashboard-editor-container">
     <div class="user">
       <!-- 控制栏 start -->
       <div class="bar">
@@ -152,7 +152,7 @@
       />
       <!-- 添加用户-弹窗 -->
     </div>
-  </sy-container>
+  </div>
 </template>
 
 <script>

@@ -248,6 +248,88 @@ const frameIn = [
     ]
   },
   {
+    path: '/permission',
+    component: layoutHeaderAside,
+    meta: {
+      auth: true,
+      title: '权限管理'
+    },
+    children: [
+      {
+        path: 'RoleMaintenance',
+        name: 'RoleMaintenance',
+        meta: {
+          auth: true,
+          title: '角色维护'
+        },
+        component: () => import('@/views/syplatform/permission/RoleMaintenance')
+      },
+      {
+        path: 'UserPermission',
+        name: 'UserPermission',
+        meta: {
+          auth: true,
+          title: '用户授权'
+        },
+        component: () => import('@/views/syplatform/permission/UserPermission')
+      },
+      {
+        path: 'BatchImportRole',
+        name: 'BatchImportRole',
+        meta: {
+          auth: true,
+          title: '批量角色导入/导出'
+        },
+        component: () => import('@/views/syplatform/permission/BatchImportRole')
+      },
+      {
+        path: 'BatchUserPermission',
+        name: 'BatchUserPermission',
+        meta: {
+          auth: true,
+          title: '批量用户授权'
+        },
+        component: () => import('@/views/syplatform/permission/BatchUserPermission')
+      },
+      {
+        path: 'BatchGroupPermission',
+        name: 'BatchGroupPermission',
+        meta: {
+          auth: true,
+          title: '批量用户组授权'
+        },
+        component: () => import('@/views/syplatform/permission/BatchGroupPermission')
+      },
+      {
+        path: 'BatchRoleMaintain',
+        name: 'BatchRoleMaintain',
+        meta: {
+          auth: true,
+          title: '批量角色维护'
+        },
+        component: () => import('@/views/syplatform/permission/BatchRoleMaintain')
+      },
+      {
+        path: 'BatchQuery',
+        name: 'BatchQuery',
+        meta: {
+          auth: true,
+          title: '批量用户/用户组授权查询'
+        },
+        component: () => import('@/views/syplatform/permission/BatchQuery')
+      },
+      {
+        path: 'Report',
+        name: 'Report',
+        meta: {
+          auth: true,
+          title: '报表统计'
+        },
+        component: () => import('@/views/syplatform/permission/Report')
+      }
+    ]
+  },
+  {
     path: '/sy-admin',
     component: layoutHeaderAside,
     meta: {

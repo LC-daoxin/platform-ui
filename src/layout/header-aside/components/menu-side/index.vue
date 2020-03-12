@@ -88,6 +88,68 @@ export default {
               path: '/user/BatchMaintain'
             }
           ]
+        },
+        {
+          icon: '',
+          iconSvg: '',
+          title: '权限管理',
+          path: '/permission',
+          children: [
+            {
+              icon: '',
+              iconSvg: '',
+              title: '角色维护',
+              path: '/permission/RoleMaintenance'
+            },
+            {
+              icon: '',
+              iconSvg: '',
+              title: '用户授权',
+              path: '/permission/UserPermission'
+            },
+            {
+              icon: '',
+              iconSvg: '',
+              title: '批量角色导入/导出',
+              path: '/permission/BatchImportRole'
+            },
+            {
+              icon: '',
+              iconSvg: '',
+              title: '批量用户授权',
+              path: '/permission/BatchUserPermission'
+            },
+            {
+              icon: '',
+              iconSvg: '',
+              title: '批量用户组授权',
+              path: '/permission/BatchGroupPermission'
+            },
+            {
+              icon: '',
+              iconSvg: '',
+              title: '报表统计',
+              path: '/permission/Report'
+            },
+            {
+              icon: '',
+              iconSvg: '',
+              title: '用户授权管理',
+              path: '/permission/UserPermission'
+            },
+            {
+              icon: '',
+              iconSvg: '',
+              title: '批量角色维护',
+              path: '/permission/BatchRoleMaintain'
+            },
+            {
+              icon: '',
+              iconSvg: '',
+              title: '批量用户/用户组授权查询',
+              path: '/permission/BatchQuery'
+            }
+          ]
         }
       ]
     }
