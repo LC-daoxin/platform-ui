@@ -27,11 +27,11 @@
             <el-button size="mini" type="primary" plain>点击上传</el-button>
           </el-upload>
           <el-row class="btnBox" type="flex" justify="center">
-            <el-button size="mini" type="primary" :loading="loading.btn1" @click="submitExport()">导出用户信息</el-button>
-            <el-button size="mini" type="primary" :loading="loading.btn2" @click="batchExportGroupUsers()">导出用户组下用户信息</el-button>
+            <el-button size="mini" type="primary" :loading="loading.btn1" @click="submitExport('1')">用户角色清单</el-button>
+            <el-button size="mini" type="primary" :loading="loading.btn2" @click="submitExport('2')">用户组角色清单</el-button>
           </el-row>
           <el-row class="downloadBox" type="flex" justify="center">
-            <el-tag size="small">导出用户信息模版下载</el-tag>
+            <el-tag size="small">用户角色清单导出模版下载</el-tag>
           </el-row>
         </div>
       </div>
@@ -40,7 +40,7 @@
 </template>
 
 <script>
-import GroupTree from './components/GroupTree'
+import GroupTree from '../user/components/GroupTree'
 export default {
   name: 'add-user',
   components: {
@@ -53,7 +53,8 @@ export default {
       loading: {
         btn1: false, // 导出用户信息 加载
         btn2: false // 导出用户组下用户 加载
-      }
+      },
+      Type: '' // 类型 1为 用户角色清单 2为用户组角色清单
     }
   },
   methods: {
@@ -75,23 +76,38 @@ export default {
     exportFile (param) {
       let fd = new FormData()
       fd.append('file', param.file)
-      this.batchExportUserUnderGroup(fd) // 导出用户信息
+      switch (this.Type) {
+        case '1':
+          this.batchExportUserRole(fd, param) // 用户角色清单
+          break
+        case '2':
+          if (this.currentGroupID === '') {
+            this.$message({
+              type: 'warning',
+              message: '请选择用户组，可多选！'
+            })
+          } else {
+            this.batchExportUserGroupRole(fd, param) // 用户组角色清单
+          }
+          break
+      }
     },
     // 导出按钮
-    submitExport () {
+    submitExport (type) {
       if (this.$refs.Export.uploadFiles.length === 0) {
         this.$message({
           type: 'warning',
           message: '请选择要导出的文件！'
         })
       } else {
+        this.Type = type
         this.$refs.Export.submit()
       }
     },
-    // 导出用户信息
-    batchExportUserUnderGroup (data) {
+    // 用户角色清单
+    batchExportUserRole (data) {
       this.loading.btn1 = true
-      this.axios.post(`/user/batchExportUserUnderGroup`, data, { responseType: 'blob' }).then((res) => {
+      this.axios_M2.post(`/role/batchExportUserRole`, data, { responseType: 'blob' }).then((res) => {
         this.download(res)
         this.loading.btn1 = false
       }).catch((err) => {
@@ -103,27 +119,20 @@ export default {
         })
       })
     },
-    // 导出用户组下用户信息
-    batchExportGroupUsers () {
-      if (this.currentGroupID === '') {
+    // 用户组角色清单
+    batchExportUserGroupRole (data) {
+      this.loading.btn2 = true
+      this.axios_M2.post(`/role/batchExportUserGroupRole/${this.currentGroupID}`, data, { responseType: 'blob' }).then((res) => {
+        this.download(res)
+        this.loading.btn2 = false
+      }).catch((err) => {
+        console.log(err)
+        this.loading.btn2 = false
         this.$message({
           type: 'warning',
-          message: '请选择要导出的用户组，可多选！'
+          message: '未成功导出用户组下用户信息！'
         })
-      } else {
-        this.loading.btn2 = true
-        this.axios.get(`/group/batchExportGroupUsers/${this.currentGroupID}`, { responseType: 'blob' }).then((res) => {
-          this.download(res)
-          this.loading.btn2 = false
-        }).catch((err) => {
-          console.log(err)
-          this.loading.btn2 = false
-          this.$message({
-            type: 'warning',
-            message: '未成功导出用户组下用户信息！'
-          })
-        })
-      }
+      })
     },
     // 下载文件
     download (res) {
@@ -158,6 +167,12 @@ export default {
       .tree-content {
         margin-top: 5px;
       }
+    }
+  }
+  .user {
+    padding: 12px;
+    .table {
+      margin-top: 5px;
     }
   }
   .fileBox {

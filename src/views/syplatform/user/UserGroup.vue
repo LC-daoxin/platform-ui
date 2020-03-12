@@ -1,148 +1,146 @@
 <template>
-  <sy-container>
-    <el-container class="user-group">
-      <el-aside width="25%" class="page-left">
-        <!-- 用户组Tree -->
-        <group-tree
-          @getGroup="getGroup"
-        />
-        <!-- 用户组Tree -->
-      </el-aside>
-      <el-main>
-        <div class="user">
-          <!-- 控制栏 start -->
-          <div class="bar">
-            <el-row>
-              <el-col :span="12">
-                <el-button class="filter-item" type="primary" size="mini" icon="el-icon-plus" @click="dialogAddGroupVisible = true">添加</el-button>
-                <el-button class="filter-item" type="primary" size="mini" icon="el-icon-minus" @click="deleteRecord(multipleSelection)">删除</el-button>
-                <el-button class="filter-item" type="primary" size="mini" icon="el-icon-plus" @click="openRelevance()">关联</el-button>
-              </el-col>
-              <el-col :span="12">
-                <el-row type="flex" :gutter="5" justify="end">
-                  <el-col :span="9">
-                    <el-input placeholder="搜索..." v-model="searchValue" size="mini"/>
-                  </el-col>
-                  <el-col :span="15">
-                    <el-button class="filter-item" type="primary" size="mini" icon="el-icon-search" @click="search()">查询</el-button>
-                    <el-button class="filter-item" type="primary" size="mini" icon="el-icon-refresh" @click="refresh()">刷新</el-button>
-                  </el-col>
-                </el-row>
-              </el-col>
-            </el-row>
-          </div>
-          <!-- 控制栏 end -->
-          <!-- 用户table start -->
-          <el-table
-            size="mini"
-            :data="tableData"
-            border
-            highlight-current-row
-            @row-dblclick="dblclick"
-            class="table"
-            v-loading="loading"
-            @selection-change="handleSelectionChange"
-          >
-            <el-table-column
-              type="selection"
-              align="center"
-              width="35">
-            </el-table-column>
-            <el-table-column label="名称" min-width="150" align="center" :show-overflow-tooltip="true">
-              <template slot-scope="scope">
-                <template v-if="scope.row.edit">
-                  <el-input v-model="scope.row.NAME" class="edit-input" size="mini" />
-                </template>
-                <span v-else>{{ scope.row.NAME }}</span>
-              </template>
-            </el-table-column>
-            <el-table-column label="组织机构编码" min-width="100" align="center" :show-overflow-tooltip="true">
-              <template slot-scope="scope">
-                <template v-if="scope.row.edit">
-                  <el-input v-model="scope.row.ORGANIZATION" class="edit-input" size="mini" />
-                </template>
-                <span v-else>{{ scope.row.ORGANIZATION }}</span>
-              </template>
-            </el-table-column>
-            <el-table-column label="更新时间" min-width="100" align="center" :show-overflow-tooltip="true">
-              <template slot-scope="scope">
-                <span>{{ scope.row.UPDATEDON }}</span>
-              </template>
-            </el-table-column>
-            <el-table-column label="" min-width="70" align="center">
-              <template slot-scope="scope">
-                <el-button
-                  v-if="scope.row.edit"
-                  type="success"
-                  size="mini"
-                  @click="confirmEdit(scope.row)"
-                >
-                  保存
-                </el-button>
-                <el-button
-                  v-if="scope.row.edit"
-                  type="primary"
-                  plain
-                  size="mini"
-                  @click="cancelEdit(scope.row)"
-                >
-                  取消
-                </el-button>
-                <el-button v-else type="danger" icon="el-icon-delete" size="mini" @click="deleteRecord(scope.row.ID)"></el-button>
-              </template>
-            </el-table-column>
-          </el-table>
-          <!-- 用户table end -->
-          <!-- 分页 -->
-          <el-pagination
-            @size-change="handleSizeChange"
-            @current-change="handleCurrentChange"
-            :current-page="currentPage"
-            :page-sizes="[5, 20, 30, 50]"
-            :page-size="pageSize"
-            layout="total, sizes, prev, pager, next, jumper"
-            :total="totalCount"
-            class="pagination"
-          >
-          </el-pagination>
-          <!-- 分页 -->
-        </div>
-      </el-main>
-      <!-- 添加用户组-弹窗 -->
-      <el-dialog
-        title="添加用户组"
-        :visible.sync="dialogAddGroupVisible"
-        :before-close='handleDialog'
-        width="600px"
-        class="AddGroup"
-      >
-        <el-form ref="AddGroupForm" :model="temp" label-width="70px">
-          <el-form-item label="名称:" :label-width="formLabelWidth">
-            <el-col :span="22">
-              <el-input size="mini" v-model="temp.NAME" autocomplete="off"></el-input>
-            </el-col>
-          </el-form-item>
-          <el-form-item label="组织机构编码:" :label-width="formLabelWidth">
-            <el-col :span="22">
-              <el-input size="mini" v-model="temp.ORGANIZATION" autocomplete="off"></el-input>
-            </el-col>
-          </el-form-item>
-        </el-form>
-        <div slot="footer" class="dialog-footer">
-          <el-button size="mini" @click="handleDialog">取 消</el-button>
-          <el-button size="mini" type="primary" @click="addGroup()">确 定</el-button>
-        </div>
-      </el-dialog>
-      <!-- 添加用户组-弹窗 -->
-      <!-- 用户组关联-弹窗 -->
-      <group-relevance
-        @showDialog="closeDialog"
-        :dialogRelevanceVisible="dialogRelevanceVisible"
-        :currentGroupID="currentGroupID"
+  <el-container class="user-group">
+    <el-aside width="25%" class="page-left">
+      <!-- 用户组Tree -->
+      <group-tree
+        @getGroup="getGroup"
       />
-      <!-- 用户组关联-弹窗 -->
-    </el-container>
-  </sy-container>
+      <!-- 用户组Tree -->
+    </el-aside>
+    <el-main>
+      <div class="user">
+        <!-- 控制栏 start -->
+        <div class="bar">
+          <el-row>
+            <el-col :span="12">
+              <el-button class="filter-item" type="primary" size="mini" icon="el-icon-plus" @click="dialogAddGroupVisible = true">添加</el-button>
+              <el-button class="filter-item" type="primary" size="mini" icon="el-icon-minus" @click="deleteRecord(multipleSelection)">删除</el-button>
+              <el-button class="filter-item" type="primary" size="mini" icon="el-icon-plus" @click="openRelevance()">关联</el-button>
+            </el-col>
+            <el-col :span="12">
+              <el-row type="flex" :gutter="5" justify="end">
+                <el-col :span="9">
+                  <el-input placeholder="搜索..." v-model="searchValue" size="mini"/>
+                </el-col>
+                <el-col :span="15">
+                  <el-button class="filter-item" type="primary" size="mini" icon="el-icon-search" @click="search()">查询</el-button>
+                  <el-button class="filter-item" type="primary" size="mini" icon="el-icon-refresh" @click="refresh()">刷新</el-button>
+                </el-col>
+              </el-row>
+            </el-col>
+          </el-row>
+        </div>
+        <!-- 控制栏 end -->
+        <!-- 用户table start -->
+        <el-table
+          size="mini"
+          :data="tableData"
+          border
+          highlight-current-row
+          @row-dblclick="dblclick"
+          class="table"
+          v-loading="loading"
+          @selection-change="handleSelectionChange"
+        >
+          <el-table-column
+            type="selection"
+            align="center"
+            width="35">
+          </el-table-column>
+          <el-table-column label="名称" min-width="150" align="center" :show-overflow-tooltip="true">
+            <template slot-scope="scope">
+              <template v-if="scope.row.edit">
+                <el-input v-model="scope.row.NAME" class="edit-input" size="mini" />
+              </template>
+              <span v-else>{{ scope.row.NAME }}</span>
+            </template>
+          </el-table-column>
+          <el-table-column label="组织机构编码" min-width="100" align="center" :show-overflow-tooltip="true">
+            <template slot-scope="scope">
+              <template v-if="scope.row.edit">
+                <el-input v-model="scope.row.ORGANIZATION" class="edit-input" size="mini" />
+              </template>
+              <span v-else>{{ scope.row.ORGANIZATION }}</span>
+            </template>
+          </el-table-column>
+          <el-table-column label="更新时间" min-width="100" align="center" :show-overflow-tooltip="true">
+            <template slot-scope="scope">
+              <span>{{ scope.row.UPDATEDON }}</span>
+            </template>
+          </el-table-column>
+          <el-table-column label="" min-width="70" align="center">
+            <template slot-scope="scope">
+              <el-button
+                v-if="scope.row.edit"
+                type="success"
+                size="mini"
+                @click="confirmEdit(scope.row)"
+              >
+                保存
+              </el-button>
+              <el-button
+                v-if="scope.row.edit"
+                type="primary"
+                plain
+                size="mini"
+                @click="cancelEdit(scope.row)"
+              >
+                取消
+              </el-button>
+              <el-button v-else type="danger" icon="el-icon-delete" size="mini" @click="deleteRecord(scope.row.ID)"></el-button>
+            </template>
+          </el-table-column>
+        </el-table>
+        <!-- 用户table end -->
+        <!-- 分页 -->
+        <el-pagination
+          @size-change="handleSizeChange"
+          @current-change="handleCurrentChange"
+          :current-page="currentPage"
+          :page-sizes="[5, 20, 30, 50]"
+          :page-size="pageSize"
+          layout="total, sizes, prev, pager, next, jumper"
+          :total="totalCount"
+          class="pagination"
+        >
+        </el-pagination>
+        <!-- 分页 -->
+      </div>
+    </el-main>
+    <!-- 添加用户组-弹窗 -->
+    <el-dialog
+      title="添加用户组"
+      :visible.sync="dialogAddGroupVisible"
+      :before-close='handleDialog'
+      width="600px"
+      class="AddGroup"
+    >
+      <el-form ref="AddGroupForm" :model="temp" label-width="70px">
+        <el-form-item label="名称:" :label-width="formLabelWidth">
+          <el-col :span="22">
+            <el-input size="mini" v-model="temp.NAME" autocomplete="off"></el-input>
+          </el-col>
+        </el-form-item>
+        <el-form-item label="组织机构编码:" :label-width="formLabelWidth">
+          <el-col :span="22">
+            <el-input size="mini" v-model="temp.ORGANIZATION" autocomplete="off"></el-input>
+          </el-col>
+        </el-form-item>
+      </el-form>
+      <div slot="footer" class="dialog-footer">
+        <el-button size="mini" @click="handleDialog">取 消</el-button>
+        <el-button size="mini" type="primary" @click="addGroup()">确 定</el-button>
+      </div>
+    </el-dialog>
+    <!-- 添加用户组-弹窗 -->
+    <!-- 用户组关联-弹窗 -->
+    <group-relevance
+      @showDialog="closeDialog"
+      :dialogRelevanceVisible="dialogRelevanceVisible"
+      :currentGroupID="currentGroupID"
+    />
+    <!-- 用户组关联-弹窗 -->
+  </el-container>
 </template>
 
 <script>
@@ -378,7 +376,7 @@ export default {
     border-right: 1px solid #eaecef;
   }
   .user {
-    padding: 8px;
+    padding: 12px;
     .table {
       margin-top: 5px;
       ::v-deep .el-button--mini {

@@ -109,7 +109,7 @@ export default {
         resolve([{ text: '用户组列表', id: 0 }])
       }
       if (node.level === 1) {
-        this.axios.get('/group/groupQuery/0')
+        this.axios.get('/group/groupAndUserQuery/0')
           .then((res) => {
             let arr = res.data.data
             this.initialID = res.data.data[0].id // 初始化节点
@@ -117,7 +117,8 @@ export default {
           })
       }
       if (node.level > 1) {
-        this.axios.get(`/group/groupQuery/${node.data.id}`)
+        let id = node.data.id.split('_')[2]
+        this.axios.get(`/group/groupAndUserQuery/${id}`)
           .then((res) => {
             let arr = res.data.data
             resolve(arr)
@@ -129,8 +130,10 @@ export default {
     },
     // 点击tree Node
     handleNodeClick (data) {
-      this.$emit('getGroup', data.id)
-      this.$emit('getGroupRow', data)
+      if (data.id !== 0) {
+        this.$emit('getGroup', data.id)
+        this.$emit('getGroupRow', data)
+      }
     },
     // check 复选框选中
     check () {
