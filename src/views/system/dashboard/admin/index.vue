@@ -94,10 +94,6 @@ export default {
 
 <style lang="scss" scoped>
 .dashboard-editor-container {
-  padding: 12px;
-  background-color: rgb(240, 242, 245);
-  position: relative;
-  height: calc(100% - 41px);
 
   .github-corner {
     position: absolute;

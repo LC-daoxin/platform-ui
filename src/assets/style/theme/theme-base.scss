@@ -76,25 +76,28 @@
       .sy-theme-container-aside {
         transition: width .3s;
         position: relative;
+        background: #fafafa;
         .sy-layout-header-aside-menu-side {
           @extend %full;
           overflow: hidden;
         }
       }
       .sy-theme-container-main {
-        padding: 0px;
+        padding: 0;
         position: relative;
         overflow: hidden;
         .sy-theme-container-main-layer {
           position: absolute;
-          top: 0px;
-          bottom: 0px;
-          left: 0px;
-          right: 20px;
+          top: 0;
+          bottom: 0;
+          left: 0;
+          right: 0;
         }
         .sy-theme-container-main-body {
           position: relative;
           overflow-y: auto;
+          top: -2px;
+          border: 1px solid #cfd7e5;
         }
       }
     }
@@ -236,6 +239,8 @@
         // 主体部分分为多页面控制器 和主体
         .sy-theme-container-main-header {
           height: 41px;
+          background: #fafafa;
+          border-radius: 4px 4px 0 0;
           // 多页面控制器
           .sy-multiple-page-control-group {
             // padding-right: 20px;
