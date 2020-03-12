@@ -377,7 +377,6 @@ export default {
 
 <style lang="scss" scoped>
 .user {
-  padding: 8px;
   .table {
     margin-top: 5px;
     ::v-deep .el-table-column--selection .cell{

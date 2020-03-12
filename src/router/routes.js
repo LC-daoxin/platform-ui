@@ -330,6 +330,52 @@ const frameIn = [
     ]
   },
   {
+    path: '/integration',
+    component: layoutHeaderAside,
+    meta: {
+      auth: true,
+      title: '集成服务'
+    },
+    children: [
+      {
+        path: 'Adapter',
+        name: 'Adapter',
+        meta: {
+          auth: true,
+          title: '集成适配器'
+        },
+        component: () => import('@/views/syplatform/integration/Adapter')
+      },
+      {
+        path: 'Database',
+        name: 'Database',
+        meta: {
+          auth: true,
+          title: '数据库连接'
+        },
+        component: () => import('@/views/syplatform/integration/Database')
+      },
+      {
+        path: 'ScvCate',
+        name: 'ScvCate',
+        meta: {
+          auth: true,
+          title: '服务分类'
+        },
+        component: () => import('@/views/syplatform/integration/ScvCate')
+      },
+      {
+        path: 'Business',
+        name: 'Business',
+        meta: {
+          auth: true,
+          title: '业务服务'
+        },
+        component: () => import('@/views/syplatform/integration/Business')
+      }
+    ]
+  },
+  {
     path: '/sy-admin',
     component: layoutHeaderAside,
     meta: {

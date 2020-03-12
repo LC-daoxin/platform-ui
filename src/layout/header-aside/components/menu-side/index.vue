@@ -150,6 +150,38 @@ export default {
               path: '/permission/BatchQuery'
             }
           ]
+        },
+        {
+          icon: '',
+          iconSvg: '',
+          title: '集成服务',
+          path: '/integration',
+          children: [
+            {
+              icon: '',
+              iconSvg: '',
+              title: '集成适配器',
+              path: '/integration/Adapter'
+            },
+            {
+              icon: '',
+              iconSvg: '',
+              title: '数据库连接',
+              path: '/integration/Database'
+            },
+            {
+              icon: '',
+              iconSvg: '',
+              title: '服务分类',
+              path: '/integration/ScvCate'
+            },
+            {
+              icon: '',
+              iconSvg: '',
+              title: '业务服务',
+              path: '/integration/Business'
+            }
+          ]
         }
       ]
     }

@@ -1,108 +1,106 @@
 <template>
-  <sy-container>
-    <el-container class="user-group">
-      <el-aside width="25%" class="page-left">
-        <div class="header">用户组</div>
-        <!-- 用户组Tree -->
-        <group-tree
-          @getGroup="getGroup"
-        />
-        <!-- 用户组Tree -->
-      </el-aside>
-      <el-main>
-        <div class="fileBox">
-          <div class="header">导入</div>
-          <div class="fileBox-content">
-            <el-upload
-              ref="upload"
-              action="url"
-              class="upload-demo"
-              :http-request="importFile"
-              :auto-upload="false"
-              :on-success="importClear"
-              :before-remove="beforeRemove"
-              :limit="1"
-              :on-exceed="handleExceed"
-            >
-              <span class="babel">上传Excel文件：</span>
-              <el-button size="mini" type="primary" plain>点击上传</el-button>
-            </el-upload>
-            <el-row class="btnBox" type="flex" justify="center">
-              <el-button size="mini" type="primary" @click="submitUpload('1')">导入用户</el-button>
-              <el-button size="mini" type="primary" @click="submitUpload('2')">导入用户到组</el-button>
-              <el-button size="mini" type="primary" @click="submitUpload('3')">解锁用户</el-button>
-              <el-button size="mini" type="primary" @click="submitUpload('4')">更新用户AD信息</el-button>
-            </el-row>
-            <el-row class="downloadBox" type="flex" justify="center">
-              <el-tag size="small">导入用户模版下载</el-tag>
-              <el-tag size="small">导入用户到组模版下载</el-tag>
-              <el-tag size="small">解锁用户模版下载</el-tag>
-              <el-tag size="small">更新用户AD信息模版下载</el-tag>
-            </el-row>
-          </div>
-          <div class="exportBox" v-if="exportBoxShow">
-            <!-- 导入结果table start -->
-            <el-table
-              size="mini"
-              :data="tableData"
-              border
-              highlight-current-row
-              class="table"
-              max-height="260px"
-            >
-              <el-table-column
-                type="index"
-                width="40"
-                align="center"
-              >
-              </el-table-column>
-              <el-table-column label="用户AD" min-width="60" align="center" :show-overflow-tooltip="true">
-                <template slot-scope="scope">
-                  <span>{{ scope.row.userAD }}</span>
-                </template>
-              </el-table-column>
-              <el-table-column label="操作" min-width="60" align="center" :show-overflow-tooltip="true">
-                <template slot-scope="scope">
-                  <span>{{ scope.row.operation }}</span>
-                </template>
-              </el-table-column>
-              <el-table-column label="状态" min-width="220" align="center" :show-overflow-tooltip="true">
-                <template slot-scope="scope">
-                  <span>{{ scope.row.describe }}</span>
-                </template>
-              </el-table-column>
-            </el-table>
-            <!-- 导入结果table end -->
-          </div>
+  <el-container class="user-group">
+    <el-aside width="25%" class="page-left">
+      <div class="header">用户组</div>
+      <!-- 用户组Tree -->
+      <group-tree
+        @getGroup="getGroup"
+      />
+      <!-- 用户组Tree -->
+    </el-aside>
+    <el-main>
+      <div class="fileBox">
+        <div class="header">导入</div>
+        <div class="fileBox-content">
+          <el-upload
+            ref="upload"
+            action="url"
+            class="upload-demo"
+            :http-request="importFile"
+            :auto-upload="false"
+            :on-success="importClear"
+            :before-remove="beforeRemove"
+            :limit="1"
+            :on-exceed="handleExceed"
+          >
+            <span class="babel">上传Excel文件：</span>
+            <el-button size="mini" type="primary" plain>点击上传</el-button>
+          </el-upload>
+          <el-row class="btnBox" type="flex" justify="center">
+            <el-button size="mini" type="primary" @click="submitUpload('1')">导入用户</el-button>
+            <el-button size="mini" type="primary" @click="submitUpload('2')">导入用户到组</el-button>
+            <el-button size="mini" type="primary" @click="submitUpload('3')">解锁用户</el-button>
+            <el-button size="mini" type="primary" @click="submitUpload('4')">更新用户AD信息</el-button>
+          </el-row>
+          <el-row class="downloadBox" type="flex" justify="center">
+            <el-tag size="small">导入用户模版下载</el-tag>
+            <el-tag size="small">导入用户到组模版下载</el-tag>
+            <el-tag size="small">解锁用户模版下载</el-tag>
+            <el-tag size="small">更新用户AD信息模版下载</el-tag>
+          </el-row>
         </div>
-        <div class="fileBox">
-          <div class="header">导出</div>
-          <div class="fileBox-content">
-            <el-upload
-              ref="Export"
-              class="upload-demo"
-              action="url"
-              :http-request="exportFile"
-              :auto-upload="false"
-              :on-success="exportClear"
-              :before-remove="beforeRemove"
-              :limit="1"
-              :on-exceed="handleExceed"
+        <div class="exportBox" v-if="exportBoxShow">
+          <!-- 导入结果table start -->
+          <el-table
+            size="mini"
+            :data="tableData"
+            border
+            highlight-current-row
+            class="table"
+            max-height="260px"
+          >
+            <el-table-column
+              type="index"
+              width="40"
+              align="center"
             >
-              <span class="babel">上传Excel文件：</span>
-              <el-button size="mini" type="primary" plain>点击上传</el-button>
-            </el-upload>
-            <el-row class="btnBox" type="flex" justify="center">
-              <el-button size="mini" type="primary" :loading="loading.btn1" @click="submitExport('1')">导出用户</el-button>
-              <el-button size="mini" type="primary" :loading="loading.btn2" @click="exportAllUser()">导出全部用户</el-button>
-              <el-button size="mini" type="primary" :loading="loading.btn3" @click="batchExportGroupUsers()">导出用户组用户</el-button>
-              <el-button size="mini" type="primary" :loading="loading.btn4" @click="submitExport('2')">导出AD域用户</el-button>
-            </el-row>
-          </div>
+            </el-table-column>
+            <el-table-column label="用户AD" min-width="60" align="center" :show-overflow-tooltip="true">
+              <template slot-scope="scope">
+                <span>{{ scope.row.userAD }}</span>
+              </template>
+            </el-table-column>
+            <el-table-column label="操作" min-width="60" align="center" :show-overflow-tooltip="true">
+              <template slot-scope="scope">
+                <span>{{ scope.row.operation }}</span>
+              </template>
+            </el-table-column>
+            <el-table-column label="状态" min-width="220" align="center" :show-overflow-tooltip="true">
+              <template slot-scope="scope">
+                <span>{{ scope.row.describe }}</span>
+              </template>
+            </el-table-column>
+          </el-table>
+          <!-- 导入结果table end -->
         </div>
-      </el-main>
-    </el-container>
-  </sy-container>
+      </div>
+      <div class="fileBox">
+        <div class="header">导出</div>
+        <div class="fileBox-content">
+          <el-upload
+            ref="Export"
+            class="upload-demo"
+            action="url"
+            :http-request="exportFile"
+            :auto-upload="false"
+            :on-success="exportClear"
+            :before-remove="beforeRemove"
+            :limit="1"
+            :on-exceed="handleExceed"
+          >
+            <span class="babel">上传Excel文件：</span>
+            <el-button size="mini" type="primary" plain>点击上传</el-button>
+          </el-upload>
+          <el-row class="btnBox" type="flex" justify="center">
+            <el-button size="mini" type="primary" :loading="loading.btn1" @click="submitExport('1')">导出用户</el-button>
+            <el-button size="mini" type="primary" :loading="loading.btn2" @click="exportAllUser()">导出全部用户</el-button>
+            <el-button size="mini" type="primary" :loading="loading.btn3" @click="batchExportGroupUsers()">导出用户组用户</el-button>
+            <el-button size="mini" type="primary" :loading="loading.btn4" @click="submitExport('2')">导出AD域用户</el-button>
+          </el-row>
+        </div>
+      </div>
+    </el-main>
+  </el-container>
 </template>
 
 <script>
@@ -472,16 +470,10 @@ export default {
     height: 100%;
     border-right: 1px solid #eaecef;
     .tree {
-      padding: 8px;
+      padding: 12px;
       .tree-content {
         margin-top: 5px;
       }
-    }
-  }
-  .user {
-    padding: 8px;
-    .table {
-      margin-top: 5px;
     }
   }
   .fileBox {
