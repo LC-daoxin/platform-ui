@@ -56,6 +56,12 @@ export default {
               iconSvg: '',
               title: '流程目录',
               path: '/work-flow/process-catalog'
+            },
+            {
+              icon: '',
+              iconSvg: '',
+              title: '邮件模板',
+              path: '/work-flow/mail-template'
             }
           ]
         },

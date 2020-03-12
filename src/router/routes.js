@@ -437,6 +437,15 @@ const frameIn = [
           title: '流程管理'
         },
         component: () => import('@/views/ProcessManagement')
+      },
+      {
+        path: 'mail-template',
+        name: 'mail-template',
+        meta: {
+          auth: true,
+          title: '流程管理'
+        },
+        component: () => import('@/views/MailTemplate')
       }
     ]
   }
