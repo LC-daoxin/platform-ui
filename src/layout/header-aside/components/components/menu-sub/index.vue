@@ -1,7 +1,7 @@
 <template>
-  <el-submenu :index="menu.path || uniqueId">
+  <el-submenu :class="" :index="menu.path || uniqueId">
     <template slot="title">
-      <i v-if="menu.icon" :class="`fa fa-${menu.icon}`"></i>
+      <i v-if="menu.icon" :class="`iconfont ${menu.icon}`"></i>
       <i v-if="menu.icon === undefined & !menu.iconSvg" class="fa fa-folder-o"></i>
       <sy-icon-svg v-if="menu.iconSvg" :name="menu.iconSvg"/>
       <span slot="title">{{menu.title}}</span>

@@ -40,19 +40,19 @@ export default {
       BS: null,
       aside: [
         {
-          icon: '',
+          icon: 'pl-yingxiaogongzuoliu',
           iconSvg: '',
           title: '工作流',
           path: '',
           children: [
             {
-              icon: '',
+              icon: 'pl-shengchanliuchengguanli',
               iconSvg: '',
               title: '流程管理',
               path: '/work-flow/process-admin'
             },
             {
-              icon: '',
+              icon: 'pl-gongzuoliuchakan',
               iconSvg: '',
               title: '流程目录',
               path: '/work-flow/process-catalog'
@@ -60,49 +60,49 @@ export default {
           ]
         },
         {
-          icon: '',
+          icon: 'pl-yonghuguanli',
           iconSvg: '',
           title: '用户管理',
           path: '/user',
           children: [
             {
-              icon: '',
+              icon: 'pl-yonghu',
               iconSvg: '',
               title: '用户',
               path: '/user/User'
             },
             {
-              icon: '',
+              icon: 'pl-yonghuzu',
               iconSvg: '',
               title: '用户组',
               path: '/user/UserGroup'
             },
             {
-              icon: '',
+              icon: 'pl-weituoguanxiguanli',
               iconSvg: '',
               title: '用户/组关系',
               path: '/user/RelationGroup'
             },
             {
-              icon: '',
+              icon: 'pl-tianjiayonghu',
               iconSvg: '',
               title: '批量添加用户',
               path: '/user/AddUser'
             },
             {
-              icon: '',
+              icon: 'pl-tianjiayonghu1',
               iconSvg: '',
               title: '批量添加用户组',
               path: '/user/AddUserGroup'
             },
             {
-              icon: '',
+              icon: 'pl-navicon-zhtdwh',
               iconSvg: '',
               title: '用户与用户组关系维护',
               path: '/user/RelationGroup'
             },
             {
-              icon: '',
+              icon: 'pl-baimingdancelveweihu',
               iconSvg: '',
               title: '批量用户与用户组关系维护',
               path: '/user/BatchMaintain'
@@ -110,61 +110,61 @@ export default {
           ]
         },
         {
-          icon: '',
+          icon: 'pl-quanxianguanli2',
           iconSvg: '',
           title: '权限管理',
           path: '/permission',
           children: [
             {
-              icon: '',
+              icon: 'pl-navicon-jsgl',
               iconSvg: '',
               title: '角色维护',
               path: '/permission/RoleMaintenance'
             },
             {
-              icon: '',
+              icon: 'pl-shouquanguanli',
               iconSvg: '',
               title: '用户授权',
               path: '/permission/UserPermission'
             },
             {
-              icon: '',
+              icon: 'pl-yonghudaoru',
               iconSvg: '',
               title: '批量角色导入/导出',
               path: '/permission/BatchImportRole'
             },
             {
-              icon: '',
+              icon: 'pl-shouquan1',
               iconSvg: '',
               title: '批量用户授权',
               path: '/permission/BatchUserPermission'
             },
             {
-              icon: '',
+              icon: 'pl-icon_Importcustomer',
               iconSvg: '',
               title: '批量用户组授权',
               path: '/permission/BatchGroupPermission'
             },
             {
-              icon: '',
+              icon: 'pl-baobiao1',
               iconSvg: '',
               title: '报表统计',
               path: '/permission/Report'
             },
             {
-              icon: '',
+              icon: 'pl-shouquanweituoshu',
               iconSvg: '',
               title: '用户授权管理',
               path: '/permission/UserPermission'
             },
             {
-              icon: '',
+              icon: 'pl-quanxianguanli1',
               iconSvg: '',
               title: '批量角色维护',
               path: '/permission/BatchRoleMaintain'
             },
             {
-              icon: '',
+              icon: 'pl-chaxun',
               iconSvg: '',
               title: '批量用户/用户组授权查询',
               path: '/permission/BatchQuery'
@@ -172,31 +172,31 @@ export default {
           ]
         },
         {
-          icon: '',
+          icon: 'pl-icon',
           iconSvg: '',
           title: '集成服务',
           path: '/integration',
           children: [
             {
-              icon: '',
+              icon: 'pl-shujujicheng',
               iconSvg: '',
               title: '集成适配器',
               path: '/integration/Adapter'
             },
             {
-              icon: '',
+              icon: 'pl-shujuku1',
               iconSvg: '',
               title: '数据库连接',
               path: '/integration/Database'
             },
             {
-              icon: '',
+              icon: 'pl-navicon-xxwh',
               iconSvg: '',
               title: '服务分类',
               path: '/integration/ScvCate'
             },
             {
-              icon: '',
+              icon: 'pl-servicehis',
               iconSvg: '',
               title: '业务服务',
               path: '/integration/Business'
@@ -262,3 +262,23 @@ export default {
   }
 }
 </script>
+
+<style lang="scss" scoped>
+  ::v-deep li.el-menu-item {
+    padding-left: 28px !important;
+  }
+  ::v-deep .el-submenu__title {
+    font-size: 15px;
+    font-weight: 400;
+  }
+  ::v-deep .el-submenu__title {
+    padding-left: 20px !important;
+    .iconfont {
+      font-size: 17px !important;
+    }
+    span {
+      display: inline-block;
+      margin-left: 3px;
+    }
+  }
+</style>

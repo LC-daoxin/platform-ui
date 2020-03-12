@@ -16,6 +16,7 @@ import { frameInRoutes } from '@/router/routes'
 
 // icon
 import './icons'
+import './icons/iconfont/iconfont.css'
 
 // 核心插件
 Vue.use(core)
