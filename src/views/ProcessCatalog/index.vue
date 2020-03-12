@@ -61,7 +61,7 @@
 export default {
   data() {
     return {
-      tableHeight: 0,
+      tableHeight: window.innerHeight - 165.67,
       dialogVisible: false,
       dialogTitle: '新增',
       form: {
@@ -93,9 +93,6 @@ export default {
     onSubmit() {
       this.dialogVisible = false
     }
-  },
-  mounted() {
-    this.tableHeight = window.innerHeight - 165.67
   }
 }
 </script>
