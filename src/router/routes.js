@@ -73,15 +73,15 @@ const frameIn = [
       title: '系统管理'
     },
     children: [
-      {
-        path: 'user',
-        name: 'user',
-        meta: {
-          auth: true,
-          title: '用户管理'
-        },
-        component: () => import('@/views/syplatform/admin/user')
-      },
+      // {
+      //   path: 'user',
+      //   name: 'user',
+      //   meta: {
+      //     auth: true,
+      //     title: '用户管理'
+      //   },
+      //   component: () => import('@/views/syplatform/admin/user')
+      // },
       {
         path: 'menu',
         name: 'menu',

@@ -23,8 +23,8 @@ const router = new VueRouter({
  * 路由拦截
  * 权限验证
  */
-router.beforeEach((to, from, next) => {
-  next()
+// router.beforeEach((to, from, next) => {
+  // next()
   // 进度条
   // NProgress.start()
   // 关闭搜索面板
@@ -51,7 +51,7 @@ router.beforeEach((to, from, next) => {
   //   // 不需要身份校验 直接通过
   //   next()
   // }
-})
+// })
 
 router.afterEach(to => {
   // 进度条

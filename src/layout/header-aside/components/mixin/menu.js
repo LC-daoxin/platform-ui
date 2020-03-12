@@ -8,9 +8,7 @@ export default {
       } else if (/^https:\/\/|http:\/\//.test(index)) {
         util.open(index)
       } else {
-        this.$router.push({
-          path: index
-        })
+        this.$router.push(index)
       }
     }
   }

@@ -208,7 +208,6 @@ export default {
     },
     // 成功获取数据
     getInfoSucc (res) {
-      console.log(res)
       this.loading = true
       let data = res.data
       if (data.code === 'success') {
