@@ -1,64 +1,67 @@
 <template>
-  <sy-container>
-    <el-container class="user-group">
-      <el-main>
-        <div class="fileBox">
-          <div class="header">用户组批量导入</div>
-          <div class="fileBox-content">
-            <el-upload
-              ref="upload"
-              action="url"
-              class="upload-demo"
-              :http-request="importFile"
-              :auto-upload="false"
-              :on-success="importClear"
-              :before-remove="beforeRemove"
-              :limit="1"
-              :on-exceed="handleExceed"
-            >
-              <span class="babel">上传Excel文件：</span>
-              <el-button size="mini" type="primary" plain>点击上传</el-button>
-            </el-upload>
-            <el-row class="btnBox" type="flex" justify="center">
-              <el-button size="mini" type="primary" @click="submitUpload()">导入用户组</el-button>
-            </el-row>
-            <el-row class="downloadBox" type="flex" justify="center">
-              <el-tag size="small">用户组批量导入模版下载</el-tag>
-            </el-row>
-          </div>
-          <div class="exportBox" v-if="exportBoxShow">
-            <!-- 导入结果table start -->
-            <el-table
-              size="mini"
-              :data="tableData"
-              border
-              highlight-current-row
-              class="table"
-              max-height="300px"
-            >
-              <el-table-column
-                type="index"
-                width="40"
-                align="center"
-              >
-              </el-table-column>
-              <el-table-column label="结果" min-width="100" align="center" :show-overflow-tooltip="true">
-                <template slot-scope="scope">
-                  <span>{{ scope.row.describe }}</span>
-                </template>
-              </el-table-column>
-              <el-table-column label="是否成功" min-width="100" align="center" :show-overflow-tooltip="true">
-                <template slot-scope="scope">
-                  <span>{{ scope.row.state ? '是' : '否' }}</span>
-                </template>
-              </el-table-column>
-            </el-table>
-            <!-- 导入结果table end -->
-          </div>
+  <el-container class="user-group">
+    <el-main>
+      <div class="fileBox">
+        <div class="header">用户组批量授权</div>
+        <div class="fileBox-content">
+          <el-upload
+            ref="upload"
+            action="url"
+            class="upload-demo"
+            :http-request="importFile"
+            :auto-upload="false"
+            :on-success="importClear"
+            :before-remove="beforeRemove"
+            :limit="1"
+            :on-exceed="handleExceed"
+          >
+            <span class="babel">上传Excel文件：</span>
+            <el-button size="mini" type="primary" plain>点击上传</el-button>
+          </el-upload>
+          <el-row class="btnBox" type="flex" justify="center">
+            <el-button size="mini" type="primary" @click="submitUpload()">用户组批量授权</el-button>
+          </el-row>
+          <el-row class="downloadBox" type="flex" justify="center">
+            <el-tag size="small">用户组批量授权模版下载</el-tag>
+          </el-row>
         </div>
-      </el-main>
-    </el-container>
-  </sy-container>
+        <div class="exportBox" v-if="exportBoxShow">
+          <!-- 导入结果table start -->
+          <el-table
+            size="mini"
+            :data="tableData"
+            border
+            highlight-current-row
+            class="table"
+            max-height="300px"
+          >
+            <el-table-column
+              type="index"
+              width="40"
+              align="center"
+            >
+            </el-table-column>
+            <el-table-column label="用户组名称" min-width="100" align="center" :show-overflow-tooltip="true">
+              <template slot-scope="scope">
+                <span>{{ scope.row.userAD }}</span>
+              </template>
+            </el-table-column>
+            <el-table-column label="结果" min-width="100" align="center" :show-overflow-tooltip="true">
+              <template slot-scope="scope">
+                <span>{{ scope.row.describe }}</span>
+              </template>
+            </el-table-column>
+            <el-table-column label="是否成功" min-width="70" align="center" :show-overflow-tooltip="true">
+              <template slot-scope="scope">
+                <span>{{ scope.row.state ? '是' : '否' }}</span>
+              </template>
+            </el-table-column>
+          </el-table>
+          <!-- 导入结果table end -->
+        </div>
+      </div>
+    </el-main>
+  </el-container>
 </template>
 
 <script>
@@ -92,14 +95,14 @@ export default {
     importClear () {
       this.$refs.upload.clearFiles() // 清空已上传的文件列表
     },
-    // 导入用户组
+    // 用户组批量授权
     importFile (param) {
       let fd = new FormData()
       fd.append('file', param.file)
-      this.axios.post(`/group/batchImportGroup`, fd).then((res) => {
+      this.axios_M2.post(`/role/batchImportGroupAuth`, fd).then((res) => {
         console.log(res)
         if (res.data.code === 'success') {
-          this.exportResult(res, '成功导入用户组', '上级组中已存在与当前同名的组') // 导入结果
+          this.exportResult(res, '用户组授权成功', '用户组授权失败') // 导入结果
           param.onSuccess()
         } else {
           this.exportTableClear() // 导入结果table清空

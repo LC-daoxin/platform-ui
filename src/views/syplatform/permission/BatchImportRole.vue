@@ -1,10 +1,10 @@
 <template>
-  <el-container class="user-group">
+  <el-container class="role">
     <el-aside width="25%" class="page-left">
-      <div class="header">用户组</div>
-      <!-- 用户组Tree -->
-      <group-tree
-        @getGroup="getGroup"
+      <div class="header">系统</div>
+      <!-- 系统Tree -->
+      <system-tree
+        @getRoleRow="getRoleRow"
       />
       <!-- 用户组Tree -->
     </el-aside>
@@ -27,16 +27,10 @@
             <el-button size="mini" type="primary" plain>点击上传</el-button>
           </el-upload>
           <el-row class="btnBox" type="flex" justify="center">
-            <el-button size="mini" type="primary" @click="submitUpload('1')">导入用户</el-button>
-            <el-button size="mini" type="primary" @click="submitUpload('2')">导入用户到组</el-button>
-            <el-button size="mini" type="primary" @click="submitUpload('3')">解锁用户</el-button>
-            <el-button size="mini" type="primary" @click="submitUpload('4')">更新用户AD信息</el-button>
+            <el-button size="mini" type="primary" @click="submitUpload()">导入角色</el-button>
           </el-row>
           <el-row class="downloadBox" type="flex" justify="center">
-            <el-tag size="small">导入用户模版下载</el-tag>
-            <el-tag size="small">导入用户到组模版下载</el-tag>
-            <el-tag size="small">解锁用户模版下载</el-tag>
-            <el-tag size="small">更新用户AD信息模版下载</el-tag>
+            <el-tag size="small">角色模版下载</el-tag>
           </el-row>
         </div>
         <div class="exportBox" v-if="exportBoxShow">
@@ -92,10 +86,10 @@
             <el-button size="mini" type="primary" plain>点击上传</el-button>
           </el-upload>
           <el-row class="btnBox" type="flex" justify="center">
-            <el-button size="mini" type="primary" :loading="loading.btn1" @click="submitExport('1')">导出用户</el-button>
-            <el-button size="mini" type="primary" :loading="loading.btn2" @click="exportAllUser()">导出全部用户</el-button>
-            <el-button size="mini" type="primary" :loading="loading.btn3" @click="batchExportGroupUsers()">导出用户组用户</el-button>
-            <el-button size="mini" type="primary" :loading="loading.btn4" @click="submitExport('2')">导出AD域用户</el-button>
+            <el-button size="mini" type="primary" :loading="loading.btn1" @click="submitExport('1')">导出角色</el-button>
+            <el-button size="mini" type="primary" :loading="loading.btn2" @click="batchExportSysRole()">导出系统角色</el-button>
+            <el-button size="mini" type="primary" :loading="loading.btn3" @click="submitExport('3')">SAP角色查询</el-button>
+            <el-button size="mini" type="primary" :loading="loading.btn4" @click="submitExport('4')">导出包含角色的用户</el-button>
           </el-row>
         </div>
       </div>
@@ -104,17 +98,15 @@
 </template>
 
 <script>
-import GroupTree from './components/GroupTree'
+import SystemTree from './components/SystemTree'
 export default {
-  name: 'add-user',
+  name: 'batch-import-role',
   components: {
-    GroupTree
+    SystemTree
   },
   data () {
     return {
-      parentID: '', // 父级ID 默认空
-      currentGroupID: '', // 当前选择的用户组ID
-      ImportType: '', // 导入类型
+      currentSysID: '', // 当前选择的系统ID
       ExportType: '', // 导出类型
       loading: {
         btn1: false, // 导出用户 加载
@@ -128,9 +120,8 @@ export default {
   },
   methods: {
     // Tree回调
-    getGroup (id) {
-      this.parentID = id // 父节点ID
-      this.currentGroupID = id // 当前选择用户组ID
+    getRoleRow (row) {
+      this.currentSysID = row.id // 当前选择用户组ID
     },
     // 文件超出个数限制时的钩子
     handleExceed (files, fileList) {
@@ -141,14 +132,18 @@ export default {
       return this.$confirm(`确定移除 ${file.name}？`)
     },
     // 导入按钮
-    submitUpload (type) {
+    submitUpload () {
       if (this.$refs.upload.uploadFiles.length === 0) {
         this.$message({
           type: 'warning',
           message: '请选择要导入的文件！'
         })
+      } else if (this.currentSysID === '') {
+        this.$message({
+          type: 'warning',
+          message: '请选择要导入到的系统！'
+        })
       } else {
-        this.ImportType = type
         this.$refs.upload.submit()
       }
     },
@@ -156,27 +151,7 @@ export default {
     importFile (param) {
       let fd = new FormData()
       fd.append('file', param.file)
-      switch (this.ImportType) {
-        case '1':
-          this.batchImportUser(fd, param) // 批量用户导入
-          break
-        case '2':
-          if (this.parentID === '') {
-            this.$message({
-              type: 'warning',
-              message: '请选择要导入进的用户组！'
-            })
-          } else {
-            this.batchAddUserToGroup(fd, param) // 用户组批量导入组用户
-          }
-          break
-        case '3':
-          this.batchUnlockUser(fd, param) // 解锁用户
-          break
-        case '4':
-          this.batchUpdateUserFromAD(fd, param) // 更新用户AD信息
-          break
-      }
+      this.batchImportRole(fd, param) // 批量角色导入
     },
     // 清空已上传的文件列表
     importClear () {
@@ -254,15 +229,19 @@ export default {
       }
       this.tableData = tableData
     },
-    // 批量用户导入
-    batchImportUser (data, param) {
-      this.axios.post(`/user/batchImportUser`, data).then((res) => {
+    // 批量角色导入
+    batchImportRole (data, param) {
+      this.axios_M2.post(`/role/batchImportRole/${this.currentSysID}`, data).then((res) => {
         console.log(res)
         if (res.data.code === 'success') {
-          this.exportResult(res, '导入', '成功导入用户', '导入失败，添加用户失败', '导入失败，用户已存在') // 导入结果
+          // this.exportResult(res, '导入', '成功导入用户', '导入失败，添加用户失败', '导入失败，用户已存在') // 导入结果
+          this.$message({
+            type: 'success',
+            message: '成功导入！'
+          })
           param.onSuccess()
         } else {
-          this.exportTableClear() // 导入结果table清空
+          // this.exportTableClear() // 导入结果table清空
           this.$message({
             type: 'warning',
             message: res.data.msg
@@ -273,76 +252,7 @@ export default {
         this.exportTableClear() // 导入结果table清空
         this.$message({
           type: 'warning',
-          message: '未成功导入用户, 请按照模版导入！'
-        })
-      })
-    },
-    // 用户组批量导入组用户
-    batchAddUserToGroup (data, param) {
-      this.axios.post(`/group/batchAddUserToGroup/${this.parentID}`, data).then((res) => {
-        console.log(res)
-        if (res.data.code === 'success') {
-          this.exportResult(res, '导入', '成功导入用户到用户组', '导入失败，添加用户到用户组失败') // 导入结果
-          param.onSuccess()
-        } else {
-          this.exportTableClear() // 导入结果table清空
-          this.$message({
-            type: 'warning',
-            message: res.data.msg
-          })
-        }
-      }).catch((err) => {
-        console.log(err)
-        this.exportTableClear() // 导入结果table清空
-        this.$message({
-          type: 'warning',
-          message: '未成功导入用户到用户组, 请按照模版导入！'
-        })
-      })
-    },
-    // 解锁用户
-    batchUnlockUser (data, param) {
-      this.axios.post(`/user/batchUnlockUser`, data).then((res) => {
-        console.log(res)
-        if (res.data.code === 'success') {
-          this.exportResult(res, '解锁/锁定', '', '操作失败', '', '用户成功解锁', '用户被锁定') // 导入结果
-          param.onSuccess()
-        } else {
-          this.exportTableClear() // 导入结果table清空
-          this.$message({
-            type: 'warning',
-            message: res.data.msg
-          })
-        }
-      }).catch((err) => {
-        console.log(err)
-        this.exportTableClear() // 导入结果table清空
-        this.$message({
-          type: 'warning',
-          message: '未成功解锁用户, 请按照模版导入！'
-        })
-      })
-    },
-    // 更新用户AD信息
-    batchUpdateUserFromAD (data, param) {
-      this.axios.post(`/user/batchUpdateUserFromAD`, data).then((res) => {
-        console.log(res)
-        if (res.data.code === 'success') {
-          this.exportResult(res, '更新AD域用户', '更新成功', '更新失败', '', '', '', '用户不存在') // 导入结果
-          param.onSuccess()
-        } else {
-          this.exportTableClear() // 导入结果table清空
-          this.$message({
-            type: 'warning',
-            message: res.data.msg
-          })
-        }
-      }).catch((err) => {
-        console.log(err)
-        this.exportTableClear() // 导入结果table清空
-        this.$message({
-          type: 'warning',
-          message: '未能更新用户AD信息, 请按照模版导入！'
+          message: '未成功导入角色, 请按照模版导入！'
         })
       })
     },
@@ -351,7 +261,12 @@ export default {
       if (this.$refs.Export.uploadFiles.length === 0) {
         this.$message({
           type: 'warning',
-          message: '请选择要导出的文件！'
+          message: '请上传导出的文件模版！'
+        })
+      } else if (this.currentSysID === '') {
+        this.$message({
+          type: 'warning',
+          message: '请选择要导出的系统！'
         })
       } else {
         this.ExportType = type
@@ -364,10 +279,16 @@ export default {
       fd.append('file', param.file)
       switch (this.ExportType) {
         case '1':
-          this.batchExportUser(fd, param) // 批量用户导出
+          this.batchExportRole(fd, param) // 导出角色
           break
         case '2':
-          this.batchExportLdapUser(fd, param) // 批量ad域用户导出
+          this.batchExportSysRole(param) // 导出系统角色
+          break
+        case '3':
+          this.exportSapRole(fd, param) // 导出Sap角色
+          break
+        case '4':
+          this.batchExportUserRole(fd, param) // 导出包含角色的用户
           break
       }
     },
@@ -375,10 +296,10 @@ export default {
     exportClear () {
       this.$refs.Export.clearFiles() // 清空已上传的文件列表
     },
-    // 批量用户导出
-    batchExportUser (data, param) {
+    // 批量角色导出
+    batchExportRole (data, param) {
       this.loading.btn1 = true
-      this.axios.post(`/user/batchExportUser`, data, { responseType: 'blob' }).then((res) => {
+      this.axios_M2.post(`/role/batchExportRole/${this.currentSysID}`, data, { responseType: 'blob' }).then((res) => {
         this.download(res)
         this.loading.btn1 = false
       }).catch((err) => {
@@ -386,50 +307,51 @@ export default {
         this.loading.btn1 = false
         this.$message({
           type: 'warning',
-          message: '未成功导出用户, 请按照模版导出！'
+          message: '未成功导出角色, 请按照模版导出！'
         })
       })
     },
-    // 导出全部用户
-    exportAllUser () {
-      this.loading.btn2 = true
-      this.axios.get(`/user/exportAllUser`, { responseType: 'blob' }).then((res) => {
-        this.loading.btn2 = false
-        this.download(res)
-      }).catch(() => {
-        this.loading.btn2 = false
+    // 批量导出系统角色
+    batchExportSysRole () {
+      if (this.currentSysID === '') {
         this.$message({
           type: 'warning',
-          message: '未成功导出全部用户'
-        })
-      })
-    },
-    // 导出用户组用户
-    batchExportGroupUsers () {
-      if (this.parentID === '') {
-        this.$message({
-          type: 'warning',
-          message: '请选择要导出的用户组！'
+          message: '请选择要导出的系统！'
         })
       } else {
-        this.loading.btn3 = true
-        this.axios.get(`/group/batchExportGroupUsers/${this.parentID}`, { responseType: 'blob' }).then((res) => {
-          this.loading.btn3 = false
+        this.loading.btn2 = true
+        this.axios_M2.post(`/role/batchExportSystemRole/${this.currentSysID}`, '', { responseType: 'blob' }).then((res) => {
+          console.log(res)
+          this.loading.btn2 = false
           this.download(res)
         }).catch((err) => {
           console.log(err)
-          this.loading.btn3 = false
+          this.loading.btn2 = false
           this.$message({
             type: 'warning',
-            message: '未成功导出用户组用户！'
+            message: '未成功导出系统角色, 请按照模版导出！'
           })
         })
       }
     },
-    // 批量ad域用户导出
-    batchExportLdapUser (data, param) {
+    // 导出Sap角色
+    exportSapRole (data, param) {
+      this.loading.btn3 = true
+      this.axios_M2.post(`/role/SearchSapRole/${this.currentSysID}`, data, { responseType: 'blob' }).then((res) => {
+        this.loading.btn3 = false
+        // this.download(res) 这个接口暂时无法使用
+      }).catch(() => {
+        this.loading.btn3 = false
+        this.$message({
+          type: 'warning',
+          message: '未成功导出Sap角色, 请按照模版导出！'
+        })
+      })
+    },
+    // 导出包含角色的用户
+    batchExportUserRole (data, param) {
       this.loading.btn4 = true
-      this.axios.post(`/user/batchExportLdapUser`, data, { responseType: 'blob' }).then((res) => {
+      this.axios_M2.get(`/role/ExportUsersByRoleName/${this.currentSysID}`, data, { responseType: 'blob' }).then((res) => {
         this.loading.btn4 = false
         this.download(res)
       }).catch((err) => {
@@ -437,7 +359,7 @@ export default {
         this.loading.btn4 = false
         this.$message({
           type: 'warning',
-          message: '未成功导出ad域用户, 请按照模版导出！'
+          message: '未成功导出包含角色的用户, 请按照模版导出！'
         })
       })
     },
@@ -464,7 +386,7 @@ export default {
 ::v-deep .el-main {
   padding: 0;
 }
-.user-group {
+.role {
   height: 100%;
   .page-left {
     height: 100%;
@@ -474,6 +396,12 @@ export default {
       .tree-content {
         margin-top: 5px;
       }
+    }
+  }
+  .user {
+    padding: 8px;
+    .table {
+      margin-top: 5px;
     }
   }
   .fileBox {
@@ -491,7 +419,7 @@ export default {
       .downloadBox {
         margin-top: 15px;
         .el-tag {
-          margin-right: 8px;
+          // margin-right: 8px;
         }
       }
     }

@@ -50,6 +50,156 @@ export default {
               iconSvg: '',
               title: '流程管理',
               path: '/work-flow/process-admin'
+            },
+            {
+              icon: '',
+              iconSvg: '',
+              title: '流程目录',
+              path: '/work-flow/process-catalog'
+            }
+          ]
+        },
+        {
+          icon: '',
+          iconSvg: '',
+          title: '用户管理',
+          path: '/user',
+          children: [
+            {
+              icon: '',
+              iconSvg: '',
+              title: '用户',
+              path: '/user/User'
+            },
+            {
+              icon: '',
+              iconSvg: '',
+              title: '用户组',
+              path: '/user/UserGroup'
+            },
+            {
+              icon: '',
+              iconSvg: '',
+              title: '用户/组关系',
+              path: '/user/RelationGroup'
+            },
+            {
+              icon: '',
+              iconSvg: '',
+              title: '批量添加用户',
+              path: '/user/AddUser'
+            },
+            {
+              icon: '',
+              iconSvg: '',
+              title: '批量添加用户组',
+              path: '/user/AddUserGroup'
+            },
+            {
+              icon: '',
+              iconSvg: '',
+              title: '用户与用户组关系维护',
+              path: '/user/RelationGroup'
+            },
+            {
+              icon: '',
+              iconSvg: '',
+              title: '批量用户与用户组关系维护',
+              path: '/user/BatchMaintain'
+            }
+          ]
+        },
+        {
+          icon: '',
+          iconSvg: '',
+          title: '权限管理',
+          path: '/permission',
+          children: [
+            {
+              icon: '',
+              iconSvg: '',
+              title: '角色维护',
+              path: '/permission/RoleMaintenance'
+            },
+            {
+              icon: '',
+              iconSvg: '',
+              title: '用户授权',
+              path: '/permission/UserPermission'
+            },
+            {
+              icon: '',
+              iconSvg: '',
+              title: '批量角色导入/导出',
+              path: '/permission/BatchImportRole'
+            },
+            {
+              icon: '',
+              iconSvg: '',
+              title: '批量用户授权',
+              path: '/permission/BatchUserPermission'
+            },
+            {
+              icon: '',
+              iconSvg: '',
+              title: '批量用户组授权',
+              path: '/permission/BatchGroupPermission'
+            },
+            {
+              icon: '',
+              iconSvg: '',
+              title: '报表统计',
+              path: '/permission/Report'
+            },
+            {
+              icon: '',
+              iconSvg: '',
+              title: '用户授权管理',
+              path: '/permission/UserPermission'
+            },
+            {
+              icon: '',
+              iconSvg: '',
+              title: '批量角色维护',
+              path: '/permission/BatchRoleMaintain'
+            },
+            {
+              icon: '',
+              iconSvg: '',
+              title: '批量用户/用户组授权查询',
+              path: '/permission/BatchQuery'
+            }
+          ]
+        },
+        {
+          icon: '',
+          iconSvg: '',
+          title: '集成服务',
+          path: '/integration',
+          children: [
+            {
+              icon: '',
+              iconSvg: '',
+              title: '集成适配器',
+              path: '/integration/Adapter'
+            },
+            {
+              icon: '',
+              iconSvg: '',
+              title: '数据库连接',
+              path: '/integration/Database'
+            },
+            {
+              icon: '',
+              iconSvg: '',
+              title: '服务分类',
+              path: '/integration/ScvCate'
+            },
+            {
+              icon: '',
+              iconSvg: '',
+              title: '业务服务',
+              path: '/integration/Business'
             }
           ]
         }
