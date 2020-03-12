@@ -248,6 +248,134 @@ const frameIn = [
     ]
   },
   {
+    path: '/permission',
+    component: layoutHeaderAside,
+    meta: {
+      auth: true,
+      title: '权限管理'
+    },
+    children: [
+      {
+        path: 'RoleMaintenance',
+        name: 'RoleMaintenance',
+        meta: {
+          auth: true,
+          title: '角色维护'
+        },
+        component: () => import('@/views/syplatform/permission/RoleMaintenance')
+      },
+      {
+        path: 'UserPermission',
+        name: 'UserPermission',
+        meta: {
+          auth: true,
+          title: '用户授权'
+        },
+        component: () => import('@/views/syplatform/permission/UserPermission')
+      },
+      {
+        path: 'BatchImportRole',
+        name: 'BatchImportRole',
+        meta: {
+          auth: true,
+          title: '批量角色导入/导出'
+        },
+        component: () => import('@/views/syplatform/permission/BatchImportRole')
+      },
+      {
+        path: 'BatchUserPermission',
+        name: 'BatchUserPermission',
+        meta: {
+          auth: true,
+          title: '批量用户授权'
+        },
+        component: () => import('@/views/syplatform/permission/BatchUserPermission')
+      },
+      {
+        path: 'BatchGroupPermission',
+        name: 'BatchGroupPermission',
+        meta: {
+          auth: true,
+          title: '批量用户组授权'
+        },
+        component: () => import('@/views/syplatform/permission/BatchGroupPermission')
+      },
+      {
+        path: 'BatchRoleMaintain',
+        name: 'BatchRoleMaintain',
+        meta: {
+          auth: true,
+          title: '批量角色维护'
+        },
+        component: () => import('@/views/syplatform/permission/BatchRoleMaintain')
+      },
+      {
+        path: 'BatchQuery',
+        name: 'BatchQuery',
+        meta: {
+          auth: true,
+          title: '批量用户/用户组授权查询'
+        },
+        component: () => import('@/views/syplatform/permission/BatchQuery')
+      },
+      {
+        path: 'Report',
+        name: 'Report',
+        meta: {
+          auth: true,
+          title: '报表统计'
+        },
+        component: () => import('@/views/syplatform/permission/Report')
+      }
+    ]
+  },
+  {
+    path: '/integration',
+    component: layoutHeaderAside,
+    meta: {
+      auth: true,
+      title: '集成服务'
+    },
+    children: [
+      {
+        path: 'Adapter',
+        name: 'Adapter',
+        meta: {
+          auth: true,
+          title: '集成适配器'
+        },
+        component: () => import('@/views/syplatform/integration/Adapter')
+      },
+      {
+        path: 'Database',
+        name: 'Database',
+        meta: {
+          auth: true,
+          title: '数据库连接'
+        },
+        component: () => import('@/views/syplatform/integration/Database')
+      },
+      {
+        path: 'ScvCate',
+        name: 'ScvCate',
+        meta: {
+          auth: true,
+          title: '服务分类'
+        },
+        component: () => import('@/views/syplatform/integration/ScvCate')
+      },
+      {
+        path: 'Business',
+        name: 'Business',
+        meta: {
+          auth: true,
+          title: '业务服务'
+        },
+        component: () => import('@/views/syplatform/integration/Business')
+      }
+    ]
+  },
+  {
     path: '/sy-admin',
     component: layoutHeaderAside,
     meta: {
