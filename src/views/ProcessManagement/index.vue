@@ -1,8 +1,8 @@
 <template>
   <div class="dashboard-editor-container">
     <header>
-      <el-button type="primary" size="mini" @click="dialogVisible = true">新增一级文件夹</el-button>
-      <el-button type="primary" size="mini">导入流程</el-button>
+      <el-button type="primary" size="mini" @click="addDialogVisible = true">新增一级文件夹</el-button>
+      <el-button type="primary" size="mini" @click="importDialogVisible = true">导入流程</el-button>
     </header>
     <main>
       <el-tree
@@ -15,25 +15,49 @@
     </main>
     <el-dialog
       title="新增一级文件夹"
-      :visible.sync="dialogVisible"
+      :visible.sync="addDialogVisible"
       width="35%">
-      <el-form ref="form" size="mini" :model="form" label-width="100px">
+      <el-form ref="form" size="mini" :model="addForm" label-width="100px">
         <el-form-item label="流程目录名称">
-          <el-input v-model="form.name" size="mini"></el-input>
+          <el-input v-model="addForm.name" size="mini"></el-input>
         </el-form-item>
         <el-form-item label="流程目录编码">
-          <el-input v-model="form.key" size="mini"></el-input>
+          <el-input v-model="addForm.key" size="mini"></el-input>
         </el-form-item>
         <el-form-item label="上级菜单">
           <el-button type="text">选择父级</el-button>
         </el-form-item>
         <el-form-item label="排序">
-          <el-input v-model="form.sort" size="mini"></el-input>
+          <el-input v-model="addForm.sort" size="mini"></el-input>
         </el-form-item>
       </el-form>
       <span slot="footer" class="dialog-footer">
-        <el-button @click="dialogVisible = false" size="mini">提交</el-button>
-        <el-button type="primary" @click="dialogVisible = false" size="mini">撤销</el-button>
+        <el-button @click="addDialogVisible = false" size="mini">提交</el-button>
+        <el-button type="primary" @click="addDialogVisible = false" size="mini">撤销</el-button>
+      </span>
+    </el-dialog>
+    <el-dialog
+      title="导入流程"
+      :visible.sync="importDialogVisible"
+      width="35%">
+      <el-form ref="form" size="mini" :model="importForm" label-width="100px">
+        <el-form-item label="选择目录">
+          <el-input v-model="importForm.name" size="mini"></el-input>
+        </el-form-item>
+        <el-form-item label="导入文件">
+          <el-button type="primary">选择文件</el-button>
+          <span class="import-tip">{{ importForm.file }}</span>
+        </el-form-item>
+        <el-form-item label="流程名称">
+          <el-input v-model="importForm.key" size="mini"></el-input>
+        </el-form-item>
+        <el-form-item label="流程编码">
+          <el-input v-model="importForm.sort" size="mini"></el-input>
+        </el-form-item>
+      </el-form>
+      <span slot="footer" class="dialog-footer">
+        <el-button @click="importDialogVisible = false" size="mini">提交</el-button>
+        <el-button type="primary" @click="importDialogVisible = false" size="mini">撤销</el-button>
       </span>
     </el-dialog>
   </div>
@@ -44,29 +68,69 @@
 
   export default {
     data() {
-      const data = [{
-        id: 1,
-        label: 'OA',
-        children: [{
-          id: 2,
-          label: '二级 1-1',
-          children: [{
-            id: 3,
-            label: '三级 1-1-1'
-          }, {
-            id: 4,
-            label: '三级 1-1-2'
-          }]
-        }]
-      }];
+      // const data = [{
+      //   id: 1,
+      //   label: 'OA',
+      //   children: [{
+      //     id: 2,
+      //     label: '二级 1-1',
+      //     children: [{
+      //       id: 3,
+      //       label: '三级 1-1-1'
+      //     }, {
+      //       id: 4,
+      //       label: '三级 1-1-2'
+      //     }]
+      //   }]
+      // }];
+      const data = [
+        {
+          "catalogId": "4683a87bd40f4b449d6089ade5afa829",
+          "code": "cataB3",
+          "name": "目录B3",
+          "parentId": null,
+          "parentCode": "cataB",
+          "type": 1,
+          "sort": 3,
+          "desc": "目录B3",
+          "systemId": null,
+          "state": 1,
+          "createdBy": "1",
+          "createdOn": "2020-03-13 10:52:56",
+          "modifyBy": null,
+          "modifyOn": null,
+          "version": "1"
+        },
+        {
+          "catalogId": "f26e451c4e6341d19f8b4f012d8e7ae7",
+          "code": "cataB2",
+          "name": "目录B2",
+          "parentId": null,
+          "parentCode": "cataB",
+          "type": 1,
+          "sort": 1,
+          "desc": "目录B1",
+          "systemId": null,
+          "state": 1,
+          "createdBy": "1",
+          "createdOn": "2020-03-13 10:08:16",
+          "modifyBy": null,
+          "modifyOn": null,
+          "version": "1"
+        }
+      ]
       return {
-        dialogVisible: false,
+        addDialogVisible: false,
+        importDialogVisible: false,
         data: JSON.parse(JSON.stringify(data)),
         data: JSON.parse(JSON.stringify(data)),
-        form: {
+        addForm: {
           name: '',
           key: '',
           sort: ''
+        },
+        importForm: {
+          file: '未选择任何文件'
         }
       }
     },
@@ -98,7 +162,7 @@
           <span class="custom-tree-node">
             <span>
               <i class="el-icon-folder"></i>
-              {node.label}
+              {node.data.name}
             </span>
             <span>
               <el-tooltip class="item" effect="dark" content="添加流程目录" placement="bottom">
@@ -134,5 +198,10 @@
   }
   .custom-tree-node i {
     margin-right: 5px
+  }
+  .import-tip {
+    font-size: 12px;
+    color: red;
+    margin-left: 5px;
   }
 </style>

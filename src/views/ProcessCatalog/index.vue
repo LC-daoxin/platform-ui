@@ -28,32 +28,44 @@
       <div class="search-co">
         <div class="search-item">
           <span>流程目录名称：</span>
-          <el-input size="mini"></el-input>
+          <el-input size="mini" v-model="search.name"></el-input>
         </div>
         <div class="search-item">
           <span>流程目录编码：</span>
-          <el-input size="mini"></el-input>
+          <el-input size="mini" v-model="search.code"></el-input>
         </div>
-        <el-button type="primary" icon="el-icon-search" size="mini">搜索</el-button>
+        <el-button type="primary" icon="el-icon-search" size="mini" @click="search">搜索</el-button>
       </div>
     </header>
-    <el-table :data="tableData" :height="tableHeight" size="mini" border stripe>
-      <el-table-column
-        type="selection"
-        align="center"
-        width="40">
-      </el-table-column>
-      <el-table-column
-        fixed
-        v-for="(item, index) of columns"
-        :key="index"
-        :prop="item.prop"
-        :label="item.label">
-        <template v-if="item.label === '操作'">
-          <el-button type="primary" size="mini">编辑</el-button>
-        </template>
-      </el-table-column>
-    </el-table>
+    <main>
+      <el-table :data="tableData" :height="tableHeight" size="mini" border stripe>
+        <el-table-column
+          type="selection"
+          align="center"
+          width="40">
+        </el-table-column>
+        <el-table-column
+          fixed
+          v-for="(item, index) of columns"
+          :key="index"
+          :prop="item.prop"
+          :label="item.label">
+          <template v-if="item.label === '操作'">
+            <el-button type="primary" size="mini">编辑</el-button>
+          </template>
+        </el-table-column>
+      </el-table>
+    </main>
+    <el-pagination
+      @size-change="handleSizeChange"
+      @current-change="handleCurrentChange"
+      :current-page="currentPage"
+      :page-sizes="[100, 200, 300, 400]"
+      :page-size="100"
+      layout="total, sizes, prev, pager, next, jumper"
+      :total="400"
+      small>
+    </el-pagination>
   </div>
 </template>
 
@@ -61,7 +73,8 @@
 export default {
   data() {
     return {
-      tableHeight: window.innerHeight - 165.67,
+      tableHeight: window.innerHeight - 165.67 - 44,
+      currentPage: 1,
       dialogVisible: false,
       dialogTitle: '新增',
       form: {
@@ -75,7 +88,7 @@ export default {
           prop: 'name',
           label: '流程目录名称'
         }, {
-          prop: 'key',
+          prop: 'code',
           label: '流程目录编码'
         }, {
           prop: 'parent',
@@ -85,14 +98,43 @@ export default {
         }
       ],
       tableData: [
-        {},{},{}
-      ]
+        {
+          code: 'cataA1',
+          name: '目录A1',
+          parentName: ''
+        },
+        {
+          code: 'cataA',
+          name: '目录A',
+          parentName: ''
+        }
+      ],
+      search: {
+        name: '',
+        code: ''
+      }
     }
   },
   methods: {
     onSubmit() {
       this.dialogVisible = false
-    }
+    },
+    /**
+     * 修改显示数量
+     */
+    handleSizeChange(val) {
+      console.log(`每页 ${val} 条`);
+    },
+    /**
+     * 翻页
+     */
+    handleCurrentChange(val) {
+      console.log(`当前页: ${val}`);
+    },
+    /**
+     * 搜索
+     */
+    search() {}
   }
 }
 </script>
@@ -101,7 +143,9 @@ export default {
   .dashboard-editor-container header {
     display: flex;
     justify-content: space-between;
-    margin-bottom: 12px;
+  }
+  .dashboard-editor-container main {
+    margin: 12px 0;
   }
   .dashboard-editor-container header .search-co {
     display: flex;
