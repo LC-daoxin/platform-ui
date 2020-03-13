@@ -198,7 +198,7 @@ const frameIn = [
           auth: true,
           title: '用户'
         },
-        component: () => import('@/views/syplatform/user/User')
+        component: () => import('@/views/user/User')
       },
       {
         path: 'UserGroup',
@@ -207,7 +207,7 @@ const frameIn = [
           auth: true,
           title: '用户组'
         },
-        component: () => import('@/views/syplatform/user/UserGroup')
+        component: () => import('@/views/user/UserGroup')
       },
       {
         path: 'RelationGroup',
@@ -216,7 +216,7 @@ const frameIn = [
           auth: true,
           title: '用户/组关系'
         },
-        component: () => import('@/views/syplatform/user/RelationGroup')
+        component: () => import('@/views/user/RelationGroup')
       },
       {
         path: 'AddUser',
@@ -225,7 +225,7 @@ const frameIn = [
           auth: true,
           title: '批量添加用户'
         },
-        component: () => import('@/views/syplatform/user/AddUser')
+        component: () => import('@/views/user/AddUser')
       },
       {
         path: 'AddUserGroup',
@@ -234,7 +234,7 @@ const frameIn = [
           auth: true,
           title: '批量添加用户组'
         },
-        component: () => import('@/views/syplatform/user/User')
+        component: () => import('@/views/user/User')
       },
       {
         path: 'BatchMaintain',
@@ -243,7 +243,7 @@ const frameIn = [
           auth: true,
           title: '批量用户与用户组关系维护'
         },
-        component: () => import('@/views/syplatform/user/BatchMaintain')
+        component: () => import('@/views/user/BatchMaintain')
       }
     ]
   },
@@ -262,7 +262,7 @@ const frameIn = [
           auth: true,
           title: '角色维护'
         },
-        component: () => import('@/views/syplatform/permission/RoleMaintenance')
+        component: () => import('@/views/permission/RoleMaintenance')
       },
       {
         path: 'UserPermission',
@@ -271,7 +271,7 @@ const frameIn = [
           auth: true,
           title: '用户授权'
         },
-        component: () => import('@/views/syplatform/permission/UserPermission')
+        component: () => import('@/views/permission/UserPermission')
       },
       {
         path: 'BatchImportRole',
@@ -280,7 +280,7 @@ const frameIn = [
           auth: true,
           title: '批量角色导入/导出'
         },
-        component: () => import('@/views/syplatform/permission/BatchImportRole')
+        component: () => import('@/views/permission/BatchImportRole')
       },
       {
         path: 'BatchUserPermission',
@@ -289,7 +289,7 @@ const frameIn = [
           auth: true,
           title: '批量用户授权'
         },
-        component: () => import('@/views/syplatform/permission/BatchUserPermission')
+        component: () => import('@/views/permission/BatchUserPermission')
       },
       {
         path: 'BatchGroupPermission',
@@ -298,7 +298,7 @@ const frameIn = [
           auth: true,
           title: '批量用户组授权'
         },
-        component: () => import('@/views/syplatform/permission/BatchGroupPermission')
+        component: () => import('@/views/permission/BatchGroupPermission')
       },
       {
         path: 'BatchRoleMaintain',
@@ -307,7 +307,7 @@ const frameIn = [
           auth: true,
           title: '批量角色维护'
         },
-        component: () => import('@/views/syplatform/permission/BatchRoleMaintain')
+        component: () => import('@/views/permission/BatchRoleMaintain')
       },
       {
         path: 'BatchQuery',
@@ -316,7 +316,7 @@ const frameIn = [
           auth: true,
           title: '批量用户/用户组授权查询'
         },
-        component: () => import('@/views/syplatform/permission/BatchQuery')
+        component: () => import('@/views/permission/BatchQuery')
       },
       {
         path: 'Report',
@@ -325,7 +325,7 @@ const frameIn = [
           auth: true,
           title: '报表统计'
         },
-        component: () => import('@/views/syplatform/permission/Report')
+        component: () => import('@/views/permission/Report')
       }
     ]
   },
@@ -344,7 +344,7 @@ const frameIn = [
           auth: true,
           title: '集成适配器'
         },
-        component: () => import('@/views/syplatform/integration/Adapter')
+        component: () => import('@/views/integration/Adapter')
       },
       {
         path: 'Database',
@@ -353,7 +353,7 @@ const frameIn = [
           auth: true,
           title: '数据库连接'
         },
-        component: () => import('@/views/syplatform/integration/Database')
+        component: () => import('@/views/integration/Database')
       },
       {
         path: 'ScvCate',
@@ -362,7 +362,7 @@ const frameIn = [
           auth: true,
           title: '服务分类'
         },
-        component: () => import('@/views/syplatform/integration/ScvCate')
+        component: () => import('@/views/integration/ScvCate')
       },
       {
         path: 'Business',
@@ -371,7 +371,7 @@ const frameIn = [
           auth: true,
           title: '业务服务'
         },
-        component: () => import('@/views/syplatform/integration/Business')
+        component: () => import('@/views/integration/Business')
       }
     ]
   },
