@@ -187,7 +187,7 @@
     margin-bottom: 12px;
   }
   main {
-    width: 50vw;
+    /*width: 50vw;*/
   }
   .custom-tree-node {
     flex: 1;
