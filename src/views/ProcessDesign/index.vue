@@ -41,6 +41,14 @@
       class="drawer"
       size="50%">
       <h1>节点属性</h1>
+      <el-card class="box-card">
+        <el-divider content-position="left">流程信息</el-divider>
+        <div class="content">
+          <div class="content-row"><span class="label">流程类型：</span><span class="text">{{ ProcessType }}</span></div>
+          <div class="content-row"><span class="label">流程描述：</span><span class="text">{{ ProcessDescribe }}</span></div>
+          <div class="content-row"><span class="label">所属公司：</span><span class="text">{{ Company }}</span></div>
+        </div>
+      </el-card>
       <el-tabs class="drawer-content">
         <el-tab-pane label="基本信息">
           <basic-info></basic-info>
