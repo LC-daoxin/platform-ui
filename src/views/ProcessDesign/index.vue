@@ -1,8 +1,8 @@
 <template>
   <div class="dashboard-editor-container">
     <header>
-      <el-button icon="el-icon-upload" type="primary" size="mini">保存</el-button>
-      <el-button icon="el-icon-document-checked" type="primary" size="mini">校验</el-button>
+      <el-button icon="el-icon-upload" type="success" size="mini">保存</el-button>
+      <el-button icon="el-icon-document-checked" type="warning" size="mini">校验</el-button>
       <el-button icon="el-icon-s-promotion" type="primary" size="mini">发布</el-button>
       <el-button icon="el-icon-picture-outline" type="primary" size="mini">存为图片</el-button>
       <el-button icon="el-icon-setting" type="primary" size="mini" @click="processDrawer = true">流程属性</el-button>
@@ -18,10 +18,18 @@
       class="drawer"
       size="50%">
       <h1>流程属性</h1>
+      <el-card class="box-card">
+        <el-divider content-position="left">流程信息</el-divider>
+        <div class="content">
+          <div class="content-row"><span class="label">流程类型：</span><span class="text">{{ ProcessType }}</span></div>
+          <div class="content-row"><span class="label">流程描述：</span><span class="text">{{ ProcessDescribe }}</span></div>
+          <div class="content-row"><span class="label">所属公司：</span><span class="text">{{ Company }}</span></div>
+        </div>
+      </el-card>
       <el-tabs class="drawer-content">
-        <el-tab-pane label="流程变量"><process-configuration/></el-tab-pane>
-        <el-tab-pane label="功能调用">功能调用</el-tab-pane>
-        <el-tab-pane label="用户修改">用户修改</el-tab-pane>
+        <el-tab-pane label="流程变量"><process-variable/></el-tab-pane>
+        <el-tab-pane label="功能调用"><process-configuration/></el-tab-pane>
+        <el-tab-pane label="用户修改"><user-modify/></el-tab-pane>
       </el-tabs>
     </el-drawer>
     <el-drawer
@@ -61,6 +69,8 @@ import Operating from './components/Operating'
 import BasicInfo from './components/BasicInfo'
 import Notice from './components/Notice'
 import ConfigInfo from './components/ConfigInfo'
+import ProcessVariable from './components/ProcessVariable'
+import UserModify from './components/UserModify'
 export default {
   components: {
     ProcessConfiguration,
@@ -68,18 +78,29 @@ export default {
     Operating,
     BasicInfo,
     Notice,
-    ConfigInfo
+    ConfigInfo,
+    ProcessVariable,
+    UserModify
   },
   data() {
     return {
       processDrawer: false,
-      nodeDrawer: false
+      nodeDrawer: false,
+      ProcessType: 'ASZ测试流程0206',
+      ProcessDescribe: 'ASZDemo01-001-Demo02',
+      Company: '中国海洋石油总公司'
     }
   }
 }
 </script>
 
 <style lang="scss" scoped>
+  ::v-deep .el-tabs--top {
+    border-top: none !important;
+  }
+  ::v-deep .el-divider--horizontal {
+    margin: 0 !important;
+  }
   .dashboard-editor-container {
     header {
       margin-bottom: 10px;
@@ -92,6 +113,20 @@ export default {
       box-shadow: 0 0 0 1px #cfd7e5;
     }
     .drawer {
+      .box-card {
+        width: 96%;
+        margin: 10px auto 0;
+        .content {
+          margin-top: 16px;
+          &-row {
+            font-size: 14px;
+            margin-bottom: 2px;
+            .text {
+              font-weight: 200;
+            }
+          }
+        }
+      }
       h1 {
         background: #f9f9f9;
         font-size: 18px;
