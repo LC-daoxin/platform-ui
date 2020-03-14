@@ -443,9 +443,18 @@ const frameIn = [
         name: 'mail-template',
         meta: {
           auth: true,
-          title: '流程管理'
+          title: '邮件模板'
         },
         component: () => import('@/views/MailTemplate')
+      },
+      {
+        path: 'work-calendar',
+        name: 'work-calendar',
+        meta: {
+          auth: true,
+          title: '工作日历'
+        },
+        component: () => import('@/views/WorkCalendar')
       }
     ]
   }

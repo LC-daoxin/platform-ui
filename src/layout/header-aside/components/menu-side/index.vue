@@ -62,6 +62,12 @@ export default {
               iconSvg: '',
               title: '邮件模板',
               path: '/work-flow/mail-template'
+            },
+            {
+              icon: '',
+              iconSvg: '',
+              title: '工作日历',
+              path: '/work-flow/work-calendar'
             }
           ]
         },
