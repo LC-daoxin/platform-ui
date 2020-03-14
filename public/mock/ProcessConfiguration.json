@@ -1,0 +1,49 @@
+{
+  "total": 12,
+  "items": [
+    {
+      "TypeName": "AllowApproverCallBack",
+      "Status": true
+    },
+    {
+      "TypeName": "AllowRescideWhenApproved",
+      "Status": true
+    },{
+      "TypeName": "ApplicanCallback",
+      "Status": false
+    },{
+      "TypeName": "ApproveLinkage",
+      "Status": false
+    },{
+      "TypeName": "CancelOperation",
+      "Status": true
+    },{
+      "TypeName": "CanSetApprover",
+      "Status": true
+    },{
+      "TypeName": "CreateLinkage",
+      "Status": false
+    },{
+      "TypeName": "DiagramLinkage",
+      "Status": false
+    },{
+      "TypeName": "EntryLinkage",
+      "Status": false
+    },{
+      "TypeName": "HelpLinkage",
+      "Status": true
+    },{
+      "TypeName": "PrintLinkage",
+      "Status": true
+    },{
+      "TypeName": "RescindToApplicant",
+      "Status": true
+    },{
+      "TypeName": "RescindToPrevious",
+      "Status": false
+    },{
+      "TypeName": "ViewLinkage",
+      "Status": true
+    }
+  ]
+}

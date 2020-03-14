@@ -21,12 +21,12 @@
       highlight-current-row
       class="table"
     >
-      <el-table-column
-        type="selection"
-        align="center"
-        width="35">
-      </el-table-column>
-      <el-table-column label="功能名称" min-width="90" align="center" :show-overflow-tooltip="true">
+      <!--<el-table-column-->
+        <!--type="selection"-->
+        <!--align="center"-->
+        <!--width="35">-->
+      <!--</el-table-column>-->
+      <el-table-column label="功能名称" min-width="130" align="center" :show-overflow-tooltip="true">
         <template slot-scope="scope">
           <span>{{ scope.row.TypeName }}</span>
         </template>
@@ -36,7 +36,7 @@
           <el-tag size="small" :type="scope.row.Status ? 'success' : 'info'">{{ scope.row.Status ? 'True' : 'False' }}</el-tag>
         </template>
       </el-table-column>
-      <el-table-column label="操作" min-width="90" align="center" :show-overflow-tooltip="true">
+      <el-table-column label="操作" min-width="70" align="center" :show-overflow-tooltip="true">
         <template slot-scope="scope">
           <!--<el-button v-if="scope.row.Status" size="mini" type="danger" @click="start(scope)">禁用</el-button>-->
           <!--<el-button v-else size="mini" type="success" @click="start(scope)">启用</el-button>-->
@@ -58,30 +58,20 @@
     >
     </el-pagination>
     <!-- 分页 -->
-    <!-- 新增流程类型-弹窗 -->
-    <add-process-type
-      @showDialog="closeDialog"
-      :dialogTypeVisible="dialogTypeVisible"
-    />
-    <!-- 新增流程类型-弹窗 -->
   </div>
 </template>
 
 <script>
 import axios from 'axios'
-import AddProcessType from './components/AddProcessType'
 export default {
-  name: 'process-type',
-  components: {
-    AddProcessType
-  },
+  name: 'process-configuration',
   data () {
     return {
       valueTime: '',
       tableData: [],
       currentPage: 1,
-      pageSize: 5,
-      totalCount: 20,
+      pageSize: 20,
+      totalCount: 14,
       dialogTypeVisible: false
     }
   },
@@ -90,7 +80,7 @@ export default {
   },
   methods: {
     getHomeInfo () {
-      axios.get('/api/Process3.json')
+      axios.get('/mock/ProcessConfiguration.json')
         .then(this.getHomeInfoSucc)
     },
     getHomeInfoSucc (res) {
@@ -101,40 +91,6 @@ export default {
     },
     handleCurrentChange (val) {
       console.log(`当前页: ${val}`)
-    },
-    lock () {
-      this.$confirm('确定要锁定选择的用户?', '提示', {
-        confirmButtonText: '确定',
-        cancelButtonText: '取消',
-        type: 'warning'
-      }).then(() => {
-        this.$message({
-          type: 'success',
-          message: '已锁定'
-        })
-      }).catch(() => {
-        this.$message({
-          type: 'info',
-          message: '已取消'
-        })
-      })
-    },
-    deleteRecord () {
-      this.$confirm('确定要删除选中的记录?', '提示', {
-        confirmButtonText: '确定',
-        cancelButtonText: '取消',
-        type: 'warning'
-      }).then(() => {
-        this.$message({
-          type: 'success',
-          message: '已删除'
-        })
-      }).catch(() => {
-        this.$message({
-          type: 'info',
-          message: '已取消'
-        })
-      })
     },
     openDialog (name) {
       switch (name) {

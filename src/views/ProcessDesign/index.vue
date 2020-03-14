@@ -19,7 +19,7 @@
       size="50%">
       <h1>流程属性</h1>
       <el-tabs class="drawer-content">
-        <el-tab-pane label="流程变量">流程变量</el-tab-pane>
+        <el-tab-pane label="流程变量"><process-configuration/></el-tab-pane>
         <el-tab-pane label="功能调用">功能调用</el-tab-pane>
         <el-tab-pane label="用户修改">用户修改</el-tab-pane>
       </el-tabs>
@@ -45,7 +45,11 @@
 </template>
 
 <script>
+import ProcessConfiguration from './components/ProcessConfiguration'
 export default {
+  components: {
+    ProcessConfiguration
+  },
   data() {
     return {
       processDrawer: false,
