@@ -40,7 +40,7 @@
         <template slot-scope="scope">
           <!--<el-button v-if="scope.row.Status" size="mini" type="danger" @click="start(scope)">禁用</el-button>-->
           <!--<el-button v-else size="mini" type="success" @click="start(scope)">启用</el-button>-->
-          <el-button size="mini" type="primary" @click="openDialog('AddType')">编辑</el-button>
+          <el-button size="mini" type="primary" icon="el-icon-edit" @click="openDialog('AddType')">编辑</el-button>
         </template>
       </el-table-column>
     </el-table>
@@ -76,14 +76,14 @@ export default {
     }
   },
   mounted () {
-    this.getHomeInfo()
+    this.getInfo()
   },
   methods: {
-    getHomeInfo () {
+    getInfo () {
       axios.get('/mock/ProcessConfiguration.json')
-        .then(this.getHomeInfoSucc)
+        .then(this.getInfoSucc)
     },
-    getHomeInfoSucc (res) {
+    getInfoSucc (res) {
       this.tableData = res.data.items
     },
     handleSizeChange (val) {
@@ -115,7 +115,7 @@ export default {
 
 <style lang="scss" scoped>
 .process {
-  padding: 8px;
+  // padding: 8px;
   .bar:not(:first-child) {
     margin-top: 5px;
   }
