@@ -34,11 +34,21 @@
       size="50%">
       <h1>节点属性</h1>
       <el-tabs class="drawer-content">
-        <el-tab-pane label="基本信息">基本信息</el-tab-pane>
-        <el-tab-pane label="配置信息">配置信息</el-tab-pane>
-        <el-tab-pane label="通知">通知</el-tab-pane>
-        <el-tab-pane label="操作">操作</el-tab-pane>
-        <el-tab-pane label="参数">参数</el-tab-pane>
+        <el-tab-pane label="基本信息">
+          <basic-info></basic-info>
+        </el-tab-pane>
+        <el-tab-pane label="配置信息">
+          <config-info></config-info>
+        </el-tab-pane>
+        <el-tab-pane label="通知">
+          <notice></notice>
+        </el-tab-pane>
+        <el-tab-pane label="操作">
+          <operating></operating>
+        </el-tab-pane>
+        <el-tab-pane label="参数">
+          <parameter></parameter>
+        </el-tab-pane>
       </el-tabs>
     </el-drawer>
   </div>
@@ -46,9 +56,19 @@
 
 <script>
 import ProcessConfiguration from './components/ProcessConfiguration'
+import Parameter from './components/Parameter'
+import Operating from './components/Operating'
+import BasicInfo from './components/BasicInfo'
+import Notice from './components/Notice'
+import ConfigInfo from './components/ConfigInfo'
 export default {
   components: {
-    ProcessConfiguration
+    ProcessConfiguration,
+    Parameter,
+    Operating,
+    BasicInfo,
+    Notice,
+    ConfigInfo
   },
   data() {
     return {
