@@ -3,6 +3,7 @@
     <header>
       <el-button type="primary" size="mini" @click="addDialogVisible = true">新增一级文件夹</el-button>
       <el-button type="primary" size="mini" @click="importDialogVisible = true">导入流程</el-button>
+      <el-button type="primary" size="mini" @click="$router.push('/work-flow/process-design')">流程设计</el-button>
     </header>
     <main>
       <el-tree

@@ -455,6 +455,15 @@ const frameIn = [
           title: '工作日历'
         },
         component: () => import('@/views/WorkCalendar')
+      },
+      {
+        path: 'process-design',
+        name: 'process-design',
+        meta: {
+          auth: true,
+          title: '流程设计'
+        },
+        component: () => import('@/views/ProcessDesign')
       }
     ]
   }
