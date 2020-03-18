@@ -6,11 +6,116 @@
   "description": "",
   "glyphs": [
     {
-      "icon_id": "351752",
-      "name": "服务中心",
-      "font_class": "fuwuzhongxin",
+      "icon_id": "2098789",
+      "name": "价格策略",
+      "font_class": "jiagecelve",
+      "unicode": "e600",
+      "unicode_decimal": 58880
+    },
+    {
+      "icon_id": "5729043",
+      "name": "文件夹-添加",
+      "font_class": "wenjianjia-tianjia",
+      "unicode": "e670",
+      "unicode_decimal": 58992
+    },
+    {
+      "icon_id": "5667959",
+      "name": "编辑",
+      "font_class": "bianji",
+      "unicode": "e62a",
+      "unicode_decimal": 58922
+    },
+    {
+      "icon_id": "1105000",
+      "name": "日历",
+      "font_class": "calendar",
       "unicode": "e60c",
       "unicode_decimal": 58892
+    },
+    {
+      "icon_id": "512360",
+      "name": "添加",
+      "font_class": "tianjia1",
+      "unicode": "e613",
+      "unicode_decimal": 58899
+    },
+    {
+      "icon_id": "4734124",
+      "name": "删除",
+      "font_class": "ic_del",
+      "unicode": "e606",
+      "unicode_decimal": 58886
+    },
+    {
+      "icon_id": "680988",
+      "name": "属性",
+      "font_class": "shuxing",
+      "unicode": "e727",
+      "unicode_decimal": 59175
+    },
+    {
+      "icon_id": "705808",
+      "name": "禁用",
+      "font_class": "jinyong",
+      "unicode": "e67e",
+      "unicode_decimal": 59006
+    },
+    {
+      "icon_id": "705810",
+      "name": "启用",
+      "font_class": "qiyong",
+      "unicode": "e680",
+      "unicode_decimal": 59008
+    },
+    {
+      "icon_id": "3978107",
+      "name": "时间策略维护",
+      "font_class": "shijiancelveweihu",
+      "unicode": "e63e",
+      "unicode_decimal": 58942
+    },
+    {
+      "icon_id": "3978377",
+      "name": "策略管理",
+      "font_class": "celveguanli",
+      "unicode": "e660",
+      "unicode_decimal": 58976
+    },
+    {
+      "icon_id": "3978384",
+      "name": "策略执行配置",
+      "font_class": "celvezhihangpeizhi",
+      "unicode": "e663",
+      "unicode_decimal": 58979
+    },
+    {
+      "icon_id": "6627746",
+      "name": "流程管理",
+      "font_class": "liuchengguanli",
+      "unicode": "e621",
+      "unicode_decimal": 58913
+    },
+    {
+      "icon_id": "8361842",
+      "name": "邮件",
+      "font_class": "youjian",
+      "unicode": "e6ce",
+      "unicode_decimal": 59086
+    },
+    {
+      "icon_id": "8821262",
+      "name": "功能-01",
+      "font_class": "gongneng-",
+      "unicode": "e610",
+      "unicode_decimal": 58896
+    },
+    {
+      "icon_id": "12694038",
+      "name": "属性管理",
+      "font_class": "shuxingguanli",
+      "unicode": "e611",
+      "unicode_decimal": 58897
     },
     {
       "icon_id": "577986",
@@ -256,13 +361,6 @@
       "font_class": "quanxianguanli1",
       "unicode": "e6a5",
       "unicode_decimal": 59045
-    },
-    {
-      "icon_id": "5650873",
-      "name": "服务",
-      "font_class": "fuwu",
-      "unicode": "e617",
-      "unicode_decimal": 58903
     },
     {
       "icon_id": "6185788",

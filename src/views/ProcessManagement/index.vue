@@ -1,23 +1,169 @@
 <template>
   <div class="dashboard-editor-container">
     <header>
-      <el-button type="primary" size="mini" @click="addDialogVisible = true">新增一级文件夹</el-button>
-      <el-button type="primary" size="mini" @click="importDialogVisible = true">导入流程</el-button>
-      <el-button type="primary" size="mini" @click="$router.push('/work-flow/process-design')">流程设计</el-button>
+      <el-button type="primary" icon="el-icon-folder-add" size="mini" @click="addDialogVisible = true">新增流程组</el-button>
+      <el-button type="primary" icon="el-icon-upload2" size="mini" @click="importDialogVisible = true">导入流程</el-button>
     </header>
     <main>
       <el-tree
         :data="data"
         node-key="id"
-        default-expand-all
+        :props="defaultProps"
+        ref="ProcessTree"
+        :default-expanded-keys="[0]"
+        @node-click="handleNodeClick"
+        :load="loadNode"
+        lazy
         :expand-on-click-node="false"
-        :render-content="renderContent">
+      >
+        <div class="custom-tree" slot-scope="{ node, data }">
+          <span class="custom-tree-node" v-if="node.level === 1">
+            <span>
+              <i class="process el-icon-folder"></i>
+              <span :class="data.status ? '' : 'info'">{{ node.data.text }}</span>
+            </span>
+            <span v-if="data.status && node.isCurrent">
+              <el-tooltip class="item" effect="dark" content="添加流程" placement="bottom">
+                <el-button size="mini" type="text" @click="console(node, data)">
+                  <i class="iconfont pl-tianjia1 success"></i>
+                </el-button>
+              </el-tooltip>
+              <el-tooltip class="item" effect="dark" content="删除" placement="bottom">
+                <el-button size="mini" type="text">
+                  <i class="iconfont pl-ic_del danger"></i>
+                </el-button>
+              </el-tooltip>
+            </span>
+          </span>
+          <span class="custom-tree-node" v-if="node.level === 2">
+            <span>
+              <i :class="{ 'process': data.status, 'info': !data.status, 'iconfont pl-shengchanliuchengguanli': true}"></i>
+              <span :class="data.status ? '' : 'info'">{{ node.data.text }}</span>
+            </span>
+            <span v-if="data.status && node.isCurrent">
+              <el-tooltip class="item" effect="dark" content="属性" placement="bottom">
+                <el-button size="mini" type="text" @click="console(node, data)">
+                  <i class="iconfont pl-shuxing warning"></i>
+                </el-button>
+              </el-tooltip>
+              <el-tooltip class="item" effect="dark" content="禁用" placement="bottom">
+                <el-button size="mini" type="text">
+                  <i class="iconfont pl-jinyong danger"></i>
+                </el-button>
+              </el-tooltip>
+              <el-tooltip class="item" effect="dark" content="添加策略组" placement="bottom">
+                <el-button size="mini" type="text">
+                  <i class="iconfont pl-celvezhihangpeizhi"></i>
+                </el-button>
+              </el-tooltip>
+              <el-tooltip class="item" effect="dark" content="功能调用" placement="bottom">
+                <el-button size="mini" type="text">
+                  <i class="iconfont pl-gongneng-"></i>
+                </el-button>
+              </el-tooltip>
+              <el-tooltip class="item" effect="dark" content="流程变量" placement="bottom">
+                <el-button size="mini" type="text">
+                  <i class="iconfont pl-liuchengguanli"></i>
+                </el-button>
+              </el-tooltip>
+              <el-tooltip class="item" effect="dark" content="邮件模版" placement="bottom">
+                <el-button size="mini" type="text">
+                  <i class="iconfont pl-youjian"></i>
+                </el-button>
+              </el-tooltip>
+            </span>
+            <span class="manage" v-if="!data.status && node.isCurrent">
+              <el-tooltip class="item" effect="dark" content="启动" placement="bottom">
+                <el-button size="mini" type="text">
+                  <i class="iconfont pl-qiyong success"></i>
+                </el-button>
+              </el-tooltip>
+            </span>
+          </span>
+          <span class="custom-tree-node" v-if="node.level === 3">
+            <span>
+              <i  :class="{ 'strategyGroup': data.status, 'info': !data.status, 'iconfont pl-shijiancelveweihu': true}"></i>
+              <span :class="data.status ? 'groupText' : 'info'">{{ node.data.text }}</span>
+              <span class="describe">{{ node.data.describe }}</span>
+            </span>
+            <span v-if="data.status && node.isCurrent">
+              <el-tooltip class="item" effect="dark" content="编辑" placement="bottom">
+                <el-button size="mini" type="text" @click="console(node, data)">
+                  <i class="iconfont pl-bianji"></i>
+                </el-button>
+              </el-tooltip>
+              <el-tooltip class="item" effect="dark" content="添加策略" placement="bottom">
+                <el-button size="mini" type="text">
+                  <i class="iconfont pl-tianjia1"></i>
+                </el-button>
+              </el-tooltip>
+              <el-tooltip class="item" effect="dark" content="入口规则" placement="bottom">
+                <el-button size="mini" type="text">
+                  <i class="iconfont pl-guizeguanli1"></i>
+                </el-button>
+              </el-tooltip>
+              <el-tooltip class="item" effect="dark" content="邮件" placement="bottom">
+                <el-button size="mini" type="text">
+                  <i class="iconfont pl-youjian"></i>
+                </el-button>
+              </el-tooltip>
+              <el-tooltip class="item" effect="dark" content="禁用" placement="bottom">
+                <el-button size="mini" type="text">
+                  <i class="iconfont pl-jinyong danger"></i>
+                </el-button>
+              </el-tooltip>
+            </span>
+            <span class="manage" v-if="!data.status && node.isCurrent">
+              <el-tooltip class="item" effect="dark" content="启动" placement="bottom">
+                <el-button size="mini" type="text">
+                  <i class="iconfont pl-qiyong success"></i>
+                </el-button>
+              </el-tooltip>
+            </span>
+          </span>
+          <span class="custom-tree-node" v-if="node.level === 4">
+            <span>
+              <i  :class="{ 'strategy': data.status, 'info': !data.status, 'iconfont pl-jiagecelve': true}"></i>
+              <span :class="data.status ? 'groupText' : 'info'">{{ node.data.text }}</span>
+              <span class="describe">{{ node.data.describe }}</span>
+            </span>
+            <span v-if="data.status && node.isCurrent">
+              <el-tooltip class="item" effect="dark" content="编辑" placement="bottom">
+                <el-button size="mini" type="text" @click="console(node, data)">
+                  <i class="iconfont pl-bianji"></i>
+                </el-button>
+              </el-tooltip>
+              <el-tooltip class="item" effect="dark" content="审批节点" placement="bottom">
+                <el-button size="mini" type="text" @click="$router.push('/work-flow/process-design')">
+                  <i class="iconfont pl-changyongtubiao_liuchengguanli"></i>
+                </el-button>
+              </el-tooltip>
+              <el-tooltip class="item" effect="dark" content="邮件" placement="bottom">
+                <el-button size="mini" type="text">
+                  <i class="iconfont pl-youjian"></i>
+                </el-button>
+              </el-tooltip>
+              <el-tooltip class="item" effect="dark" content="禁用" placement="bottom">
+                <el-button size="mini" type="text">
+                  <i class="iconfont pl-jinyong danger"></i>
+                </el-button>
+              </el-tooltip>
+            </span>
+            <span class="manage" v-if="!data.status && node.isCurrent">
+              <el-tooltip class="item" effect="dark" content="启动" placement="bottom">
+                <el-button size="mini" type="text">
+                  <i class="iconfont pl-qiyong success"></i>
+                </el-button>
+              </el-tooltip>
+            </span>
+          </span>
+        </div>
       </el-tree>
     </main>
     <el-dialog
-      title="新增一级文件夹"
+      title="新增流程组"
       :visible.sync="addDialogVisible"
-      width="35%">
+      width="420px">
       <el-form ref="form" size="mini" :model="addForm" label-width="100px">
         <el-form-item label="流程目录名称">
           <el-input v-model="addForm.name" size="mini"></el-input>
@@ -40,7 +186,7 @@
     <el-dialog
       title="导入流程"
       :visible.sync="importDialogVisible"
-      width="35%">
+      width="420px">
       <el-form ref="form" size="mini" :model="importForm" label-width="100px">
         <el-form-item label="选择目录">
           <el-input v-model="importForm.name" size="mini"></el-input>
@@ -65,140 +211,148 @@
 </template>
 
 <script>
-  let id = 1000;
-
-  export default {
-    data() {
-      // const data = [{
-      //   id: 1,
-      //   label: 'OA',
-      //   children: [{
-      //     id: 2,
-      //     label: '二级 1-1',
-      //     children: [{
-      //       id: 3,
-      //       label: '三级 1-1-1'
-      //     }, {
-      //       id: 4,
-      //       label: '三级 1-1-2'
-      //     }]
-      //   }]
-      // }];
-      const data = [
-        {
-          "catalogId": "4683a87bd40f4b449d6089ade5afa829",
-          "code": "cataB3",
-          "name": "目录B3",
-          "parentId": null,
-          "parentCode": "cataB",
-          "type": 1,
-          "sort": 3,
-          "desc": "目录B3",
-          "systemId": null,
-          "state": 1,
-          "createdBy": "1",
-          "createdOn": "2020-03-13 10:52:56",
-          "modifyBy": null,
-          "modifyOn": null,
-          "version": "1"
-        },
-        {
-          "catalogId": "f26e451c4e6341d19f8b4f012d8e7ae7",
-          "code": "cataB2",
-          "name": "目录B2",
-          "parentId": null,
-          "parentCode": "cataB",
-          "type": 1,
-          "sort": 1,
-          "desc": "目录B1",
-          "systemId": null,
-          "state": 1,
-          "createdBy": "1",
-          "createdOn": "2020-03-13 10:08:16",
-          "modifyBy": null,
-          "modifyOn": null,
-          "version": "1"
+import axios from 'axios'
+export default {
+  data() {
+    return {
+      data: null,
+      defaultProps: {
+        children: 'children',
+        label: 'text',
+        isLeaf: function (res) {
+          return !res.Leaf
         }
-      ]
-      return {
-        addDialogVisible: false,
-        importDialogVisible: false,
-        data: JSON.parse(JSON.stringify(data)),
-        data: JSON.parse(JSON.stringify(data)),
-        addForm: {
-          name: '',
-          key: '',
-          sort: ''
-        },
-        importForm: {
-          file: '未选择任何文件'
-        }
-      }
-    },
-
-    methods: {
-      /**
-       * 新增一级文件夹
-       */
-      addRootFolder() {
-
       },
-      append(data) {
-        const newChild = { id: id++, label: 'testtest', children: [] };
-        if (!data.children) {
-          this.$set(data, 'children', []);
-        }
-        data.children.push(newChild);
+      addDialogVisible: false,
+      importDialogVisible: false,
+      addForm: {
+        name: '',
+        key: '',
+        sort: ''
       },
-
-      remove(node, data) {
-        const parent = node.parent;
-        const children = parent.data.children || parent.data;
-        const index = children.findIndex(d => d.id === data.id);
-        children.splice(index, 1);
-      },
-
-      renderContent(h, { node, data, store }) {
-        return (
-          <span class="custom-tree-node">
-            <span>
-              <i class="el-icon-folder"></i>
-              {node.data.name}
-            </span>
-            <span>
-              <el-tooltip class="item" effect="dark" content="添加流程目录" placement="bottom">
-                <el-button icon="el-icon-folder-add" type="text"></el-button>
-              </el-tooltip>
-              <el-tooltip class="item" effect="dark" content="添加流程" placement="bottom">
-                <el-button icon="el-icon-share" type="text"></el-button>
-              </el-tooltip>
-              <el-tooltip class="item" effect="dark" content="删除" placement="bottom">
-                <el-button icon="el-icon-folder-delete" type="text"></el-button>
-              </el-tooltip>
-            </span>
-          </span>);
+      importForm: {
+        file: '未选择任何文件'
       }
     }
-  };
+  },
+
+  methods: {
+    /**
+     * 新增一级文件夹
+     */
+    addRootFolder() {
+
+    },
+    append(data) {
+      const newChild = { id: id++, label: 'testtest', children: [] };
+      if (!data.children) {
+        this.$set(data, 'children', []);
+      }
+      data.children.push(newChild);
+    },
+
+    remove(node, data) {
+      const parent = node.parent;
+      const children = parent.data.children || parent.data;
+      const index = children.findIndex(d => d.id === data.id);
+      children.splice(index, 1);
+    },
+    console (node, data) {
+      console.log(node)
+      console.log(data)
+    },
+    // 点击tree Node
+    handleNodeClick (data) {
+      console.log(data)
+    },
+    // 动态加载tree
+    loadNode (node, resolve) {
+      if (node.level === 0) {
+        axios.get('/mock/ProcessGroupTree.json')
+          .then((res) => {
+            console.log(res)
+            let arr = res.data.data
+            resolve(arr)
+          })
+      }
+      if (node.level === 1) {
+        axios.get('/mock/ProcessTree.json')
+          .then((res) => {
+            console.log(res)
+            let arr = res.data.data
+            resolve(arr)
+          })
+      }
+      if (node.level === 2) {
+        axios.get('/mock/TacticsTree.json')
+          .then((res) => {
+            console.log(res)
+            let arr = res.data.data
+            resolve(arr)
+          })
+      }
+      if (node.level === 3) {
+        axios.get('/mock/Tactics2Tree.json')
+          .then((res) => {
+            console.log(res)
+            let arr = res.data.data
+            resolve(arr)
+          })
+      }
+    }
+  }
+}
 </script>
 
-<style>
+<style lang="scss" scoped>
   header {
     margin-bottom: 12px;
   }
   main {
-    /*width: 50vw;*/
+    width: 80%;
   }
-  .custom-tree-node {
-    flex: 1;
-    display: flex;
-    align-items: center;
-    justify-content: space-between;
-    font-size: 14px;
-    padding-right: 8px;
-  }
-  .custom-tree-node i {
-    margin-right: 5px
+  .custom-tree {
+    width: 100%;
+    .custom-tree-node {
+      flex: 1;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      font-size: 14px;
+      padding-right: 8px;
+      i.process {
+        margin-right: 5px;
+        font-weight: bold;
+        color: #96a7ff;
+      }
+      i.info {
+        margin-right: 5px;
+        color: #909399;
+      }
+      span.info {color: #909399}
+      i.danger { color: #F56C6C; }
+      i.warning { color: #E6A23C; }
+      i.success { color: #67C23A; }
+      i.strategyGroup {
+        margin-right: 5px;
+        color: #9a6e3a;
+      }
+      i.strategy {
+        margin-right: 5px;
+        color: #eed61f;
+      }
+      .groupText {
+        display: inline-block;
+        width: 180px;
+      }
+      .describe {
+        display: inline-block;
+        font-weight: 100;
+      }
+    }
+    ::v-deep .el-button--mini {
+      padding: 0;
+    }
   }
   .import-tip {
     font-size: 12px;

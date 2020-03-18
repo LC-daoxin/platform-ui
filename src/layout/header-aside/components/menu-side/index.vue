@@ -58,13 +58,13 @@ export default {
               path: '/work-flow/process-catalog'
             },
             {
-              icon: '',
+              icon: 'pl-youjian',
               iconSvg: '',
               title: '邮件模板',
               path: '/work-flow/mail-template'
             },
             {
-              icon: '',
+              icon: 'pl-calendar',
               iconSvg: '',
               title: '工作日历',
               path: '/work-flow/work-calendar'

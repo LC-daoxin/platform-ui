@@ -1,0 +1,32 @@
+{
+  "data": [
+    {
+      "id": 1,
+      "text": "ASZDemo01-001-002",
+      "describe": "Test测试策略组",
+      "Leaf": true,
+      "status": true
+    },
+    {
+      "id": 2,
+      "text": "ASZDemo01-001-066",
+      "describe": "Test测试策略组0-01",
+      "Leaf": true,
+      "status": true
+    },
+    {
+      "id": 3,
+      "text": "TestDemoTest-009",
+      "describe": "Test策略组",
+      "Leaf": false,
+      "status": false
+    },
+    {
+      "id": 4,
+      "text": "TestDemoTest-010",
+      "describe": "Test测试02策略组",
+      "Leaf": true,
+      "status": true
+    }
+  ]
+}

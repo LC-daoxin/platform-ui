@@ -1,0 +1,25 @@
+{
+  "data": [
+    {
+      "id": 1,
+      "text": "ASZDemo01-001-2",
+      "describe": "Test测试策略",
+      "Leaf": false,
+      "status": true
+    },
+    {
+      "id": 2,
+      "text": "ASZDemo01-001-009",
+      "describe": "Test测试策略99",
+      "Leaf": false,
+      "status": true
+    },
+    {
+      "id": 3,
+      "text": "TestDemoTest-9",
+      "describe": "Test策略",
+      "Leaf": false,
+      "status": false
+    }
+  ]
+}

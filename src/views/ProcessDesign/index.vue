@@ -5,30 +5,34 @@
       <el-button icon="el-icon-document-checked" type="warning" size="mini">校验</el-button>
       <el-button icon="el-icon-s-promotion" type="primary" size="mini">发布</el-button>
       <el-button icon="el-icon-picture-outline" type="primary" size="mini">存为图片</el-button>
-      <el-button icon="el-icon-setting" type="primary" size="mini" @click="processDrawer = true">流程属性</el-button>
+      <el-button icon="el-icon-setting" type="primary" size="mini" @click="processDrawer = true">策略属性</el-button>
       <el-button icon="el-icon-setting" type="primary" size="mini" @click="nodeDrawer = true">节点属性</el-button>
     </header>
     <main></main>
     <el-drawer
-      title="流程属性"
+      title="策略属性"
       :visible.sync="processDrawer"
       :modal="false"
       direction="rtl"
       :with-header="false"
       class="drawer"
       size="50%">
-      <h1>流程属性</h1>
+      <h1>策略属性</h1>
       <el-card class="box-card">
         <el-divider content-position="left">流程信息</el-divider>
         <div class="content">
           <div class="content-row"><span class="label">流程类型：</span><span class="text">{{ ProcessType }}</span></div>
           <div class="content-row"><span class="label">流程描述：</span><span class="text">{{ ProcessDescribe }}</span></div>
           <div class="content-row"><span class="label">所属公司：</span><span class="text">{{ Company }}</span></div>
+          <div class="content-row"><span class="label">策略组：</span><span class="text">{{ TacticsGroup }}</span></div>
+          <div class="content-row"><span class="label">策略：</span><span class="text">{{ Tactics }}</span></div>
         </div>
       </el-card>
       <el-tabs class="drawer-content">
-        <el-tab-pane label="流程变量"><process-variable/></el-tab-pane>
-        <el-tab-pane label="功能调用"><process-configuration/></el-tab-pane>
+        <el-tab-pane label="基础信息"><basic-info-tactics/></el-tab-pane>
+        <el-tab-pane label="邮件">邮箱</el-tab-pane>
+        <!--<el-tab-pane label="流程变量"><process-variable/></el-tab-pane>-->
+        <!--<el-tab-pane label="功能调用"><process-configuration/></el-tab-pane>-->
         <el-tab-pane label="用户修改"><user-modify/></el-tab-pane>
       </el-tabs>
     </el-drawer>
@@ -47,6 +51,9 @@
           <div class="content-row"><span class="label">流程类型：</span><span class="text">{{ ProcessType }}</span></div>
           <div class="content-row"><span class="label">流程描述：</span><span class="text">{{ ProcessDescribe }}</span></div>
           <div class="content-row"><span class="label">所属公司：</span><span class="text">{{ Company }}</span></div>
+          <div class="content-row"><span class="label">策略组：</span><span class="text">{{ TacticsGroup }}</span></div>
+          <div class="content-row"><span class="label">策略：</span><span class="text">{{ Tactics }}</span></div>
+          <div class="content-row"><span class="label">节点：</span><span class="text">{{ Node }}</span></div>
         </div>
       </el-card>
       <el-tabs class="drawer-content">
@@ -79,6 +86,7 @@ import Notice from './components/Notice'
 import ConfigInfo from './components/ConfigInfo'
 import ProcessVariable from './components/ProcessVariable'
 import UserModify from './components/UserModify'
+import BasicInfoTactics from './components/BasicInfoTactics'
 export default {
   components: {
     ProcessConfiguration,
@@ -88,7 +96,8 @@ export default {
     Notice,
     ConfigInfo,
     ProcessVariable,
-    UserModify
+    UserModify,
+    BasicInfoTactics
   },
   data() {
     return {
@@ -96,7 +105,10 @@ export default {
       nodeDrawer: false,
       ProcessType: 'ASZ测试流程0206',
       ProcessDescribe: 'ASZDemo01-001-Demo02',
-      Company: '中国海洋石油总公司'
+      Company: '中国海洋石油总公司',
+      TacticsGroup: 'ASZDDemo01-策略组',
+      Tactics: 'ASZDDemo01-TEST-审批策略',
+      Node: '审批节点'
     }
   }
 }
@@ -129,6 +141,12 @@ export default {
           &-row {
             font-size: 14px;
             margin-bottom: 2px;
+            .label {
+              display: inline-block;
+              width: 75px;
+              text-align: right;
+              margin-right: 10px;
+            }
             .text {
               font-weight: 200;
             }
