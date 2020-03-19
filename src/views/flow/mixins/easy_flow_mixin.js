@@ -5,8 +5,8 @@ export const easyFlowMixin = {
         // 动态锚点、位置自适应
         Anchors: ['Top', 'TopCenter', 'TopRight', 'TopLeft', 'Right', 'RightMiddle', 'Bottom', 'BottomCenter', 'BottomRight', 'BottomLeft', 'Left', 'LeftMiddle'],
         Container: 'flowContainer',
-        // 连线的样式 StateMachine、Flowchart，Bezier
-        Connector: 'Flowchart',
+        // 连线的样式 StateMachine,Flowchart,Bezier, Straight
+        Connector: 'Straight',
         // 鼠标不能拖动删除线
         ConnectionsDetachable: false,
         // 删除线的时候节点不删除
@@ -35,11 +35,11 @@ export const easyFlowMixin = {
           hoverClass: 'dropHover',
           activeClass: 'dragActive'
         },
-        scope: 'green dot'
+        scope: 'green dot',
         // 鼠标滑过线的样式
-        // HoverPaintStyle: {stroke: '#1879FF'},
+        HoverPaintStyle: { stroke: '#1879FF' },
         // 滑过锚点效果
-        // EndpointHoverStyle: {fill: 'red'}
+        // EndpointHoverStyle: { fill: 'red' }
       },
       // jsplumb连接参数
       jsplumbConnectOptions: {

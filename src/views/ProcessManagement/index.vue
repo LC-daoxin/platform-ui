@@ -24,7 +24,7 @@
             </span>
             <span v-if="data.status && node.isCurrent">
               <el-tooltip class="item" effect="dark" content="添加流程" placement="bottom">
-                <el-button size="mini" type="text" @click="console(node, data)">
+                <el-button size="mini" type="text">
                   <i class="iconfont pl-tianjia1 success"></i>
                 </el-button>
               </el-tooltip>
@@ -42,7 +42,7 @@
             </span>
             <span v-if="data.status && node.isCurrent">
               <el-tooltip class="item" effect="dark" content="属性" placement="bottom">
-                <el-button size="mini" type="text" @click="console(node, data)">
+                <el-button size="mini" type="text" @click="processDrawer = true">
                   <i class="iconfont pl-shuxing warning"></i>
                 </el-button>
               </el-tooltip>
@@ -88,7 +88,7 @@
             </span>
             <span v-if="data.status && node.isCurrent">
               <el-tooltip class="item" effect="dark" content="编辑" placement="bottom">
-                <el-button size="mini" type="text" @click="console(node, data)">
+                <el-button size="mini" type="text">
                   <i class="iconfont pl-bianji"></i>
                 </el-button>
               </el-tooltip>
@@ -129,7 +129,7 @@
             </span>
             <span v-if="data.status && node.isCurrent">
               <el-tooltip class="item" effect="dark" content="编辑" placement="bottom">
-                <el-button size="mini" type="text" @click="console(node, data)">
+                <el-button size="mini" type="text">
                   <i class="iconfont pl-bianji"></i>
                 </el-button>
               </el-tooltip>
@@ -160,6 +160,30 @@
         </div>
       </el-tree>
     </main>
+	  <el-drawer
+		  title="流程属性"
+		  :visible.sync="processDrawer"
+		  :modal="false"
+		  direction="rtl"
+		  :with-header="false"
+		  class="drawer"
+		  size="50%">
+		  <h1>流程属性</h1>
+		  <el-card class="box-card">
+			  <el-divider content-position="left">流程信息</el-divider>
+			  <div class="content">
+				  <div class="content-row"><span class="label">流程类型：</span><span class="text">{{ ProcessType }}</span></div>
+				  <div class="content-row"><span class="label">流程描述：</span><span class="text">{{ ProcessDescribe }}</span></div>
+				  <div class="content-row"><span class="label">所属公司：</span><span class="text">{{ Company }}</span></div>
+			  </div>
+		  </el-card>
+		  <el-tabs class="drawer-content">
+			  <el-tab-pane label="属性">属性</el-tab-pane>
+			  <el-tab-pane label="功能调用"><process-configuration/></el-tab-pane>
+			  <el-tab-pane label="流程变量"><process-variable/></el-tab-pane>
+			  <el-tab-pane label="邮件模版"><notice></notice></el-tab-pane>
+		  </el-tabs>
+	  </el-drawer>
     <el-dialog
       title="新增流程组"
       :visible.sync="addDialogVisible"
@@ -212,9 +236,17 @@
 
 <script>
 import axios from 'axios'
+import ProcessConfiguration from '../ProcessDesign/components/ProcessConfiguration'
+import ProcessVariable from '../ProcessDesign/components/ProcessVariable'
+import Notice from '../ProcessDesign/components/Notice'
 export default {
   data () {
     return {
+      processDrawer: false,
+      ProcessType: 'ASZ测试流程0206',
+      ProcessDescribe: 'ASZDemo01-001-Demo02',
+      Company: '中国海洋石油总公司',
+      Node: '审批节点',
       data: null,
       defaultProps: {
         children: 'children',
@@ -235,25 +267,13 @@ export default {
       }
     }
   },
+	components: {
+    ProcessVariable,
+    ProcessConfiguration,
+    Notice
+	},
   methods: {
     addRootFolder () {
-    },
-    // append (data) {
-    //   const newChild = { id: id++, label: 'testtest', children: [] }
-    //   if (!data.children) {
-    //     this.$set(data, 'children', [])
-    //   }
-    //   data.children.push(newChild)
-    // },
-    // remove (node, data) {
-    //   const parent = node.parent;
-    //   const children = parent.data.children || parent.data
-    //   const index = children.findIndex(d => d.id === data.id)
-    //   children.splice(index, 1)
-    // },
-    console (node, data) {
-      console.log(node)
-      console.log(data)
     },
     // 点击tree Node
     handleNodeClick (data) {
@@ -356,5 +376,45 @@ export default {
     font-size: 12px;
     color: red;
     margin-left: 5px;
+  }
+  .drawer {
+	  ::v-deep .el-tabs--top {
+		  border-top: none !important;
+	  }
+	  ::v-deep .el-divider--horizontal {
+		  margin: 0 !important;
+	  }
+	  .box-card {
+		  width: 96%;
+		  margin: 10px auto 0;
+		  .content {
+			  margin-top: 16px;
+			  &-row {
+				  font-size: 14px;
+				  margin-bottom: 2px;
+				  .label {
+					  display: inline-block;
+					  width: 75px;
+					  text-align: right;
+					  margin-right: 10px;
+				  }
+				  .text {
+					  font-weight: 200;
+				  }
+			  }
+		  }
+	  }
+	  h1 {
+		  background: #f9f9f9;
+		  font-size: 18px;
+		  font-weight: 400;
+		  padding: 10px 20px;
+		  margin: 0;
+	  }
+	  .drawer-content {
+		  // margin-top: 20px;
+		  padding: 0 10px;
+		  border-top: 1px solid #cfd7e5;
+	  }
   }
 </style>
