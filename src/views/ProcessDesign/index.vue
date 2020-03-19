@@ -31,7 +31,7 @@
       </el-card>
       <el-tabs class="drawer-content">
         <el-tab-pane label="基础信息"><basic-info-tactics/></el-tab-pane>
-        <el-tab-pane label="邮件">邮箱</el-tab-pane>
+        <el-tab-pane label="邮件"><notice></notice></el-tab-pane>
         <!--<el-tab-pane label="流程变量"><process-variable/></el-tab-pane>-->
         <!--<el-tab-pane label="功能调用"><process-configuration/></el-tab-pane>-->
         <el-tab-pane label="用户修改"><user-modify/></el-tab-pane>

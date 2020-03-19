@@ -82,6 +82,9 @@ export default {
 }
 </script>
 
-<style>
-
+<style lang="scss" scoped>
+	::v-deep .el-button--mini {
+		padding: 5px 8px;
+		vertical-align: top;
+	}
 </style>
