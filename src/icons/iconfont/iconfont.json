@@ -6,6 +6,27 @@
   "description": "",
   "glyphs": [
     {
+      "icon_id": "2733963",
+      "name": "结束",
+      "font_class": "jieshu",
+      "unicode": "e6ec",
+      "unicode_decimal": 59116
+    },
+    {
+      "icon_id": "4889699",
+      "name": "开始",
+      "font_class": "kaishi",
+      "unicode": "e615",
+      "unicode_decimal": 58901
+    },
+    {
+      "icon_id": "6246293",
+      "name": "节点",
+      "font_class": "jiedian",
+      "unicode": "e649",
+      "unicode_decimal": 58953
+    },
+    {
       "icon_id": "2098789",
       "name": "价格策略",
       "font_class": "jiagecelve",

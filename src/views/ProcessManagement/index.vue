@@ -83,7 +83,7 @@
           <span class="custom-tree-node" v-if="node.level === 3">
             <span>
               <i  :class="{ 'strategyGroup': data.status, 'info': !data.status, 'iconfont pl-shijiancelveweihu': true}"></i>
-              <span :class="data.status ? 'groupText' : 'info'">{{ node.data.text }}</span>
+              <span :class="data.status ? 'groupText' : 'info TextWidth'">{{ node.data.text }}</span>
               <span class="describe">{{ node.data.describe }}</span>
             </span>
             <span v-if="data.status && node.isCurrent">
@@ -124,7 +124,7 @@
           <span class="custom-tree-node" v-if="node.level === 4">
             <span>
               <i  :class="{ 'strategy': data.status, 'info': !data.status, 'iconfont pl-jiagecelve': true}"></i>
-              <span :class="data.status ? 'groupText' : 'info'">{{ node.data.text }}</span>
+              <span :class="data.status ? 'groupText' : 'info TextWidth'">{{ node.data.text }}</span>
               <span class="describe">{{ node.data.describe }}</span>
             </span>
             <span v-if="data.status && node.isCurrent">
@@ -213,7 +213,7 @@
 <script>
 import axios from 'axios'
 export default {
-  data() {
+  data () {
     return {
       data: null,
       defaultProps: {
@@ -235,28 +235,22 @@ export default {
       }
     }
   },
-
   methods: {
-    /**
-     * 新增一级文件夹
-     */
-    addRootFolder() {
-
+    addRootFolder () {
     },
-    append(data) {
-      const newChild = { id: id++, label: 'testtest', children: [] };
-      if (!data.children) {
-        this.$set(data, 'children', []);
-      }
-      data.children.push(newChild);
-    },
-
-    remove(node, data) {
-      const parent = node.parent;
-      const children = parent.data.children || parent.data;
-      const index = children.findIndex(d => d.id === data.id);
-      children.splice(index, 1);
-    },
+    // append (data) {
+    //   const newChild = { id: id++, label: 'testtest', children: [] }
+    //   if (!data.children) {
+    //     this.$set(data, 'children', [])
+    //   }
+    //   data.children.push(newChild)
+    // },
+    // remove (node, data) {
+    //   const parent = node.parent;
+    //   const children = parent.data.children || parent.data
+    //   const index = children.findIndex(d => d.id === data.id)
+    //   children.splice(index, 1)
+    // },
     console (node, data) {
       console.log(node)
       console.log(data)
@@ -345,6 +339,10 @@ export default {
         display: inline-block;
         width: 180px;
       }
+	    .TextWidth {
+		    display: inline-block;
+		    width: 180px;
+	    }
       .describe {
         display: inline-block;
         font-weight: 100;

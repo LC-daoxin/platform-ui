@@ -6,9 +6,10 @@
       <el-button icon="el-icon-s-promotion" type="primary" size="mini">发布</el-button>
       <el-button icon="el-icon-picture-outline" type="primary" size="mini">存为图片</el-button>
       <el-button icon="el-icon-setting" type="primary" size="mini" @click="processDrawer = true">策略属性</el-button>
-      <el-button icon="el-icon-setting" type="primary" size="mini" @click="nodeDrawer = true">节点属性</el-button>
     </header>
-    <main></main>
+    <main>
+	    <panel @openNode="openNode"/>
+    </main>
     <el-drawer
       title="策略属性"
       :visible.sync="processDrawer"
@@ -72,34 +73,37 @@
         <el-tab-pane label="参数">
           <parameter></parameter>
         </el-tab-pane>
+	      <el-tab-pane label="显示设置">
+		      <show-info ref="nodeForm"></show-info>
+	      </el-tab-pane>
       </el-tabs>
     </el-drawer>
   </div>
 </template>
 
 <script>
-import ProcessConfiguration from './components/ProcessConfiguration'
 import Parameter from './components/Parameter'
 import Operating from './components/Operating'
 import BasicInfo from './components/BasicInfo'
 import Notice from './components/Notice'
 import ConfigInfo from './components/ConfigInfo'
-import ProcessVariable from './components/ProcessVariable'
 import UserModify from './components/UserModify'
 import BasicInfoTactics from './components/BasicInfoTactics'
+import ShowInfo from './components/ShowInfo'
+import panel from '../flow/panel'
 export default {
   components: {
-    ProcessConfiguration,
     Parameter,
     Operating,
     BasicInfo,
     Notice,
     ConfigInfo,
-    ProcessVariable,
     UserModify,
-    BasicInfoTactics
+    BasicInfoTactics,
+    ShowInfo,
+    panel
   },
-  data() {
+  data () {
     return {
       processDrawer: false,
       nodeDrawer: false,
@@ -110,7 +114,19 @@ export default {
       Tactics: 'ASZDDemo01-TEST-审批策略',
       Node: '审批节点'
     }
-  }
+  },
+	methods: {
+    // 打开节点属性
+    openNode (data, nodeId) {
+      this.nodeDrawer = true
+	    console.log(data)
+	    console.log(nodeId)
+      this.$nextTick(() => {
+        this.$refs.nodeForm.init(data, nodeId)
+      })
+
+    }
+	}
 }
 </script>
 
@@ -126,11 +142,9 @@ export default {
       margin-bottom: 10px;
     }
     main {
-      display: flex;
+      // display: flex;
+	    width: 100%;
       height: calc(100vh - 163.67px);
-      background: url('./img/流程设计器2.png') left top no-repeat;
-      background-size: 100%;
-      box-shadow: 0 0 0 1px #cfd7e5;
     }
     .drawer {
       .box-card {
