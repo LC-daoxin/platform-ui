@@ -1,7 +1,7 @@
 <template>
   <div class="dashboard-editor-container">
     <header>
-      <el-button type="primary" icon="el-icon-folder-add" size="mini" @click="addDialogVisible = true">新增流程组</el-button>
+      <el-button type="primary" icon="el-icon-folder-add" size="mini" @click="addDialogVisible = true">新增流程分类</el-button>
       <el-button type="primary" icon="el-icon-upload2" size="mini" @click="importDialogVisible = true">导入流程</el-button>
     </header>
     <main>
@@ -42,32 +42,32 @@
             </span>
             <span v-if="data.status && node.isCurrent">
               <el-tooltip class="item" effect="dark" content="属性" placement="bottom">
-                <el-button size="mini" type="text" @click="processDrawer = true">
+                <el-button size="mini" type="text" @click="openProcessDrawer('1')">
                   <i class="iconfont pl-shuxing warning"></i>
                 </el-button>
               </el-tooltip>
               <el-tooltip class="item" effect="dark" content="禁用" placement="bottom">
-                <el-button size="mini" type="text">
+                <el-button size="mini" type="text" @click="stopProcess(data)">
                   <i class="iconfont pl-jinyong danger"></i>
                 </el-button>
               </el-tooltip>
               <el-tooltip class="item" effect="dark" content="添加策略组" placement="bottom">
                 <el-button size="mini" type="text">
-                  <i class="iconfont pl-celvezhihangpeizhi"></i>
+                  <i class="iconfont pl-celvezhihangpeizhi" @click="appendTactics(data)"></i>
                 </el-button>
               </el-tooltip>
               <el-tooltip class="item" effect="dark" content="功能调用" placement="bottom">
-                <el-button size="mini" type="text">
+                <el-button size="mini" type="text" @click="openProcessDrawer('2')">
                   <i class="iconfont pl-gongneng-"></i>
                 </el-button>
               </el-tooltip>
               <el-tooltip class="item" effect="dark" content="流程变量" placement="bottom">
-                <el-button size="mini" type="text">
+                <el-button size="mini" type="text" @click="openProcessDrawer('3')">
                   <i class="iconfont pl-liuchengguanli"></i>
                 </el-button>
               </el-tooltip>
               <el-tooltip class="item" effect="dark" content="邮件模版" placement="bottom">
-                <el-button size="mini" type="text">
+                <el-button size="mini" type="text" @click="openProcessDrawer('4')">
                   <i class="iconfont pl-youjian"></i>
                 </el-button>
               </el-tooltip>
@@ -184,6 +184,30 @@
         <el-tab-pane label="邮件模版"><notice></notice></el-tab-pane>
       </el-tabs>
     </el-drawer>
+	  <el-drawer
+		  title="流程属性"
+		  :visible.sync="processDrawer"
+		  :modal="false"
+		  direction="rtl"
+		  :with-header="false"
+		  class="drawer"
+		  size="50%">
+		  <h1>流程属性</h1>
+		  <el-card class="box-card">
+			  <el-divider content-position="left">流程信息</el-divider>
+			  <div class="content">
+				  <div class="content-row"><span class="label">流程类型：</span><span class="text">{{ ProcessType }}</span></div>
+				  <div class="content-row"><span class="label">流程描述：</span><span class="text">{{ ProcessDescribe }}</span></div>
+				  <div class="content-row"><span class="label">所属公司：</span><span class="text">{{ Company }}</span></div>
+			  </div>
+		  </el-card>
+		  <el-tabs class="drawer-content" v-model="activeName">
+			  <el-tab-pane label="属性" name="1"><attribute/></el-tab-pane>
+			  <el-tab-pane label="功能调用" name="2"><process-configuration/></el-tab-pane>
+			  <el-tab-pane label="流程变量" name="3"><process-variable/></el-tab-pane>
+			  <el-tab-pane label="邮件模版" name="4"><notice/></el-tab-pane>
+		  </el-tabs>
+	  </el-drawer>
     <el-dialog
       title="新增流程组"
       :visible.sync="addDialogVisible"
@@ -239,7 +263,9 @@ import axios from 'axios'
 import ProcessConfiguration from '../ProcessDesign/components/ProcessConfiguration'
 import ProcessVariable from '../ProcessDesign/components/ProcessVariable'
 import Notice from '../ProcessDesign/components/Notice'
+import Attribute from './components/Attribute'
 export default {
+  name: 'process-management',
   data () {
     return {
       processDrawer: false,
@@ -255,6 +281,7 @@ export default {
           return !res.Leaf
         }
       },
+      activeName: '1', // 流程属性Tabs
       addDialogVisible: false,
       importDialogVisible: false,
       addForm: {
@@ -270,8 +297,9 @@ export default {
   components: {
     ProcessVariable,
     ProcessConfiguration,
-    Notice
-  },
+    Notice,
+    Attribute
+	},
   methods: {
     addRootFolder () {
     },
@@ -312,6 +340,44 @@ export default {
             let arr = res.data.data
             resolve(arr)
           })
+      }
+    },
+	  // 打开流程属性
+	  openProcessDrawer (type) {
+      this.activeName = type
+      this.processDrawer = true
+	  },
+	  // 添加策略
+    appendTactics (data) {
+	    this.refreshNodeBy(data.id)
+    },
+    // 禁用流程
+    stopProcess (data) {
+      this.$confirm(`确定要禁用'${data.text}'流程?`, '提示', {
+        confirmButtonText: '确定',
+        cancelButtonText: '取消',
+        type: 'warning'
+      }).then(() => {
+        axios.get('/mock/OK.json')
+          .then((res) => {
+            this.$message({
+              type: 'success',
+              message: '已禁用'
+            })
+	          this.refreshNodeBy(data.id)
+          })
+      }).catch(() => {
+        this.$message({
+          type: 'info',
+          message: '已取消'
+        })
+      })
+    },
+    // 局部刷新节点
+    refreshNodeBy (id) {
+      if (this.$refs.ProcessTree.getNode(id) != null) {
+        let node = this.$refs.ProcessTree.getNode(id) // 通过节点id找到对应树节点对象
+        node.expand() // 主动调用展开节点方法，重新查询该节点下的所有子节点
       }
     }
   }

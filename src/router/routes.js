@@ -430,8 +430,8 @@ const frameIn = [
         component: () => import('@/views/ProcessCatalog')
       },
       {
-        path: 'process-admin',
-        name: 'process-admin',
+        path: 'process-management',
+        name: 'process-management',
         meta: {
           auth: true,
           title: '流程管理'

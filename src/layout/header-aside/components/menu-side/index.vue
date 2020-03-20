@@ -49,7 +49,7 @@ export default {
               icon: 'pl-shengchanliuchengguanli',
               iconSvg: '',
               title: '流程管理',
-              path: '/work-flow/process-admin'
+              path: '/work-flow/process-management'
             },
             {
               icon: 'pl-gongzuoliuchakan',
