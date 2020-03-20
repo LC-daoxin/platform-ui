@@ -167,7 +167,8 @@
       direction="rtl"
       :with-header="false"
       class="drawer"
-      size="50%">
+      size="50%"
+    >
       <h1>流程属性</h1>
       <el-card class="box-card">
         <el-divider content-position="left">流程信息</el-divider>
@@ -177,37 +178,13 @@
           <div class="content-row"><span class="label">所属公司：</span><span class="text">{{ Company }}</span></div>
         </div>
       </el-card>
-      <el-tabs class="drawer-content">
-        <el-tab-pane label="属性">属性</el-tab-pane>
-        <el-tab-pane label="功能调用"><process-configuration/></el-tab-pane>
-        <el-tab-pane label="流程变量"><process-variable/></el-tab-pane>
-        <el-tab-pane label="邮件模版"><notice></notice></el-tab-pane>
+      <el-tabs class="drawer-content" v-model="activeName">
+        <el-tab-pane label="属性" name="1"><attribute/></el-tab-pane>
+        <el-tab-pane label="功能调用" name="2"><process-configuration/></el-tab-pane>
+        <el-tab-pane label="流程变量" name="3"><process-variable/></el-tab-pane>
+        <el-tab-pane label="邮件模版" name="4"><notice/></el-tab-pane>
       </el-tabs>
     </el-drawer>
-	  <el-drawer
-		  title="流程属性"
-		  :visible.sync="processDrawer"
-		  :modal="false"
-		  direction="rtl"
-		  :with-header="false"
-		  class="drawer"
-		  size="50%">
-		  <h1>流程属性</h1>
-		  <el-card class="box-card">
-			  <el-divider content-position="left">流程信息</el-divider>
-			  <div class="content">
-				  <div class="content-row"><span class="label">流程类型：</span><span class="text">{{ ProcessType }}</span></div>
-				  <div class="content-row"><span class="label">流程描述：</span><span class="text">{{ ProcessDescribe }}</span></div>
-				  <div class="content-row"><span class="label">所属公司：</span><span class="text">{{ Company }}</span></div>
-			  </div>
-		  </el-card>
-		  <el-tabs class="drawer-content" v-model="activeName">
-			  <el-tab-pane label="属性" name="1"><attribute/></el-tab-pane>
-			  <el-tab-pane label="功能调用" name="2"><process-configuration/></el-tab-pane>
-			  <el-tab-pane label="流程变量" name="3"><process-variable/></el-tab-pane>
-			  <el-tab-pane label="邮件模版" name="4"><notice/></el-tab-pane>
-		  </el-tabs>
-	  </el-drawer>
     <el-dialog
       title="新增流程组"
       :visible.sync="addDialogVisible"
@@ -299,7 +276,7 @@ export default {
     ProcessConfiguration,
     Notice,
     Attribute
-	},
+  },
   methods: {
     addRootFolder () {
     },
@@ -342,14 +319,14 @@ export default {
           })
       }
     },
-	  // 打开流程属性
-	  openProcessDrawer (type) {
+    // 打开流程属性
+    openProcessDrawer (type) {
       this.activeName = type
       this.processDrawer = true
-	  },
-	  // 添加策略
+    },
+    // 添加策略
     appendTactics (data) {
-	    this.refreshNodeBy(data.id)
+      this.refreshNodeBy(data.id)
     },
     // 禁用流程
     stopProcess (data) {
@@ -364,7 +341,7 @@ export default {
               type: 'success',
               message: '已禁用'
             })
-	          this.refreshNodeBy(data.id)
+            this.refreshNodeBy(data.id)
           })
       }).catch(() => {
         this.$message({

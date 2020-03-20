@@ -1,6 +1,6 @@
 <template>
   <div class="content">
-	  <el-form size="mini" :model="data" ref="dataForm" label-width="80px">
+		<el-form size="mini" :model="data" ref="dataForm" label-width="80px">
 		  <el-form-item label="流程名称:">
 			  <el-input class="input" v-model="data.name" :disabled="true" size="mini"></el-input>
 		  </el-form-item>
@@ -62,23 +62,23 @@
 			  <div v-else>
 				  <el-button type="success" size="mini" icon="el-icon-s-claim" @click="save">保存</el-button>
 				  <el-button size="mini" icon="el-icon-circle-close" @click="cancel">取消</el-button>
-			  </div>
-		  </el-form-item>
-	  </el-form>
+        </div>
+      </el-form-item>
+		</el-form>
   </div>
 </template>
 
 <script>
 export default {
-  data() {
+  data () {
     return {
       data: {
         name: 'ASZ测试流程0206',
         describe: 'ASZDemo01-001-Demo02',
-	      company: '1',
+        company: '1',
         other: ''
       },
-	    options: {
+      options: {
         company: [{
           value: '1',
           label: '中国海洋石油总公司'
@@ -87,7 +87,7 @@ export default {
           value: '选项1',
           label: 'Test'
         }]
-	    },
+      },
       editShow: false,
       disabled: true // 编辑状态
     }
@@ -96,14 +96,14 @@ export default {
     // 编辑属性
     edit () {
       this.editShow = true
-	    this.disabled = false
+      this.disabled = false
     },
-    // 保存属性
+	  // 保存属性
     save () {
       this.editShow = false
       this.disabled = true
     },
-	  // 取消属性
+    // 取消属性
     cancel () {
       this.editShow = false
       this.disabled = true
@@ -113,19 +113,19 @@ export default {
 </script>
 
 <style lang="scss" scoped>
-  .content {
-    padding: 10px 10px 10px 30px;
-	  .input {
-		  width: 240px;
-	  }
-	  ::v-deep .el-select {
-		  min-width: 240px;
-	  }
-	  ::v-deep .el-input.is-disabled .el-input__inner {
-		  background-color: #f9fbfe;
-		  border-color: #E4E7ED;
-		  color: #979ba2;
-		  cursor: not-allowed;
-	  }
+.content {
+  padding: 10px 10px 10px 30px;
+  .input {
+    width: 240px;
   }
+  ::v-deep .el-select {
+		min-width: 240px;
+  }
+  ::v-deep .el-input.is-disabled .el-input__inner {
+		background-color: #f9fbfe;
+		border-color: #E4E7ED;
+		color: #979ba2;
+		cursor: not-allowed;
+  }
+}
 </style>
