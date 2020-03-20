@@ -68,7 +68,7 @@
               <!-- 页面 -->
               <div class="sy-theme-container-main-body" flex-box="1">
                 <transition :name="transitionActive ? 'fade-transverse' : ''">
-                  <keep-alive :include="keepAlive">
+                  <keep-alive> <!-- :include="keepAlive" -->
                     <router-view/>
                   </keep-alive>
                 </transition>

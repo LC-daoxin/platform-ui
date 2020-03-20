@@ -90,6 +90,7 @@ import BasicInfoTactics from './components/BasicInfoTactics'
 import ShowInfo from './components/ShowInfo'
 import panel from '../flow/panel'
 export default {
+  name: 'process-design',
   components: {
     Parameter,
     Operating,
