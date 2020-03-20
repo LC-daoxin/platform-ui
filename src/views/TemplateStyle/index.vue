@@ -1,34 +1,44 @@
 <template>
   <div class="dashboard-editor-container">
+    <el-dialog
+      title="添加模板样式"
+      :visible.sync="dialogVisible"
+      width="50%">
+      <style-modal></style-modal>
+    </el-dialog>
     <header>
       <div>
-        <el-button type="danger" size="mini">删除</el-button>
-        <el-button type="primary" size="mini">新增</el-button>
-        <el-button type="primary" size="mini">导入</el-button>
         <el-button
-          type="primary"
+          icon="el-icon-arrow-left"
           size="mini"
-          @click="$router.push('/work-flow/template-style')"
-        >模板样式</el-button>
+          @click="$router.push('/work-flow/mail-template')"
+        >返回</el-button>
+        <el-button type="danger" size="mini">删除</el-button>
+        <el-button type="primary" size="mini" @click="dialogVisible=true">新增</el-button>
       </div>
       <div class="search-co">
-        <p>编码：</p>
-        <el-input size="mini" class="search-input"></el-input>
         <p>名称：</p>
         <el-input size="mini" class="search-input"></el-input>
         <el-button type="primary" size="mini">搜索</el-button>
       </div>
     </header>
-    <template-table></template-table>
+    <style-table></style-table>
   </div>
 </template>
 
 <script>
-import TemplateTable from './components/templateTable'
+import StyleTable from './components/styleTable'
+import StyleModal from './components/styleModal'
 
 export default {
+  data() {
+    return {
+      dialogVisible: false
+    }
+  },
   components: {
-    TemplateTable
+    StyleTable,
+    StyleModal
   }
 }
 </script>

@@ -448,13 +448,13 @@ const frameIn = [
         component: () => import('@/views/MailTemplate')
       },
       {
-        path: 'work-calendar',
-        name: 'work-calendar',
+        path: 'template-style',
+        name: 'template-style',
         meta: {
           auth: true,
-          title: '工作日历'
+          title: '模板样式'
         },
-        component: () => import('@/views/WorkCalendar')
+        component: () => import('@/views/TemplateStyle')
       },
       {
         path: 'process-design',
