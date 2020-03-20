@@ -31,7 +31,7 @@ import StyleTable from './components/styleTable'
 import StyleModal from './components/styleModal'
 
 export default {
-  data() {
+  data () {
     return {
       dialogVisible: false
     }

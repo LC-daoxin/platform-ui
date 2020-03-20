@@ -1,5 +1,5 @@
 <template>
-	<div v-if="easyFlowVisible">
+  <div v-if="easyFlowVisible">
     <el-row>
       <!--左侧可以拖动的菜单-->
       <el-col :span="3" ref="nodeMenu">
@@ -10,8 +10,9 @@
           <!--画布-->
           <el-col :span="24">
             <div id="flowContainer" ref="flowContainer" class="container">
-              <template v-for="node in data.nodeList">
+              <template v-for="(node, nodeIndex) in data.nodeList">
                 <flow-node
+                  :key="nodeIndex"
                   v-show="node.show"
                   :id="node.id"
                   :node="node"
@@ -20,8 +21,7 @@
                   @nodeRightMenu="nodeRightMenu"
                   @clickNode="clickNode"
                   @openNode="openNode"
-                >
-                </flow-node>
+                ></flow-node>
               </template>
             </div>
           </el-col>
@@ -32,7 +32,7 @@
 </template>
 
 <script>
-import draggable from 'vuedraggable'
+// import draggable from 'vuedraggable'
 import { jsPlumb } from 'jsplumb'
 import { easyFlowMixin } from '@/views/flow/mixins/easy_flow_mixin'
 import flowNode from '@/views/flow/node'
@@ -40,7 +40,7 @@ import nodeMenu from '@/views/flow/node_menu'
 import lodash from 'lodash'
 import dataAll from './data'
 export default {
-  data() {
+  data () {
     return {
       // jsPlumb 实例
       jsPlumb: null,
@@ -57,9 +57,11 @@ export default {
   // 一些基础配置移动该文件中
   mixins: [easyFlowMixin],
   components: {
-    draggable, flowNode, nodeMenu
+    // draggable,
+    flowNode,
+    nodeMenu
   },
-  mounted() {
+  mounted () {
     this.jsPlumb = jsPlumb.getInstance()
     this.$nextTick(() => {
       // 默认加载流程C的数据、在这里可以根据具体的业务返回符合流程数据格式的数据即可
@@ -68,15 +70,15 @@ export default {
   },
   methods: {
   // 返回唯一标识
-    getUUID() {
-        return Math.random().toString(36).substr(3, 10)
+    getUUID () {
+      return Math.random().toString(36).substr(3, 10)
     },
-    jsPlumbInit() {
+    jsPlumbInit () {
       this.jsPlumb.ready(() => {
         // 导入默认配置
         this.jsPlumb.importDefaults(this.jsplumbSetting)
         // 会使整个jsPlumb立即重绘。
-        this.jsPlumb.setSuspendDrawing(false, true);
+        this.jsPlumb.setSuspendDrawing(false, true)
         // 初始化节点
         this.loadEasyFlow()
         // 单点击了连接线,
@@ -91,27 +93,27 @@ export default {
           })
         })
         // 连线
-        this.jsPlumb.bind("connection", (evt) => {
+        this.jsPlumb.bind('connection', (evt) => {
           let from = evt.source.id
           let to = evt.target.id
           if (this.loadEasyFlowFinish) {
-            this.data.lineList.push({from: from, to: to})
+            this.data.lineList.push({ from: from, to: to })
           }
         })
         // 删除连线回调
-        this.jsPlumb.bind("connectionDetached", (evt) => {
+        this.jsPlumb.bind('connectionDetached', (evt) => {
           this.deleteLine(evt.sourceId, evt.targetId)
         })
         // 改变线的连接节点
-        this.jsPlumb.bind("connectionMoved", (evt) => {
+        this.jsPlumb.bind('connectionMoved', (evt) => {
           this.changeLine(evt.originalSourceId, evt.originalTargetId)
         })
         // 连线右击
-        this.jsPlumb.bind("contextmenu", (evt) => {
+        this.jsPlumb.bind('contextmenu', (evt) => {
           console.log('contextmenu', evt)
         })
         // 连线
-        this.jsPlumb.bind("beforeDrop", (evt) => {
+        this.jsPlumb.bind('beforeDrop', (evt) => {
           let from = evt.sourceId
           let to = evt.targetId
           if (from === to) {
@@ -123,20 +125,20 @@ export default {
             return false
           }
           if (this.hashOppositeLine(from, to)) {
-            this.$message.error('不支持两个节点之间连线回环');
+            this.$message.error('不支持两个节点之间连线回环')
             return false
           }
           this.$message.success('连接成功')
           return true
         })
         // beforeDetach
-        this.jsPlumb.bind("beforeDetach", (evt) => {
+        this.jsPlumb.bind('beforeDetach', (evt) => {
           console.log('beforeDetach', evt)
         })
       })
     },
     // 加载流程图
-    loadEasyFlow() {
+    loadEasyFlow () {
       // 初始化节点
       for (var i = 0; i < this.data.nodeList.length; i++) {
         let node = this.data.nodeList[i]
@@ -144,21 +146,21 @@ export default {
         this.jsPlumb.makeSource(node.id, this.jsplumbSourceOptions)
         // // 设置目标点，其他源点拖出的线可以连接该节点
         this.jsPlumb.makeTarget(node.id, this.jsplumbTargetOptions)
-        this.jsPlumb.draggable(node.id, {containment: 'parent'})
+        this.jsPlumb.draggable(node.id, { containment: 'parent' })
       }
       // 初始化连线
-      for (var i = 0; i < this.data.lineList.length; i++) {
+      for (let i = 0; i < this.data.lineList.length; i++) {
         let line = this.data.lineList[i]
-        this.jsPlumb.connect({source: line.from, target: line.to}, this.jsplumbConnectOptions)
+        this.jsPlumb.connect({ source: line.from, target: line.to }, this.jsplumbConnectOptions)
       }
       this.$nextTick(function () {
         this.loadEasyFlowFinish = true
       })
     },
     // 删除线
-    deleteLine(from, to) {
+    deleteLine (from, to) {
       this.data.lineList = this.data.lineList.filter(function (line) {
-        if (line.from == from && line.to == to) {
+        if (line.from === from && line.to === to) {
           return false
         }
         return true
@@ -169,7 +171,7 @@ export default {
       this.deleteLine(oldFrom, oldTo)
     },
     // 改变节点的位置
-    changeNodeSite(data) {
+    changeNodeSite (data) {
       for (var i = 0; i < this.data.nodeList.length; i++) {
         let node = this.data.nodeList[i]
         if (node.id === data.nodeId) {
@@ -185,15 +187,17 @@ export default {
      * @param mousePosition 鼠标拖拽结束的坐标
      */
     addNode (evt, nodeMenu, mousePosition) {
-      let width = this.$refs.nodeMenu.$el.clientWidth
-      let nodeId = this.getUUID(), left = mousePosition.left, top = mousePosition.top
+      const width = this.$refs.nodeMenu.$el.clientWidth
+      const nodeId = this.getUUID()
+      let left = mousePosition.left
+      let top = mousePosition.top
       if (left < 0) {
         left = evt.originalEvent.layerX - width
       }
       if (top < 0) {
         top = evt.originalEvent.clientY - 50
       }
-      var node = {
+      const node = {
         id: nodeId,
         name: nodeId,
         type: nodeMenu.type,
@@ -210,7 +214,7 @@ export default {
         this.jsPlumb.makeSource(nodeId, this.jsplumbSourceOptions)
         this.jsPlumb.makeTarget(nodeId, this.jsplumbTargetOptions)
         this.jsPlumb.draggable(nodeId, {
-            containment: 'parent'
+          containment: 'parent'
         })
       })
     },
@@ -236,7 +240,7 @@ export default {
           return true
         })
         this.$nextTick(function () {
-          this.jsPlumb.removeAllEndpoints(nodeId);
+          this.jsPlumb.removeAllEndpoints(nodeId)
         })
       }).catch(() => {
       })
@@ -245,10 +249,7 @@ export default {
     openNode (nodeId) {
       this.$emit('openNode', this.data, nodeId)
     },
-    clickNode (nodeId) {
-      // this.$refs.nodeForm.init(this.data, nodeId)
-	    console.log(nodeId)
-    },
+    clickNode (nodeId) {},
     // 是否具有该线
     hasLine (from, to) {
       for (var i = 0; i < this.data.lineList.length; i++) {
@@ -270,7 +271,7 @@ export default {
       this.menu.top = evt.y + 'px'
     },
     // 加载流程图
-    dataReload(data) {
+    dataReload (data) {
       this.easyFlowVisible = false
       this.data.nodeList = []
       this.data.lineList = []
@@ -304,35 +305,35 @@ export default {
 </script>
 
 <style lang="scss" scoped>
-	#flowContainer {
-		background-image: linear-gradient(90deg, rgba(0, 0, 0, 0.04) 10%, rgba(0, 0, 0, 0) 10%), linear-gradient(rgba(0, 0, 0, 0.04) 10%, rgba(0, 0, 0, 0) 10%);
-		background-size: 10px 10px;
-		height: calc(100vh - 163.67px);
-		background-color: rgb(251, 251, 251);
-		position: relative;
-	}
+#flowContainer {
+  background-image: linear-gradient(90deg, rgba(0, 0, 0, 0.04) 10%, rgba(0, 0, 0, 0) 10%), linear-gradient(rgba(0, 0, 0, 0.04) 10%, rgba(0, 0, 0, 0) 10%);
+  background-size: 10px 10px;
+  height: calc(100vh - 163.67px);
+  background-color: rgb(251, 251, 251);
+  position: relative;
+}
 
-	::v-deep .labelClass {
-		z-index: 999;
-		background-color: white;
-		padding: 5px;
-		opacity: 0.7;
-		border: 1px solid #346789;
-		cursor: pointer;
-		-webkit-user-select: none;
-		-moz-user-select: none;
-		-ms-user-select: none;
-		user-select: none;
-	}
+::v-deep .labelClass {
+  z-index: 999;
+  background-color: white;
+  padding: 5px;
+  opacity: 0.7;
+  border: 1px solid #346789;
+  cursor: pointer;
+  -webkit-user-select: none;
+  -moz-user-select: none;
+  -ms-user-select: none;
+  user-select: none;
+}
 
-	.flow-tooltar {
-		padding-left: 10px;
-		box-sizing: border-box;
-		border: 1px solid #e9e9e9;
-		height: 42px;
-		line-height: 42px;
-		z-index: 3;
-		-webkit-box-shadow: 0 8px 12px 0 rgba(0, 52, 107, .04);
-		box-shadow: 0 8px 12px 0 rgba(0, 52, 107, .04);
-	}
+.flow-tooltar {
+  padding-left: 10px;
+  box-sizing: border-box;
+  border: 1px solid #e9e9e9;
+  height: 42px;
+  line-height: 42px;
+  z-index: 3;
+  -webkit-box-shadow: 0 8px 12px 0 rgba(0, 52, 107, .04);
+  box-shadow: 0 8px 12px 0 rgba(0, 52, 107, .04);
+}
 </style>

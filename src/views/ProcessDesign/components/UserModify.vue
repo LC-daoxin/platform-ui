@@ -35,7 +35,7 @@
         </template>
       </el-table-column>
       <el-table-column label="操作" min-width="100" align="center" :show-overflow-tooltip="true">
-        <template slot-scope="scope">
+        <template>
           <el-button size="mini" type="primary" icon="el-icon-edit">编辑</el-button>
           <el-button size="mini" type="success" icon="el-icon-setting">配置</el-button>
         </template>

@@ -34,7 +34,7 @@
           <span>流程目录编码：</span>
           <el-input size="mini" v-model="search.code"></el-input>
         </div>
-        <el-button type="primary" icon="el-icon-search" size="mini" @click="search">搜索</el-button>
+        <el-button type="primary" icon="el-icon-search" size="mini">搜索</el-button>
       </div>
     </header>
     <main>
@@ -71,7 +71,7 @@
 
 <script>
 export default {
-  data() {
+  data () {
     return {
       tableHeight: window.innerHeight - 165.67 - 44,
       currentPage: 1,
@@ -116,25 +116,21 @@ export default {
     }
   },
   methods: {
-    onSubmit() {
+    onSubmit () {
       this.dialogVisible = false
     },
     /**
      * 修改显示数量
      */
-    handleSizeChange(val) {
-      console.log(`每页 ${val} 条`);
+    handleSizeChange (val) {
+      console.log(`每页 ${val} 条`)
     },
     /**
      * 翻页
      */
-    handleCurrentChange(val) {
-      console.log(`当前页: ${val}`);
-    },
-    /**
-     * 搜索
-     */
-    search() {}
+    handleCurrentChange (val) {
+      console.log(`当前页: ${val}`)
+    }
   }
 }
 </script>

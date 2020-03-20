@@ -218,7 +218,7 @@
 
 <script>
 export default {
-  data() {
+  data () {
     return {
       condition: 'Express',
       conditionTitle: '申请人AD',

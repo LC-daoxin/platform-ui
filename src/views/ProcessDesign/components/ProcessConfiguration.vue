@@ -37,7 +37,7 @@
         </template>
       </el-table-column>
       <el-table-column label="操作" min-width="70" align="center" :show-overflow-tooltip="true">
-        <template slot-scope="scope">
+        <template>
           <!--<el-button v-if="scope.row.Status" size="mini" type="danger" @click="start(scope)">禁用</el-button>-->
           <!--<el-button v-else size="mini" type="success" @click="start(scope)">启用</el-button>-->
           <el-button size="mini" type="primary" icon="el-icon-edit" @click="openDialog('AddType')">编辑</el-button>

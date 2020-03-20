@@ -19,7 +19,7 @@
 
 <script>
 export default {
-  data() {
+  data () {
     return {
       tableHeight: window.innerHeight - 177,
       tableData: [{}],

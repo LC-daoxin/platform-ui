@@ -6,7 +6,7 @@
       <el-button icon="el-icon-setting" type="primary" size="mini" @click="processDrawer = true">策略属性</el-button>
     </header>
     <main>
-	    <panel @openNode="openNode"/>
+      <panel @openNode="openNode"/>
     </main>
     <el-drawer
       title="策略属性"
@@ -71,9 +71,9 @@
         <el-tab-pane label="参数">
           <parameter></parameter>
         </el-tab-pane>
-	      <el-tab-pane label="显示设置">
-		      <show-info ref="nodeForm"></show-info>
-	      </el-tab-pane>
+        <el-tab-pane label="显示设置">
+          <show-info ref="nodeForm"></show-info>
+        </el-tab-pane>
       </el-tabs>
     </el-drawer>
   </div>
@@ -113,18 +113,17 @@ export default {
       Node: '审批节点'
     }
   },
-	methods: {
+  methods: {
     // 打开节点属性
     openNode (data, nodeId) {
       this.nodeDrawer = true
-	    console.log(data)
-	    console.log(nodeId)
+      console.log(data)
+      console.log(nodeId)
       this.$nextTick(() => {
         this.$refs.nodeForm.init(data, nodeId)
       })
-
     }
-	}
+  }
 }
 </script>
 
@@ -141,7 +140,7 @@ export default {
     }
     main {
       // display: flex;
-	    width: 100%;
+      width: 100%;
       height: calc(100vh - 163.67px);
     }
     .drawer {

@@ -160,30 +160,30 @@
         </div>
       </el-tree>
     </main>
-	  <el-drawer
-		  title="流程属性"
-		  :visible.sync="processDrawer"
-		  :modal="false"
-		  direction="rtl"
-		  :with-header="false"
-		  class="drawer"
-		  size="50%">
-		  <h1>流程属性</h1>
-		  <el-card class="box-card">
-			  <el-divider content-position="left">流程信息</el-divider>
-			  <div class="content">
-				  <div class="content-row"><span class="label">流程类型：</span><span class="text">{{ ProcessType }}</span></div>
-				  <div class="content-row"><span class="label">流程描述：</span><span class="text">{{ ProcessDescribe }}</span></div>
-				  <div class="content-row"><span class="label">所属公司：</span><span class="text">{{ Company }}</span></div>
-			  </div>
-		  </el-card>
-		  <el-tabs class="drawer-content">
-			  <el-tab-pane label="属性">属性</el-tab-pane>
-			  <el-tab-pane label="功能调用"><process-configuration/></el-tab-pane>
-			  <el-tab-pane label="流程变量"><process-variable/></el-tab-pane>
-			  <el-tab-pane label="邮件模版"><notice></notice></el-tab-pane>
-		  </el-tabs>
-	  </el-drawer>
+    <el-drawer
+      title="流程属性"
+      :visible.sync="processDrawer"
+      :modal="false"
+      direction="rtl"
+      :with-header="false"
+      class="drawer"
+      size="50%">
+      <h1>流程属性</h1>
+      <el-card class="box-card">
+        <el-divider content-position="left">流程信息</el-divider>
+        <div class="content">
+          <div class="content-row"><span class="label">流程类型：</span><span class="text">{{ ProcessType }}</span></div>
+          <div class="content-row"><span class="label">流程描述：</span><span class="text">{{ ProcessDescribe }}</span></div>
+          <div class="content-row"><span class="label">所属公司：</span><span class="text">{{ Company }}</span></div>
+        </div>
+      </el-card>
+      <el-tabs class="drawer-content">
+        <el-tab-pane label="属性">属性</el-tab-pane>
+        <el-tab-pane label="功能调用"><process-configuration/></el-tab-pane>
+        <el-tab-pane label="流程变量"><process-variable/></el-tab-pane>
+        <el-tab-pane label="邮件模版"><notice></notice></el-tab-pane>
+      </el-tabs>
+    </el-drawer>
     <el-dialog
       title="新增流程组"
       :visible.sync="addDialogVisible"
@@ -267,11 +267,11 @@ export default {
       }
     }
   },
-	components: {
+  components: {
     ProcessVariable,
     ProcessConfiguration,
     Notice
-	},
+  },
   methods: {
     addRootFolder () {
     },
@@ -319,102 +319,102 @@ export default {
 </script>
 
 <style lang="scss" scoped>
-  header {
-    margin-bottom: 12px;
-  }
-  main {
-    width: 80%;
-  }
-  .custom-tree {
-    width: 100%;
-    .custom-tree-node {
-      flex: 1;
-      display: flex;
-      align-items: center;
-      justify-content: space-between;
-      font-size: 14px;
-      padding-right: 8px;
-      i.process {
-        margin-right: 5px;
-        font-weight: bold;
-        color: #96a7ff;
-      }
-      i.info {
-        margin-right: 5px;
-        color: #909399;
-      }
-      span.info {color: #909399}
-      i.danger { color: #F56C6C; }
-      i.warning { color: #E6A23C; }
-      i.success { color: #67C23A; }
-      i.strategyGroup {
-        margin-right: 5px;
-        color: #9a6e3a;
-      }
-      i.strategy {
-        margin-right: 5px;
-        color: #eed61f;
-      }
-      .groupText {
-        display: inline-block;
-        width: 180px;
-      }
-	    .TextWidth {
-		    display: inline-block;
-		    width: 180px;
-	    }
-      .describe {
-        display: inline-block;
-        font-weight: 100;
-      }
+header {
+  margin-bottom: 12px;
+}
+main {
+  width: 80%;
+}
+.custom-tree {
+  width: 100%;
+  .custom-tree-node {
+    flex: 1;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    font-size: 14px;
+    padding-right: 8px;
+    i.process {
+      margin-right: 5px;
+      font-weight: bold;
+      color: #96a7ff;
     }
-    ::v-deep .el-button--mini {
-      padding: 0;
+    i.info {
+      margin-right: 5px;
+      color: #909399;
+    }
+    span.info {color: #909399}
+    i.danger { color: #F56C6C; }
+    i.warning { color: #E6A23C; }
+    i.success { color: #67C23A; }
+    i.strategyGroup {
+      margin-right: 5px;
+      color: #9a6e3a;
+    }
+    i.strategy {
+      margin-right: 5px;
+      color: #eed61f;
+    }
+    .groupText {
+      display: inline-block;
+      width: 180px;
+    }
+    .TextWidth {
+      display: inline-block;
+      width: 180px;
+    }
+    .describe {
+      display: inline-block;
+      font-weight: 100;
     }
   }
-  .import-tip {
-    font-size: 12px;
-    color: red;
-    margin-left: 5px;
+  ::v-deep .el-button--mini {
+    padding: 0;
   }
-  .drawer {
-	  ::v-deep .el-tabs--top {
-		  border-top: none !important;
-	  }
-	  ::v-deep .el-divider--horizontal {
-		  margin: 0 !important;
-	  }
-	  .box-card {
-		  width: 96%;
-		  margin: 10px auto 0;
-		  .content {
-			  margin-top: 16px;
-			  &-row {
-				  font-size: 14px;
-				  margin-bottom: 2px;
-				  .label {
-					  display: inline-block;
-					  width: 75px;
-					  text-align: right;
-					  margin-right: 10px;
-				  }
-				  .text {
-					  font-weight: 200;
-				  }
-			  }
-		  }
-	  }
-	  h1 {
-		  background: #f9f9f9;
-		  font-size: 18px;
-		  font-weight: 400;
-		  padding: 10px 20px;
-		  margin: 0;
-	  }
-	  .drawer-content {
-		  // margin-top: 20px;
-		  padding: 0 10px;
-		  border-top: 1px solid #cfd7e5;
-	  }
+}
+.import-tip {
+  font-size: 12px;
+  color: red;
+  margin-left: 5px;
+}
+.drawer {
+  ::v-deep .el-tabs--top {
+    border-top: none !important;
   }
+  ::v-deep .el-divider--horizontal {
+    margin: 0 !important;
+  }
+  .box-card {
+    width: 96%;
+    margin: 10px auto 0;
+    .content {
+      margin-top: 16px;
+      &-row {
+        font-size: 14px;
+        margin-bottom: 2px;
+        .label {
+          display: inline-block;
+          width: 75px;
+          text-align: right;
+          margin-right: 10px;
+        }
+        .text {
+          font-weight: 200;
+        }
+      }
+    }
+  }
+  h1 {
+    background: #f9f9f9;
+    font-size: 18px;
+    font-weight: 400;
+    padding: 10px 20px;
+    margin: 0;
+  }
+  .drawer-content {
+    // margin-top: 20px;
+    padding: 0 10px;
+    border-top: 1px solid #cfd7e5;
+  }
+}
 </style>

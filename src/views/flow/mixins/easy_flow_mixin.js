@@ -37,7 +37,7 @@ export const easyFlowMixin = {
         },
         scope: 'green dot',
         // 鼠标滑过线的样式
-        HoverPaintStyle: { stroke: '#1879FF' },
+        HoverPaintStyle: { stroke: '#1879FF' }
         // 滑过锚点效果
         // EndpointHoverStyle: { fill: 'red' }
       },

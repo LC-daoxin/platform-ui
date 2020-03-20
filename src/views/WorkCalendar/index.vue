@@ -55,7 +55,7 @@
 
 <script>
 export default {
-  data() {
+  data () {
     return {
       calendar: '',
       calendarValue: new Date(),
@@ -75,7 +75,7 @@ export default {
     }
   },
   methods: {
-    showDialog(title) {
+    showDialog (title) {
       this.dialogTitle = title
       this.dialogVisible = true
     }

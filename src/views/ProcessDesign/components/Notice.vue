@@ -15,14 +15,14 @@
       </div>
       <el-button type="primary" size="mini">添加</el-button>
     </header>
-	  <h1>邮件列表</h1>
+    <h1>邮件列表</h1>
     <el-table size="mini" :data="tableData" border></el-table>
   </div>
 </template>
 
 <script>
 export default {
-  data() {
+  data () {
     return {
       tableData: [],
       mailTemplateType: '1'
@@ -46,9 +46,9 @@ export default {
     }
   }
   h1 {
-	  font-size: 15px;
-	  font-weight: 300;
-	  padding: 8px 10px;
-	  margin: 0;
+    font-size: 15px;
+    font-weight: 300;
+    padding: 8px 10px;
+    margin: 0;
   }
 </style>

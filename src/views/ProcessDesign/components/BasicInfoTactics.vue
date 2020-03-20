@@ -13,7 +13,7 @@
 
 <script>
 export default {
-  data() {
+  data () {
     return {
       Name: 'ASZDDemo01-TEST-审批策略',
       Describe: 'Test策略审批'

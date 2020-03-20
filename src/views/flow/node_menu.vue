@@ -6,7 +6,8 @@
           {{menuList.name}}
         </template>
         <draggable @end="end" @start="move" v-model="menuList.children" :options="draggableOptions">
-          <div v-for="son in menuList.children"
+          <div v-for="(son, sonIndex) in menuList.children"
+            :key="sonIndex"
             :type="son.type"
             class="flow-node-menu"
             :style="son.style"
@@ -21,17 +22,17 @@
           </div>
         </draggable>
       </el-collapse-item>
-	    <el-collapse-item name="2">
-		    <template slot="title">
-			    操作
-		    </template>
-		    <el-row>
-			    <el-button class="buttonSty" icon="el-icon-refresh" size="small" @click="refresh">刷新</el-button>
-		    </el-row>
-		    <el-row>
-			    <el-button class="buttonSty" icon="el-icon-edit-outline" size="small" @click="changeLabel">设置连线</el-button>
-		    </el-row>
-	    </el-collapse-item>
+      <el-collapse-item name="2">
+        <template slot="title">
+          操作
+        </template>
+        <el-row>
+          <el-button class="buttonSty" icon="el-icon-refresh" size="small" @click="refresh">刷新</el-button>
+        </el-row>
+        <el-row>
+          <el-button class="buttonSty" icon="el-icon-edit-outline" size="small" @click="changeLabel">设置连线</el-button>
+        </el-row>
+      </el-collapse-item>
     </el-collapse>
   </div>
 </template>
@@ -42,7 +43,7 @@ var mousePosition = {
   top: -1
 }
 export default {
-  data() {
+  data () {
     return {
       activeNames: ['1', '2'],
       // draggable配置参数参考 https://www.cnblogs.com/weixin186/p/10108679.html
@@ -52,7 +53,7 @@ export default {
         disabled: false,
         ghostClass: 'tt',
         // 不使用H5原生的配置
-        forceFallback: true,
+        forceFallback: true
         // 拖拽的时候样式
         // fallbackClass: 'flow-node-draggable'
       },
@@ -89,7 +90,7 @@ export default {
   components: {
     draggable
   },
-  created() {
+  created () {
     /**
      * 以下是为了解决在火狐浏览器上推拽时弹出tab页到搜索问题
      * @param event
@@ -114,8 +115,8 @@ export default {
       this.$emit('changeLabel')
     },
     // 根据类型获取左侧菜单对象
-    getMenu(type) {
-      let children = this.menuList.children;
+    getMenu (type) {
+      let children = this.menuList.children
       for (let j = 0; j < children.length; j++) {
         if (children[j].type === type) {
           return children[j]
@@ -123,19 +124,19 @@ export default {
       }
     },
     // 拖拽开始时触发
-    move(evt, a, b, c) {
+    move (evt, a, b, c) {
       console.log(evt, a, b, c)
       let type = evt.item.attributes.type.nodeValue
       this.nodeMenu = this.getMenu(type)
     },
     // 拖拽结束时触发
-    end(evt, e) {
+    end (evt, e) {
       this.$emit('addNode', evt, this.nodeMenu, mousePosition)
     },
     // 是否是火狐浏览器
-    isFirefox() {
+    isFirefox () {
       let userAgent = navigator.userAgent
-      if (userAgent.indexOf("Firefox") > -1) {
+      if (userAgent.indexOf('Firefox') > -1) {
         return true
       }
       return false
@@ -145,13 +146,13 @@ export default {
 </script>
 <style lang="scss" scoped>
 ::v-deep .el-collapse-item__wrap {
-	border-bottom: none;
+  border-bottom: none;
 }
 ::v-deep .el-collapse-item__header {
-	border-bottom: none;
+  border-bottom: none;
 }
 ::v-deep .el-collapse-item__content {
-	padding-bottom: 0;
+  padding-bottom: 0;
 }
 .flow-menu {
     text-align: center;
@@ -216,10 +217,10 @@ export default {
     overflow: hidden;
     text-overflow: ellipsis;
 }
-	.buttonSty {
-		margin: 5px 10px;
-		display: flex;
-		width: 80%;
-		height: 30px;
-	}
+.buttonSty {
+  margin: 5px 10px;
+  display: flex;
+  width: 80%;
+  height: 30px;
+}
 </style>
