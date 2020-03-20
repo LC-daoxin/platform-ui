@@ -2,19 +2,19 @@
   "data": [
     {
       "id": 1,
-      "text": "流程组Demo-001",
+      "text": "审批流程Demo-001",
       "Leaf": true,
       "status": true
     },
     {
       "id": 2,
-      "text": "流程组Demo-002",
+      "text": "测试流程Demo-002",
       "Leaf": true,
       "status": true
     },
     {
       "id": 3,
-      "text": "TestGroupDemo",
+      "text": "报表流程Demo",
       "Leaf": true,
       "status": true
     },
@@ -26,7 +26,7 @@
     },
     {
       "id": 5,
-      "text": "ASZDemo01-002",
+      "text": "财务ASZDemo01-002",
       "Leaf": true,
       "status": true
     },

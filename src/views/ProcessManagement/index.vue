@@ -1,7 +1,7 @@
 <template>
   <div class="dashboard-editor-container">
     <header>
-      <el-button type="primary" icon="el-icon-folder-add" size="mini" @click="addDialogVisible = true">新增流程组</el-button>
+      <el-button type="primary" icon="el-icon-folder-add" size="mini" @click="addDialogVisible = true">新增流程分类</el-button>
       <el-button type="primary" icon="el-icon-upload2" size="mini" @click="importDialogVisible = true">导入流程</el-button>
     </header>
     <main>
@@ -42,7 +42,7 @@
             </span>
             <span v-if="data.status && node.isCurrent">
               <el-tooltip class="item" effect="dark" content="属性" placement="bottom">
-                <el-button size="mini" type="text" @click="processDrawer = true">
+                <el-button size="mini" type="text" @click="openProcessDrawer('1')">
                   <i class="iconfont pl-shuxing warning"></i>
                 </el-button>
               </el-tooltip>
@@ -53,21 +53,21 @@
               </el-tooltip>
               <el-tooltip class="item" effect="dark" content="添加策略组" placement="bottom">
                 <el-button size="mini" type="text">
-                  <i class="iconfont pl-celvezhihangpeizhi"></i>
+                  <i class="iconfont pl-celvezhihangpeizhi" @click="appendTactics(data)"></i>
                 </el-button>
               </el-tooltip>
               <el-tooltip class="item" effect="dark" content="功能调用" placement="bottom">
-                <el-button size="mini" type="text">
+                <el-button size="mini" type="text" @click="openProcessDrawer('2')">
                   <i class="iconfont pl-gongneng-"></i>
                 </el-button>
               </el-tooltip>
               <el-tooltip class="item" effect="dark" content="流程变量" placement="bottom">
-                <el-button size="mini" type="text">
+                <el-button size="mini" type="text" @click="openProcessDrawer('3')">
                   <i class="iconfont pl-liuchengguanli"></i>
                 </el-button>
               </el-tooltip>
               <el-tooltip class="item" effect="dark" content="邮件模版" placement="bottom">
-                <el-button size="mini" type="text">
+                <el-button size="mini" type="text" @click="openProcessDrawer('4')">
                   <i class="iconfont pl-youjian"></i>
                 </el-button>
               </el-tooltip>
@@ -177,11 +177,11 @@
 				  <div class="content-row"><span class="label">所属公司：</span><span class="text">{{ Company }}</span></div>
 			  </div>
 		  </el-card>
-		  <el-tabs class="drawer-content">
-			  <el-tab-pane label="属性">属性</el-tab-pane>
-			  <el-tab-pane label="功能调用"><process-configuration/></el-tab-pane>
-			  <el-tab-pane label="流程变量"><process-variable/></el-tab-pane>
-			  <el-tab-pane label="邮件模版"><notice></notice></el-tab-pane>
+		  <el-tabs class="drawer-content" v-model="activeName">
+			  <el-tab-pane label="属性" name="1"><attribute/></el-tab-pane>
+			  <el-tab-pane label="功能调用" name="2"><process-configuration/></el-tab-pane>
+			  <el-tab-pane label="流程变量" name="3"><process-variable/></el-tab-pane>
+			  <el-tab-pane label="邮件模版" name="4"><notice/></el-tab-pane>
 		  </el-tabs>
 	  </el-drawer>
     <el-dialog
@@ -239,7 +239,9 @@ import axios from 'axios'
 import ProcessConfiguration from '../ProcessDesign/components/ProcessConfiguration'
 import ProcessVariable from '../ProcessDesign/components/ProcessVariable'
 import Notice from '../ProcessDesign/components/Notice'
+import Attribute from './components/Attribute'
 export default {
+  name: 'process-management',
   data () {
     return {
       processDrawer: false,
@@ -255,6 +257,7 @@ export default {
           return !res.Leaf
         }
       },
+      activeName: '1', // 流程属性Tabs
       addDialogVisible: false,
       importDialogVisible: false,
       addForm: {
@@ -270,7 +273,8 @@ export default {
 	components: {
     ProcessVariable,
     ProcessConfiguration,
-    Notice
+    Notice,
+    Attribute
 	},
   methods: {
     addRootFolder () {
@@ -313,6 +317,20 @@ export default {
             resolve(arr)
           })
       }
+    },
+	  // 打开流程属性
+	  openProcessDrawer (type) {
+      this.activeName = type
+      this.processDrawer = true
+	  },
+	  // 添加策略
+    appendTactics (data) {
+      console.log(data)
+      const newChild = { id: id++, label: 'testtest', children: [] };
+      if (!data.children) {
+        this.$set(data, 'children', []);
+      }
+      data.children.push(newChild);
     }
   }
 }
