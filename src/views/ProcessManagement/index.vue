@@ -47,7 +47,7 @@
                 </el-button>
               </el-tooltip>
               <el-tooltip class="item" effect="dark" content="禁用" placement="bottom">
-                <el-button size="mini" type="text">
+                <el-button size="mini" type="text" @click="stopProcess(data)">
                   <i class="iconfont pl-jinyong danger"></i>
                 </el-button>
               </el-tooltip>
@@ -325,12 +325,36 @@ export default {
 	  },
 	  // 添加策略
     appendTactics (data) {
-      console.log(data)
-      const newChild = { id: id++, label: 'testtest', children: [] };
-      if (!data.children) {
-        this.$set(data, 'children', []);
+	    this.refreshNodeBy(data.id)
+    },
+    // 禁用流程
+    stopProcess (data) {
+      this.$confirm(`确定要禁用'${data.text}'流程?`, '提示', {
+        confirmButtonText: '确定',
+        cancelButtonText: '取消',
+        type: 'warning'
+      }).then(() => {
+        axios.get('/mock/OK.json')
+          .then((res) => {
+            this.$message({
+              type: 'success',
+              message: '已禁用'
+            })
+	          this.refreshNodeBy(data.id)
+          })
+      }).catch(() => {
+        this.$message({
+          type: 'info',
+          message: '已取消'
+        })
+      })
+    },
+    // 局部刷新节点
+    refreshNodeBy (id) {
+      if (this.$refs.ProcessTree.getNode(id) != null) {
+        let node = this.$refs.ProcessTree.getNode(id) // 通过节点id找到对应树节点对象
+        node.expand() // 主动调用展开节点方法，重新查询该节点下的所有子节点
       }
-      data.children.push(newChild);
     }
   }
 }

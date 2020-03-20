@@ -59,10 +59,10 @@
 		  </el-form-item>
 		  <el-form-item>
 			  <el-button v-if="!editShow" type="primary" size="mini" icon="el-icon-edit" @click="edit">编辑</el-button>
-			  <templete v-else>
+			  <div v-else>
 				  <el-button type="success" size="mini" icon="el-icon-s-claim" @click="save">保存</el-button>
 				  <el-button size="mini" icon="el-icon-circle-close" @click="cancel">取消</el-button>
-			  </templete>
+			  </div>
 		  </el-form-item>
 	  </el-form>
   </div>
