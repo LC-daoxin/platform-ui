@@ -28,7 +28,7 @@
         <template>
           <el-button type="primary" size="mini">编辑</el-button>
           <el-button type="primary" size="mini">配置邮件</el-button>
-          <el-button type="primary" size="mini">禁用</el-button>
+          <el-button type="danger" size="mini">禁用</el-button>
         </template>
       </el-table-column>
     </el-table>
@@ -61,6 +61,9 @@ export default {
 }
 </script>
 
-<style>
-
+<style lang="scss" scoped>
+	::v-deep .el-button--mini {
+		padding: 5px 8px;
+		vertical-align: top;
+	}
 </style>

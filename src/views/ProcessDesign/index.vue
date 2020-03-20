@@ -3,8 +3,6 @@
     <header>
       <el-button icon="el-icon-upload" type="success" size="mini">保存</el-button>
       <el-button icon="el-icon-document-checked" type="warning" size="mini">校验</el-button>
-      <el-button icon="el-icon-s-promotion" type="primary" size="mini">发布</el-button>
-      <el-button icon="el-icon-picture-outline" type="primary" size="mini">存为图片</el-button>
       <el-button icon="el-icon-setting" type="primary" size="mini" @click="processDrawer = true">策略属性</el-button>
     </header>
     <main>
@@ -31,7 +29,7 @@
       </el-card>
       <el-tabs class="drawer-content">
         <el-tab-pane label="基础信息"><basic-info-tactics/></el-tab-pane>
-        <el-tab-pane label="邮件">邮箱</el-tab-pane>
+        <el-tab-pane label="邮件"><notice></notice></el-tab-pane>
         <!--<el-tab-pane label="流程变量"><process-variable/></el-tab-pane>-->
         <!--<el-tab-pane label="功能调用"><process-configuration/></el-tab-pane>-->
         <el-tab-pane label="用户修改"><user-modify/></el-tab-pane>
