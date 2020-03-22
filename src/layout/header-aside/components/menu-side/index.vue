@@ -62,6 +62,36 @@ export default {
               iconSvg: '',
               title: '邮件模板',
               path: '/work-flow/mail-template'
+            },
+            {
+              icon: '',
+              iconSvg: '',
+              title: '我的待办',
+              path: '/work-flow/my-todo'
+            },
+            {
+              icon: '',
+              iconSvg: '',
+              title: '我的代理',
+              path: '/work-flow/my-proxy'
+            },
+            {
+              icon: '',
+              iconSvg: '',
+              title: '我的已办',
+              path: '/work-flow/my-done'
+            },
+            {
+              icon: '',
+              iconSvg: '',
+              title: '我的申请',
+              path: '/work-flow/my-request'
+            },
+            {
+              icon: '',
+              iconSvg: '',
+              title: '我的发起',
+              path: '/work-flow/my-initiate'
             }
           ]
         },

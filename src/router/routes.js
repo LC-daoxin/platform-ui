@@ -464,6 +464,51 @@ const frameIn = [
           title: '流程设计'
         },
         component: () => import('@/views/ProcessDesign')
+      },
+      {
+        path: 'my-todo',
+        name: 'my-todo',
+        meta: {
+          auth: true,
+          title: '我的待办'
+        },
+        component: () => import('@/views/MyTodo')
+      },
+      {
+        path: 'my-proxy',
+        name: 'my-proxy',
+        meta: {
+          auth: true,
+          title: '我的代理'
+        },
+        component: () => import('@/views/MyTodo')
+      },
+      {
+        path: 'my-done',
+        name: 'my-done',
+        meta: {
+          auth: true,
+          title: '我的已办'
+        },
+        component: () => import('@/views/MyTodo')
+      },
+      {
+        path: 'my-request',
+        name: 'my-request',
+        meta: {
+          auth: true,
+          title: '我的申请'
+        },
+        component: () => import('@/views/MyTodo')
+      },
+      {
+        path: 'my-initiate',
+        name: 'my-initiate',
+        meta: {
+          auth: true,
+          title: '我的发起'
+        },
+        component: () => import('@/views/MyInitiate')
       }
     ]
   }
