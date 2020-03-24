@@ -18,6 +18,10 @@ import { frameInRoutes } from '@/router/routes'
 import './icons'
 import './icons/iconfont/iconfont.css'
 
+// 富文本编辑器
+import CKEditor from 'ckeditor4-vue'
+Vue.use(CKEditor)
+
 // 核心插件
 Vue.use(core)
 

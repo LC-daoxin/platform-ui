@@ -3,7 +3,7 @@
     <header>
       <div>
         <el-button type="danger" size="mini">删除</el-button>
-        <el-button type="primary" size="mini">新增</el-button>
+        <el-button type="primary" size="mini" @click="dialogVisible=true">新增</el-button>
         <el-button type="primary" size="mini">导入</el-button>
         <el-button
           type="primary"
@@ -20,15 +20,32 @@
       </div>
     </header>
     <template-table></template-table>
+    <el-dialog
+      title="添加模版设置"
+      :visible.sync="dialogVisible"
+      width="50%">
+      <template-dialog></template-dialog>
+      <span slot="footer">
+        <el-button type="primary" @click="dialogVisible = false" size="mini">提交</el-button>
+        <el-button @click="dialogVisible = false" size="mini">撤销</el-button>
+      </span>
+    </el-dialog>
   </div>
 </template>
 
 <script>
 import TemplateTable from './components/templateTable'
+import TemplateDialog from './components/templateDialog'
 
 export default {
+  data () {
+    return {
+      dialogVisible: false
+    }
+  },
   components: {
-    TemplateTable
+    TemplateTable,
+    TemplateDialog
   }
 }
 </script>
@@ -50,5 +67,8 @@ export default {
   header .search-co .el-input--mini {
     width: 100px;
     margin-right: 12px;
+  }
+  .dashboard-editor-container /deep/ .el-dialog__footer {
+    text-align: left;
   }
 </style>
