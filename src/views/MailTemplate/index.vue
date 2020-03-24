@@ -5,11 +5,11 @@
         <el-button type="danger" size="mini">删除</el-button>
         <el-button type="primary" size="mini" @click="dialogVisible=true">新增</el-button>
         <el-button type="primary" size="mini">导入</el-button>
-        <el-button
+        <!-- <el-button
           type="primary"
           size="mini"
           @click="$router.push('/work-flow/template-style')"
-        >模板样式</el-button>
+        >模板样式</el-button> -->
       </div>
       <div class="search-co">
         <p>编码：</p>
