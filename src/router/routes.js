@@ -509,6 +509,15 @@ const frameIn = [
           title: '我的发起'
         },
         component: () => import('@/views/MyInitiate')
+      },
+      {
+        path: 'app-certification-reg',
+        name: 'app-certification-reg',
+        meta: {
+          auth: true,
+          title: '应用认证注册'
+        },
+        component: () => import('@/views/AppCertificationReg')
       }
     ]
   }

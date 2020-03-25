@@ -54,7 +54,7 @@ export default {
             {
               icon: 'pl-gongzuoliuchakan',
               iconSvg: '',
-              title: '流程目录',
+              title: '流程分类',
               path: '/work-flow/process-catalog'
             },
             {
@@ -92,6 +92,12 @@ export default {
               iconSvg: '',
               title: '我的发起',
               path: '/work-flow/my-initiate'
+            },
+            {
+              icon: '',
+              iconSvg: '',
+              title: '应用认证注册',
+              path: '/work-flow/app-certification-reg'
             }
           ]
         },
