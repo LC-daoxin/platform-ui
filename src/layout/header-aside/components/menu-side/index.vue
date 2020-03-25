@@ -64,31 +64,31 @@ export default {
               path: '/work-flow/mail-template'
             },
             {
-              icon: '',
+              icon: 'pl-daiban',
               iconSvg: '',
               title: '我的待办',
               path: '/work-flow/my-todo'
             },
             {
-              icon: '',
+              icon: 'pl-renwu-copy',
               iconSvg: '',
               title: '我的代理',
               path: '/work-flow/my-proxy'
             },
             {
-              icon: '',
+              icon: 'pl-yiban-moren',
               iconSvg: '',
               title: '我的已办',
               path: '/work-flow/my-done'
             },
             {
-              icon: '',
+              icon: 'pl-shenqing',
               iconSvg: '',
               title: '我的申请',
               path: '/work-flow/my-request'
             },
             {
-              icon: '',
+              icon: 'pl-faqirenwuxietong',
               iconSvg: '',
               title: '我的发起',
               path: '/work-flow/my-initiate'
