@@ -1,18 +1,80 @@
 <template>
   <div class="dashboard-editor-container">
+    <el-dialog
+      :title="dialogTitle"
+      :visible.sync="dialogVisible"
+      width="30%"
+    >
+      <dialog-form></dialog-form>
+    </el-dialog>
     <header>
-      <el-button size="mini" type="primary">添加</el-button>
+      <el-button size="mini" type="primary" @click="showDialog('新增')">添加</el-button>
       <el-button size="mini">刷新</el-button>
     </header>
-    <main>
-      <el-table size="mini" border></el-table>
-    </main>
+    <main-table :tableData="tableData"></main-table>
+    <el-pagination
+      @size-change="handleSizeChange"
+      @current-change="handleCurrentChange"
+      :current-page="currentPage"
+      :page-sizes="[5, 20, 30, 50]"
+      :page-size="20"
+      layout="total, sizes, prev, pager, next, jumper"
+      :total="pageTotal">
+    </el-pagination>
   </div>
 </template>
 
 <script>
-export default {
+import MainTable from './components/MainTable'
+import DialogForm from './components/DialogForm'
 
+export default {
+  data () {
+    return {
+      currentPage: 1,
+      pageTotal: 100,
+      dialogTitle: '新增',
+      dialogVisible: false,
+      tableData: [
+        {
+          name: '客户端1',
+          id: '5d22eb6e8b0c7ba066014398',
+          type: ['password'],
+          range: 'All',
+          url: 'https://eerp.com',
+          certification: true
+        },
+        {
+          name: '客户端2',
+          id: '5d22eb6e8b0c7ba066014398',
+          type: ['password'],
+          range: 'All',
+          url: 'https://eerp.com',
+          certification: false
+        },
+        {
+          name: '客户端3',
+          id: '5d22eb6e8b0c7ba066014398',
+          type: ['password'],
+          range: 'All',
+          url: 'https://eerp.com',
+          certification: false
+        }
+      ]
+    }
+  },
+  methods: {
+    handleSizeChange () {},
+    handleCurrentChange () {},
+    showDialog (title) {
+      this.dialogTitle = title
+      this.dialogVisible = true
+    }
+  },
+  components: {
+    MainTable,
+    DialogForm
+  }
 }
 </script>
 
