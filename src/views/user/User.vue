@@ -6,9 +6,9 @@
         <el-row>
           <el-col :span="12">
             <el-button class="filter-item" type="primary" size="mini" icon="el-icon-plus" @click="openDialog('AddUser')">添加</el-button>
-            <el-button class="filter-item" type="primary" size="mini" icon="el-icon-minus" @click="deleteRecord(multipleSelection)">删除</el-button>
-            <el-button class="filter-item" type="primary" size="mini" icon="el-icon-lock" @click="lock(multipleSelection)">锁定</el-button>
-            <el-button class="filter-item" type="primary" size="mini" icon="el-icon-unlock" @click="lock(multipleSelection, true)">解锁</el-button>
+            <el-button class="filter-item" type="danger" size="mini" icon="el-icon-minus" @click="deleteRecord(multipleSelection)">删除</el-button>
+            <el-button class="filter-item" type="warning" size="mini" icon="el-icon-lock" @click="lock(multipleSelection)">锁定</el-button>
+            <el-button class="filter-item" type="success" size="mini" icon="el-icon-unlock" @click="lock(multipleSelection, true)">解锁</el-button>
           </el-col>
           <el-col :span="12">
             <el-row type="flex" :gutter="10" justify="end">

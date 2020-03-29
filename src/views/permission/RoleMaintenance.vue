@@ -6,8 +6,8 @@
         <el-row>
           <el-col :span="12">
             <el-button class="filter-item" type="primary" size="mini" icon="el-icon-plus" @click="openDialog('AddRole')">新增</el-button>
-            <el-button class="filter-item" type="primary" size="mini" icon="el-icon-minus" @click="deleteRecord(multipleSelection)">删除</el-button>
-            <el-button class="filter-item" type="primary" size="mini" icon="el-icon-refresh" @click="openDialog('sapRole')">同步</el-button>
+            <el-button class="filter-item" type="danger" size="mini" icon="el-icon-minus" @click="deleteRecord(multipleSelection)">删除</el-button>
+            <el-button class="filter-item" type="success" size="mini" icon="el-icon-refresh" @click="openDialog('sapRole')">同步</el-button>
             <el-button class="filter-item" type="primary" size="mini" icon="el-icon-document" @click="openDialog('GroupRole')">关联</el-button>
             <el-button class="filter-item" type="primary" size="mini" icon="el-icon-search">高级搜索</el-button>
           </el-col>

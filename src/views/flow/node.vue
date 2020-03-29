@@ -13,7 +13,7 @@
       <i :class="nodeIcoClass"></i>
     </div>
     <div class="flow-node-text" :show-overflow-tooltip="true">
-      {{node.name}}
+      {{node.nodeName}}
     </div>
     <div class="flow-node-right-attribute" v-if="mouseEnter" @click="openNode">
       <i class="el-icon-s-tools"></i>
@@ -27,12 +27,14 @@
 <script>
 export default {
   props: {
-    node: Object
+    node: Object,
+    processData: Object
   },
   data () {
     return {
       // 控制节点操作显示
-      mouseEnter: false
+      mouseEnter: false,
+      currentNode: null
     }
   },
   computed: {
@@ -52,9 +54,18 @@ export default {
     }
   },
   methods: {
+    // 获取当前nodeData
+    getNodeData (Data, id) {
+      for (let index of Data) {
+        if (index.id === id) {
+          this.currentNode = index
+          break
+        }
+      }
+    },
     // 删除节点
     deleteNode () {
-      this.$emit('deleteNode', this.node.id)
+      this.$emit('deleteNode', this.node)
     },
     // 节点属性
     openNode () {
@@ -63,6 +74,8 @@ export default {
     // 点击节点
     clickNode () {
       this.$emit('clickNode', this.node.id)
+      this.getNodeData(this.processData.nodeList, this.node.id)
+      console.log(this.currentNode)
     },
     // 鼠标移动后抬起
     changeNodePosition () {

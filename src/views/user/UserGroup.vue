@@ -14,7 +14,7 @@
           <el-row>
             <el-col :span="12">
               <el-button class="filter-item" type="primary" size="mini" icon="el-icon-plus" @click="dialogAddGroupVisible = true">添加</el-button>
-              <el-button class="filter-item" type="primary" size="mini" icon="el-icon-minus" @click="deleteRecord(multipleSelection)">删除</el-button>
+              <el-button class="filter-item" type="danger" size="mini" icon="el-icon-minus" @click="deleteRecord(multipleSelection)">删除</el-button>
               <el-button class="filter-item" type="primary" size="mini" icon="el-icon-plus" @click="openRelevance()">关联</el-button>
             </el-col>
             <el-col :span="12">

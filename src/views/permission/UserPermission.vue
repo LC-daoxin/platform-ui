@@ -14,7 +14,7 @@
             <el-row>
               <el-col :span="9">
                 <el-button class="filter-item" type="primary" size="mini" icon="el-icon-plus" @click="AddUserPermissionVisible = true">添加</el-button>
-                <el-button class="filter-item" type="primary" size="mini" icon="el-icon-minus" @click="deleteRecord(multipleSelection)">删除</el-button>
+                <el-button class="filter-item" type="danger" size="mini" icon="el-icon-minus" @click="deleteRecord(multipleSelection)">删除</el-button>
               </el-col>
               <el-col :span="15">
                 <el-row type="flex" :gutter="5" justify="end">
