@@ -27,11 +27,11 @@
           操作
         </template>
         <el-row>
-          <el-button class="buttonSty" icon="el-icon-refresh" size="small" @click="refresh">刷新</el-button>
+          <el-button class="buttonSty" icon="el-icon-refresh" size="small" @click="refresh">重置</el-button>
         </el-row>
-        <el-row>
-          <el-button class="buttonSty" icon="el-icon-edit-outline" size="small" @click="changeLabel">设置连线</el-button>
-        </el-row>
+        <!--<el-row>-->
+          <!--<el-button class="buttonSty" icon="el-icon-edit-outline" size="small" @click="changeLabel">设置连线</el-button>-->
+        <!--</el-row>-->
       </el-collapse-item>
     </el-collapse>
   </div>
@@ -67,21 +67,22 @@ export default {
             ico: 'iconfont pl-jiedian',
             // 自定义覆盖样式
             style: {}
-          }, {
-            id: '2',
-            type: 'start',
-            name: '流程开始',
-            ico: 'iconfont pl-kaishi',
-            // 自定义覆盖样式
-            style: {}
-          }, {
-            id: '3',
-            type: 'end',
-            name: '流程结束',
-            ico: 'iconfont pl-jieshu',
-            // 自定义覆盖样式
-            style: {}
           }
+          // }, {
+          //   id: '2',
+          //   type: 'start',
+          //   name: '流程开始',
+          //   ico: 'iconfont pl-kaishi',
+          //   // 自定义覆盖样式
+          //   style: {}
+          // }, {
+          //   id: '3',
+          //   type: 'end',
+          //   name: '流程结束',
+          //   ico: 'iconfont pl-jieshu',
+          //   // 自定义覆盖样式
+          //   style: {}
+          // }
         ]
       },
       nodeMenu: {}

@@ -16,6 +16,7 @@
                   v-show="node.show"
                   :id="node.id"
                   :node="node"
+                  :processData="processData"
                   @deleteNode="deleteNode"
                   @changeNodeSite="changeNodeSite"
                   @nodeRightMenu="nodeRightMenu"
@@ -40,6 +41,10 @@ import nodeMenu from '@/views/flow/node_menu'
 import lodash from 'lodash'
 import dataAll from './data'
 export default {
+  props: {
+    ProcessConfigData: Object,
+    NodeData: Array
+  },
   data () {
     return {
       // jsPlumb 实例
@@ -51,7 +56,9 @@ export default {
       // 是否加载完毕标志位
       loadEasyFlowFinish: false,
       // 数据
-      data: {}
+      data: {},
+      processData: null,
+      tempData: null // 存储初始化数据
     }
   },
   // 一些基础配置移动该文件中
@@ -63,13 +70,56 @@ export default {
   },
   mounted () {
     this.jsPlumb = jsPlumb.getInstance()
-    this.$nextTick(() => {
-      // 默认加载流程C的数据、在这里可以根据具体的业务返回符合流程数据格式的数据即可
-      this.dataReload(dataAll.dataC)
-    })
+  },
+  watch: {
+    NodeData () {
+      if (this.NodeData.length > 0) {
+        let obj = {
+          name: this.ProcessConfigData.controlPointID, // 策略名称
+          nodeList: [],
+          lineList: []
+        }
+        this.NodeData.forEach((item, index) => {
+          item.id = this.getUUID()
+          item.type = 'node'
+          item.left = '200px'
+          item.top = 20 + index * 70 + 'px'
+          item.ico = 'iconfont pl-jiedian'
+          item.show = true
+          obj.nodeList.push(item)
+        })
+        for (let i = 0; i < this.NodeData.length - 1; i++) {
+          if (i < this.NodeData.length -1) {
+            let line = {
+              from: this.NodeData[i].id,
+              to: this.NodeData[i + 1].id
+            }
+            obj.lineList.push(line)
+          }
+        }
+        this.processData = obj
+        this.tempData = obj
+        console.log(obj)
+        this.$nextTick(() => {
+          // 加载流程数据、在这里可以根据具体的业务返回符合流程数据格式的数据即可
+          // this.dataReload(dataAll.dataC)
+          this.dataReload(this.processData)
+        })
+      } else {
+        this.$nextTick(() => {
+          // 加载流程数据、在这里可以根据具体的业务返回符合流程数据格式的数据即可
+          let obj = {
+            name: this.ProcessConfigData.controlPointID, // 策略名称
+            nodeList: [],
+            lineList: []
+          }
+          this.dataReload(obj)
+        })
+      }
+    }
   },
   methods: {
-  // 返回唯一标识
+    // 返回唯一标识
     getUUID () {
       return Math.random().toString(36).substr(3, 10)
     },
@@ -192,14 +242,14 @@ export default {
       let left = mousePosition.left
       let top = mousePosition.top
       if (left < 0) {
-        left = evt.originalEvent.layerX - width
+        left = evt.originalEvent.layerX - width + 50
       }
       if (top < 0) {
-        top = evt.originalEvent.clientY - 50
+        top = evt.originalEvent.clientY - 150
       }
       const node = {
         id: nodeId,
-        name: nodeId,
+        nodeName: '新审批节点',
         type: nodeMenu.type,
         left: left + 'px',
         top: top + 'px',
@@ -217,13 +267,43 @@ export default {
           containment: 'parent'
         })
       })
+      this.addConfigNode() // 新增审批节点
+    },
+    // 新增审批节点
+    addConfigNode () {
+      let data = {
+        processConfigID: this.ProcessConfigData.processConfigID, // 策略id
+        nodeActivityID: null, // 活动Id
+        nodeName: '新审批节点',
+        nodeOrder: 1, // 节点排序
+        nodeGroupType: 1, // 节点类型 1.单项节点 2.会签节点
+        parentNodeID: 0, // 父节点Id
+        precedingRuleExpression: null, // 前置表达式
+        endRuleExpression: null // 后置表达式
+      }
+      this.axios_M4.post(`/node/ProcessApproval/`, data).then((res) => {
+        console.log(res)
+        if (res.data.code === 'success') {
+          this.$message({
+            type: 'success',
+            message: res.data.msg
+          })
+        } else {
+          this.$message({
+            type: 'error',
+            message: res.data.msg
+          })
+        }
+      }).catch((err) => {
+        console.log(err)
+      })
     },
     /**
      * 删除节点
-     * @param nodeId 被删除节点的ID
+     * @param nodeEl.id 被删除节点的ID
      */
-    deleteNode (nodeId) {
-      this.$confirm('确定要删除审批节点' + nodeId + '?', '提示', {
+    deleteNode (nodeEl) {
+      this.$confirm('确定要删除审批节点 "' + nodeEl.nodeName + '" ?', '提示', {
         confirmButtonText: '确定',
         cancelButtonText: '取消',
         type: 'warning',
@@ -233,18 +313,38 @@ export default {
          * 这里需要进行业务判断，是否可以删除
          */
         this.data.nodeList = this.data.nodeList.filter(function (node) {
-          if (node.id === nodeId) {
+          if (node.id === nodeEl.id) {
             // 伪删除，将节点隐藏，否则会导致位置错位
             node.show = false
           }
           return true
         })
         this.$nextTick(function () {
-          this.jsPlumb.removeAllEndpoints(nodeId)
+          this.jsPlumb.removeAllEndpoints(nodeEl.id)
         })
       }).catch(() => {
       })
       return true
+    },
+    // 删除策略节点
+    deleteConfigNode () {
+      this.axios_M4.delete(`/node/{nodeID}`)
+        .then((res) => {
+          console.log(res)
+          if (res.data.code === 'success') {
+            if (res.data.data === null) {
+              this.$message({
+                type: 'success',
+                message: res.data.msg
+              })
+            } else {
+              this.$message({
+                type: 'error',
+                message: res.data.data
+              })
+            }
+          }
+        })
     },
     openNode (nodeId) {
       this.$emit('openNode', this.data, nodeId)
@@ -289,7 +389,7 @@ export default {
     },
     // 模拟载入数据dataC
     dataReloadC () {
-      this.dataReload(dataAll.dataC)
+      this.dataReload(this.tempData)
     },
     changeLabel () {
       let lines = this.jsPlumb.getConnections()

@@ -1,13 +1,22 @@
 <template>
   <div class="dashboard-editor-container">
     <header>
-      <el-button type="primary" icon="el-icon-folder-add" size="mini" @click="addDialogVisible = true">新增流程分类</el-button>
-      <el-button type="primary" icon="el-icon-upload2" size="mini" @click="importDialogVisible = true">导入流程</el-button>
+      <el-row :gutter="10">
+        <el-col :span="4">
+          <el-input placeholder="流程分类" v-model="searchValue" size="mini" clearable/>
+        </el-col>
+        <el-col :span="20">
+          <el-button class="filter-item" type="primary" size="mini" icon="el-icon-search" @click="searchClass">查询</el-button>
+          <el-button class="filter-item" type="primary" size="mini" icon="el-icon-refresh" @click="refreshClass">刷新</el-button>
+          <el-button type="success" icon="el-icon-folder-add" size="mini" @click="openDialog('AddClass')">新增流程分类</el-button>
+        </el-col>
+      </el-row>
     </header>
     <main>
       <el-tree
+        v-if="isClass"
         :data="data"
-        node-key="id"
+        node-key="treeID"
         :props="defaultProps"
         ref="ProcessTree"
         :default-expanded-keys="[0]"
@@ -17,141 +26,151 @@
         :expand-on-click-node="false"
       >
         <div class="custom-tree" slot-scope="{ node, data }">
-          <span class="custom-tree-node" v-if="node.level === 1">
+          <span class="custom-tree-node" v-if="node.level === 1" @mouseover="selectStyle(node, $event)" @mouseout="outStyle(node, $event)">
             <span>
               <i class="process el-icon-folder"></i>
-              <span :class="data.status ? '' : 'info'">{{ node.data.text }}</span>
+              <span :class="data.status ? '' : 'info'">{{ node.data.displayName }}</span>
             </span>
-            <span v-if="data.status && node.isCurrent">
-              <el-tooltip class="item" effect="dark" content="添加流程" placement="bottom">
-                <el-button size="mini" type="text">
+            <span :class="node.isCurrent ? 'active' : 'noactive'">
+              <el-tooltip class="item" effect="dark" content="添加流程" placement="bottom" :enterable="false">
+                <el-button size="mini" type="text" @click="openDialog('AddProcess', data, node)">
                   <i class="iconfont pl-tianjia1 success"></i>
                 </el-button>
               </el-tooltip>
-              <el-tooltip class="item" effect="dark" content="删除" placement="bottom">
-                <el-button size="mini" type="text">
+              <el-tooltip class="item" effect="dark" content="删除流程分类" placement="bottom" :enterable="false">
+                <el-button size="mini" type="text" @click="deleteClass(data)">
                   <i class="iconfont pl-ic_del danger"></i>
                 </el-button>
               </el-tooltip>
             </span>
           </span>
-          <span class="custom-tree-node" v-if="node.level === 2">
+          <span class="custom-tree-node" v-if="node.level === 2" @mouseover="selectStyle(node, $event)" @mouseout="outStyle(node, $event)">
             <span>
-              <i :class="{ 'process': data.status, 'info': !data.status, 'iconfont pl-shengchanliuchengguanli': true}"></i>
-              <span :class="data.status ? '' : 'info'">{{ node.data.text }}</span>
+              <i :class="{ 'process': data.Status, 'info': !data.Status, 'iconfont pl-shengchanliuchengguanli': true}"></i>
+              <span :class="data.status ? '' : 'info'">{{ node.data.DisplayName }}</span>
             </span>
-            <span v-if="data.status && node.isCurrent">
-              <el-tooltip class="item" effect="dark" content="属性" placement="bottom">
-                <el-button size="mini" type="text" @click="openProcessDrawer('1')">
-                  <i class="iconfont pl-shuxing warning"></i>
+            <span v-if="data.Status" :class="node.isCurrent ? 'active' : 'noactive'">
+              <el-tooltip class="item" effect="dark" content="编辑" placement="bottom" :enterable="false">
+                <el-button size="mini" type="text" @click="openProcessDrawer('1', data)">
+                  <i class="iconfont pl-bianji warning"></i>
                 </el-button>
               </el-tooltip>
-              <el-tooltip class="item" effect="dark" content="禁用" placement="bottom">
-                <el-button size="mini" type="text" @click="stopProcess(data)">
-                  <i class="iconfont pl-jinyong danger"></i>
+              <el-tooltip class="item" effect="dark" content="添加策略组" placement="bottom" :enterable="false">
+                <el-button size="mini" type="text" @click="openDialog('AddProcessBase', data, node)">
+                  <i class="iconfont pl-tianjia1 success"></i>
                 </el-button>
               </el-tooltip>
-              <el-tooltip class="item" effect="dark" content="添加策略组" placement="bottom">
-                <el-button size="mini" type="text">
-                  <i class="iconfont pl-celvezhihangpeizhi" @click="appendTactics(data)"></i>
-                </el-button>
-              </el-tooltip>
-              <el-tooltip class="item" effect="dark" content="功能调用" placement="bottom">
-                <el-button size="mini" type="text" @click="openProcessDrawer('2')">
+              <el-tooltip class="item" effect="dark" content="功能调用" placement="bottom" :enterable="false">
+                <el-button size="mini" type="text" @click="openProcessDrawer('2', data)">
                   <i class="iconfont pl-gongneng-"></i>
                 </el-button>
               </el-tooltip>
-              <el-tooltip class="item" effect="dark" content="流程变量" placement="bottom">
-                <el-button size="mini" type="text" @click="openProcessDrawer('3')">
+              <el-tooltip class="item" effect="dark" content="流程变量" placement="bottom" :enterable="false">
+                <el-button size="mini" type="text" @click="openProcessDrawer('3', data)">
                   <i class="iconfont pl-liuchengguanli"></i>
                 </el-button>
               </el-tooltip>
-              <el-tooltip class="item" effect="dark" content="邮件模版" placement="bottom">
-                <el-button size="mini" type="text" @click="openProcessDrawer('4')">
+              <el-tooltip class="item" effect="dark" content="邮件模版" placement="bottom" :enterable="false">
+                <el-button size="mini" type="text" @click="openProcessDrawer('4', data)">
                   <i class="iconfont pl-youjian"></i>
                 </el-button>
               </el-tooltip>
+              <el-tooltip class="item" effect="dark" content="禁用流程" placement="bottom" :enterable="false">
+                <el-button size="mini" type="text" @click="stopProcess(data, node)">
+                  <i class="iconfont pl-jinyong danger"></i>
+                </el-button>
+              </el-tooltip>
+              <el-tooltip class="item" effect="dark" content="删除流程" placement="bottom" :enterable="false">
+                <el-button size="mini" type="text" @click="deleteProcess(data)">
+                  <i class="iconfont pl-ic_del danger"></i>
+                </el-button>
+              </el-tooltip>
             </span>
-            <span class="manage" v-if="!data.status && node.isCurrent">
-              <el-tooltip class="item" effect="dark" content="启动" placement="bottom">
-                <el-button size="mini" type="text">
+            <span v-else :class="node.isCurrent ? 'active' : 'noactive'">
+              <el-tooltip class="item" effect="dark" content="启用" placement="bottom" :enterable="false">
+                <el-button size="mini" type="text" @click="startProcess(data, node)">
                   <i class="iconfont pl-qiyong success"></i>
                 </el-button>
               </el-tooltip>
             </span>
           </span>
-          <span class="custom-tree-node" v-if="node.level === 3">
+          <span class="custom-tree-node" v-if="node.level === 3" @mouseover="selectStyle(node, $event)" @mouseout="outStyle(node, $event)">
             <span>
-              <i  :class="{ 'strategyGroup': data.status, 'info': !data.status, 'iconfont pl-shijiancelveweihu': true}"></i>
-              <span :class="data.status ? 'groupText' : 'info TextWidth'">{{ node.data.text }}</span>
-              <span class="describe">{{ node.data.describe }}</span>
+              <i  :class="{ 'strategyGroup': data.Status, 'info': !data.Status, 'iconfont pl-shijiancelveweihu': true}"></i>
+              <span :class="data.Status ? 'groupText' : 'info TextWidth'">{{ node.data.controlPointTypeCode }}</span>
+              <span class="describe">{{ node.data.controlPointTypeCodeDesc }}</span>
             </span>
-            <span v-if="data.status && node.isCurrent">
-              <el-tooltip class="item" effect="dark" content="编辑" placement="bottom">
-                <el-button size="mini" type="text">
-                  <i class="iconfont pl-bianji"></i>
+            <span v-if="data.Status" :class="node.isCurrent ? 'active' : 'noactive'">
+              <el-tooltip class="item" effect="dark" content="编辑" placement="bottom" :enterable="false">
+                <el-button size="mini" type="text" @click="openProcessBaseDrawer('1', data)">
+                  <i class="iconfont pl-bianji warning"></i>
                 </el-button>
               </el-tooltip>
-              <el-tooltip class="item" effect="dark" content="添加策略" placement="bottom">
-                <el-button size="mini" type="text">
-                  <i class="iconfont pl-tianjia1"></i>
+              <el-tooltip class="item" effect="dark" content="添加策略" placement="bottom" :enterable="false">
+                <el-button size="mini" type="text" @click="openDialog('AddProcessConfig', data, node)">
+                  <i class="iconfont pl-tianjia1 success"></i>
                 </el-button>
               </el-tooltip>
-              <el-tooltip class="item" effect="dark" content="入口规则" placement="bottom">
-                <el-button size="mini" type="text">
+              <el-tooltip class="item" effect="dark" content="入口规则" placement="bottom" :enterable="false">
+                <el-button size="mini" type="text" @click="openProcessBaseDrawer('2', data)">
                   <i class="iconfont pl-guizeguanli1"></i>
                 </el-button>
               </el-tooltip>
-              <el-tooltip class="item" effect="dark" content="邮件" placement="bottom">
-                <el-button size="mini" type="text">
-                  <i class="iconfont pl-youjian"></i>
-                </el-button>
-              </el-tooltip>
-              <el-tooltip class="item" effect="dark" content="禁用" placement="bottom">
-                <el-button size="mini" type="text">
+              <el-tooltip class="item" effect="dark" content="禁用" placement="bottom" :enterable="false">
+                <el-button size="mini" type="text" @click="stopProcessBase(data, node)">
                   <i class="iconfont pl-jinyong danger"></i>
                 </el-button>
               </el-tooltip>
+              <el-tooltip class="item" effect="dark" content="删除策略组" placement="bottom" :enterable="false">
+                <el-button size="mini" type="text" @click="deleteProcessBase(data)">
+                  <i class="iconfont pl-ic_del danger"></i>
+                </el-button>
+              </el-tooltip>
             </span>
-            <span class="manage" v-if="!data.status && node.isCurrent">
-              <el-tooltip class="item" effect="dark" content="启动" placement="bottom">
-                <el-button size="mini" type="text">
+            <span v-else :class="node.isCurrent ? 'active' : 'noactive'">
+              <el-tooltip class="item" effect="dark" content="启动" placement="bottom" :enterable="false">
+                <el-button size="mini" type="text" @click="startProcessBase(data, node)">
                   <i class="iconfont pl-qiyong success"></i>
                 </el-button>
               </el-tooltip>
             </span>
           </span>
-          <span class="custom-tree-node" v-if="node.level === 4">
+          <span class="custom-tree-node" v-if="node.level === 4" @mouseover="selectStyle(node, $event)" @mouseout="outStyle(node, $event)">
             <span>
-              <i  :class="{ 'strategy': data.status, 'info': !data.status, 'iconfont pl-jiagecelve': true}"></i>
-              <span :class="data.status ? 'groupText' : 'info TextWidth'">{{ node.data.text }}</span>
-              <span class="describe">{{ node.data.describe }}</span>
+              <i  :class="{ 'strategy': data.Status, 'info': !data.Status, 'iconfont pl-jiagecelve': true}"></i>
+              <span :class="data.Status ? 'groupText' : 'info TextWidth'">{{ node.data.controlPointID }}</span>
+              <span class="describe">{{ node.data.controlPointDesc }}</span>
             </span>
-            <span v-if="data.status && node.isCurrent">
-              <el-tooltip class="item" effect="dark" content="编辑" placement="bottom">
-                <el-button size="mini" type="text">
-                  <i class="iconfont pl-bianji"></i>
+            <span v-if="data.Status" :class="node.isCurrent ? 'active' : 'noactive'">
+              <el-tooltip class="item" effect="dark" content="编辑" placement="bottom" :enterable="false">
+                <el-button size="mini" type="text" @click="openProcessConfigDrawer('1', data)">
+                  <i class="iconfont pl-bianji warning"></i>
                 </el-button>
               </el-tooltip>
-              <el-tooltip class="item" effect="dark" content="审批节点" placement="bottom">
-                <el-button size="mini" type="text" @click="$router.push('/work-flow/process-design')">
+              <el-tooltip class="item" effect="dark" content="审批节点" placement="bottom" :enterable="false">
+                <el-button size="mini" type="text" @click="routerNode(data, node)">
                   <i class="iconfont pl-changyongtubiao_liuchengguanli"></i>
                 </el-button>
               </el-tooltip>
-              <el-tooltip class="item" effect="dark" content="邮件" placement="bottom">
-                <el-button size="mini" type="text">
+              <el-tooltip class="item" effect="dark" content="邮件" placement="bottom" :enterable="false">
+                <el-button size="mini" type="text" @click="openProcessConfigDrawer('2', data)">
                   <i class="iconfont pl-youjian"></i>
                 </el-button>
               </el-tooltip>
-              <el-tooltip class="item" effect="dark" content="禁用" placement="bottom">
-                <el-button size="mini" type="text">
+              <el-tooltip class="item" effect="dark" content="禁用" placement="bottom" :enterable="false">
+                <el-button size="mini" type="text" @click="stopProcessConfig(data, node)">
                   <i class="iconfont pl-jinyong danger"></i>
                 </el-button>
               </el-tooltip>
+              <el-tooltip class="item" effect="dark" content="删除策略" placement="bottom" :enterable="false">
+                <el-button size="mini" type="text" @click="deleteProcessConfig(data)">
+                  <i class="iconfont pl-ic_del danger"></i>
+                </el-button>
+              </el-tooltip>
             </span>
-            <span class="manage" v-if="!data.status && node.isCurrent">
-              <el-tooltip class="item" effect="dark" content="启动" placement="bottom">
-                <el-button size="mini" type="text">
+            <span v-else :class="node.isCurrent ? 'active' : 'noactive'">
+              <el-tooltip class="item" effect="dark" content="启动" placement="bottom" :enterable="false">
+                <el-button size="mini" type="text" @click="startProcessConfig(data, node)">
                   <i class="iconfont pl-qiyong success"></i>
                 </el-button>
               </el-tooltip>
@@ -165,6 +184,7 @@
       :visible.sync="processDrawer"
       :modal="false"
       direction="rtl"
+      :before-close="closeProcessDrawer"
       :with-header="false"
       class="drawer"
       size="50%"
@@ -173,175 +193,288 @@
       <el-card class="box-card">
         <el-divider content-position="left">流程信息</el-divider>
         <div class="content">
-          <div class="content-row"><span class="label">流程类型：</span><span class="text">{{ ProcessType }}</span></div>
-          <div class="content-row"><span class="label">流程描述：</span><span class="text">{{ ProcessDescribe }}</span></div>
-          <div class="content-row"><span class="label">所属公司：</span><span class="text">{{ Company }}</span></div>
+          <div class="content-row"><span class="label">流程分类：</span><span class="text">{{ Info.processClass }}</span></div>
+          <div class="content-row"><span class="label">流程名称：</span><span class="text">{{ Info.process }}</span></div>
+          <div class="content-row"><span class="label">所属公司：</span><span class="text">{{ Info.CompanyCode }}</span></div>
         </div>
       </el-card>
       <el-tabs class="drawer-content" v-model="activeName">
-        <el-tab-pane label="属性" name="1"><attribute/></el-tab-pane>
-        <el-tab-pane label="功能调用" name="2"><process-configuration/></el-tab-pane>
+        <el-tab-pane label="属性" name="1"><attribute ref="attribute" @updateTree="refreshNodeBy(currentNode.parent.key)" :ProcessData="ProcessData"/></el-tab-pane>
+        <el-tab-pane label="功能调用" name="2"><process-configuration :Data="ProcessData" Type="process"/></el-tab-pane>
         <el-tab-pane label="流程变量" name="3"><process-variable/></el-tab-pane>
         <el-tab-pane label="邮件模版" name="4"><notice/></el-tab-pane>
       </el-tabs>
     </el-drawer>
+    <el-drawer
+      title="策略组属性"
+      :visible.sync="processBaseDrawer"
+      :modal="false"
+      direction="rtl"
+      :before-close="closeProcessBaseDrawer"
+      :with-header="false"
+      class="drawer"
+      size="50%"
+    >
+      <h1>策略组属性</h1>
+      <el-card class="box-card">
+        <el-divider content-position="left">策略组信息</el-divider>
+        <div class="content">
+          <div class="content-row"><span class="label">流程分类：</span><span class="text">{{ Info.processClass }}</span></div>
+          <div class="content-row"><span class="label">流程名称：</span><span class="text">{{ Info.process }}</span></div>
+          <div class="content-row"><span class="label">所属公司：</span><span class="text">{{ Info.CompanyCode }}</span></div>
+          <div class="content-row"><span class="label">策略组：</span><span class="text">{{ Info.processBase }}</span></div>
+          <div class="content-row"><span class="label">策略组描述：</span><span class="text">{{ Info.processBaseDes }}</span></div>
+        </div>
+      </el-card>
+      <el-tabs class="drawer-content" v-model="activeBaseName">
+        <el-tab-pane label="属性" name="1"><process-base-attribute ref="ProcessBaseAttribute" @updateTree="refreshNodeBy(currentNode.parent.key)" :ProcessBaseData="ProcessBaseData" /></el-tab-pane>
+        <el-tab-pane label="入口规则" name="2"><process-reference  :ProcessBaseData="ProcessBaseData"/></el-tab-pane>
+      </el-tabs>
+    </el-drawer>
     <el-dialog
-      title="新增流程组"
+      title="新增流程分类"
       :visible.sync="addDialogVisible"
       width="420px">
-      <el-form ref="form" size="mini" :model="addForm" label-width="100px">
-        <el-form-item label="流程目录名称">
-          <el-input v-model="addForm.name" size="mini"></el-input>
+      <el-form ref="addClassForm" :rules="addClassRules" size="mini" :model="addForm" label-width="100px">
+        <el-form-item label="流程全称：" prop="fullName">
+          <el-input v-model="addForm.fullName" size="mini"></el-input>
         </el-form-item>
-        <el-form-item label="流程目录编码">
-          <el-input v-model="addForm.key" size="mini"></el-input>
+        <el-form-item label="显示名称：" prop="displayName">
+          <el-input v-model="addForm.displayName" size="mini"></el-input>
         </el-form-item>
-        <el-form-item label="上级菜单">
-          <el-button type="text">选择父级</el-button>
-        </el-form-item>
-        <el-form-item label="排序">
-          <el-input v-model="addForm.sort" size="mini"></el-input>
+        <el-form-item label="set编码：" prop="setCode">
+          <el-input v-model="addForm.setCode" size="mini"></el-input>
         </el-form-item>
       </el-form>
       <span slot="footer" class="dialog-footer">
-        <el-button @click="addDialogVisible = false" size="mini">提交</el-button>
-        <el-button type="primary" @click="addDialogVisible = false" size="mini">撤销</el-button>
+        <el-button @click="addClass" size="mini">提交</el-button>
+        <el-button type="primary" @click="closeDialog('AddClass')" size="mini">取消</el-button>
       </span>
     </el-dialog>
-    <el-dialog
-      title="导入流程"
-      :visible.sync="importDialogVisible"
-      width="420px">
-      <el-form ref="form" size="mini" :model="importForm" label-width="100px">
-        <el-form-item label="选择目录">
-          <el-input v-model="importForm.name" size="mini"></el-input>
-        </el-form-item>
-        <el-form-item label="导入文件">
-          <el-button type="primary">选择文件</el-button>
-          <span class="import-tip">{{ importForm.file }}</span>
-        </el-form-item>
-        <el-form-item label="流程名称">
-          <el-input v-model="importForm.key" size="mini"></el-input>
-        </el-form-item>
-        <el-form-item label="流程编码">
-          <el-input v-model="importForm.sort" size="mini"></el-input>
-        </el-form-item>
-      </el-form>
-      <span slot="footer" class="dialog-footer">
-        <el-button @click="importDialogVisible = false" size="mini">提交</el-button>
-        <el-button type="primary" @click="importDialogVisible = false" size="mini">撤销</el-button>
-      </span>
-    </el-dialog>
+    <!-- 策略drawer-弹窗 -->
+    <process-config-drawer
+      @updateTree="refreshNodeBy(currentNode.parent.key)"
+      @showDialog="closeDialog"
+      :activeConfigName="activeConfigName"
+      :Info="Info"
+      :ProcessConfigData="ProcessConfigData"
+      :processConfigDrawer="processConfigDrawer"
+    />
+    <!-- 策略drawer-弹窗 -->
+    <!-- 新增流程-弹窗 -->
+    <add-process
+      @showDialog="closeDialog"
+      :ProcessClassData="ProcessClassData"
+      :addProcessVisible="addProcessVisible"
+    />
+    <!-- 新增流程-弹窗 -->
+    <!-- 新增策略组-弹窗 -->
+    <add-process-base
+      @showDialog="closeDialog"
+      :ProcessData="ProcessData"
+      :addProcessBaseVisible="addProcessBaseVisible"
+    />
+    <!-- 新增策略组-弹窗 -->
+    <!-- 新增策略-弹窗 -->
+    <add-process-config
+      @showDialog="closeDialog"
+      :ProcessBaseData="ProcessBaseData"
+      :addProcessConfigVisible="addProcessConfigVisible"
+    />
+    <!-- 新增策略-弹窗 -->
   </div>
 </template>
 
 <script>
-import axios from 'axios'
 import ProcessConfiguration from '../ProcessDesign/components/ProcessConfiguration'
 import ProcessVariable from '../ProcessDesign/components/ProcessVariable'
-import Notice from '../ProcessDesign/components/Notice'
 import Attribute from './components/Attribute'
+import AddProcess from './components/AddProcess'
+import AddProcessBase from './components/AddProcessBase'
+import ProcessBaseAttribute from './components/ProcessBaseAttribute'
+import AddProcessConfig from './components/AddProcessConfig'
+import ProcessReference from './components/ProcessReference'
+import ProcessConfigDrawer from './components/ProcessConfigDrawer'
+import { mapMutations } from 'vuex'
 export default {
   name: 'process-management',
-  data () {
-    return {
-      processDrawer: false,
-      ProcessType: 'ASZ测试流程0206',
-      ProcessDescribe: 'ASZDemo01-001-Demo02',
-      Company: '中国海洋石油总公司',
-      Node: '审批节点',
-      data: null,
-      defaultProps: {
-        children: 'children',
-        label: 'text',
-        isLeaf: function (res) {
-          return !res.Leaf
-        }
-      },
-      activeName: '1', // 流程属性Tabs
-      addDialogVisible: false,
-      importDialogVisible: false,
-      addForm: {
-        name: '',
-        key: '',
-        sort: ''
-      },
-      importForm: {
-        file: '未选择任何文件'
-      }
-    }
-  },
   components: {
     ProcessVariable,
     ProcessConfiguration,
-    Notice,
-    Attribute
+    Attribute,
+    AddProcess,
+    AddProcessBase,
+    ProcessBaseAttribute,
+    AddProcessConfig,
+    ProcessReference,
+    ProcessConfigDrawer
+  },
+  data () {
+    return {
+      searchValue: '', // 搜索流程分类
+      data: null,
+      addForm: {
+        fullName: '',
+        displayName: '',
+        setCode: ''
+      },
+      addClassRules: {
+        fullName: [
+          { required: true, message: '请输入流程全称', trigger: 'blur' }
+        ],
+        displayName: [
+          { required: true, message: '请输入显示名称', trigger: 'blur' }
+        ],
+        setCode: [
+          { required: true, message: '请输入set编码', trigger: 'blur' }
+        ]
+      },
+      isClass: true, // 刷新tree
+      processDrawer: false, // 流程Drawer
+      processBaseDrawer: false, // 策略组Drawer
+      processConfigDrawer: false, // 策略Drawer
+      Info: {
+        processClass: '', // 当前流程分类
+        process: '', // 当前流程
+        CompanyCode: '', // 所属公司
+        processBase: '', // 策略组
+        processBaseDes: '', // 策略组描述
+        controlPointID: '', // 策略
+        controlPointDesc: '' // 策略描述
+      },
+      defaultProps: {
+        label: function (data, node) {
+          if (node.level === 1) {
+            return { processClass: data.displayName } // 返回流程分类名
+          } else if (node.level === 2) {
+            return { process: data.DisplayName, CompanyCode: data.CompanyCode }  // 返回流程名 所属公司
+          } else if (node.level === 3) {
+            return { processBase: data.controlPointTypeCode, processBaseDes: data.controlPointTypeCodeDesc }  // 返回策略组名称 策略组描述
+          } else if (node.level === 4) {
+            return { controlPointID: data.controlPointID, controlPointDesc: data.controlPointDesc }  // 返回策略名称 策略描述
+          }
+        },
+        isLeaf: function (data) {
+          return !data.Leaf
+        }
+      },
+      activeName: '1', // 流程属性Tabs
+      activeBaseName: '1', // 策略组属性Tabs
+      activeConfigName: '1', // 策略属性Tabs
+      addDialogVisible: false, // 新增流程分类
+      addProcessVisible: false, // 新增流程
+      addProcessBaseVisible: false, // 新增策略组
+      addProcessConfigVisible: false, // 新增策略
+      currentNode: {}, // 当前node节点数据
+      ProcessClassData: {}, // 流程分类数据
+      ProcessData: {}, // 流程数据
+      ProcessBaseData: {}, // 策略组数据
+      ProcessConfigData: {} // 策略数据
+    }
   },
   methods: {
-    addRootFolder () {
+    // 返回唯一标识
+    getUUID () {
+      return Math.random().toString(36)
     },
-    // 点击tree Node
-    handleNodeClick (data) {
-      console.log(data)
-    },
-    // 动态加载tree
-    loadNode (node, resolve) {
-      if (node.level === 0) {
-        axios.get('/mock/ProcessGroupTree.json')
-          .then((res) => {
-            console.log(res)
-            let arr = res.data.data
-            resolve(arr)
-          })
-      }
-      if (node.level === 1) {
-        axios.get('/mock/ProcessTree.json')
-          .then((res) => {
-            console.log(res)
-            let arr = res.data.data
-            resolve(arr)
-          })
-      }
-      if (node.level === 2) {
-        axios.get('/mock/TacticsTree.json')
-          .then((res) => {
-            console.log(res)
-            let arr = res.data.data
-            resolve(arr)
-          })
-      }
-      if (node.level === 3) {
-        axios.get('/mock/Tactics2Tree.json')
-          .then((res) => {
-            console.log(res)
-            let arr = res.data.data
-            resolve(arr)
-          })
+    // 打开对话框
+    openDialog (name, data = null, node = null) {
+      switch (name) {
+        case 'AddClass': // 新增流程分类
+          this.addDialogVisible = true
+          break
+        case 'AddProcess': // 新增流程
+          this.ProcessClassData = data
+          this.addProcessVisible = true
+          break
+        case 'AddProcessBase': // 新增策略组
+          this.ProcessData = data
+          this.addProcessBaseVisible = true
+          break
+        case 'AddProcessConfig': // 新增策略
+          this.ProcessBaseData = data
+          this.addProcessConfigVisible = true
+          break
       }
     },
-    // 打开流程属性
-    openProcessDrawer (type) {
-      this.activeName = type
-      this.processDrawer = true
+    // 关闭对话框
+    closeDialog (name) {
+      switch (name) {
+        case 'AddClass':
+          this.clearAddForm()
+          this.$refs['addClassForm'].resetFields()
+          this.addDialogVisible = false
+          break
+        case 'AddProcess':
+          this.addProcessVisible = false
+          this.refreshNodeBy(this.currentNode.key)
+          break
+        case 'AddProcessBase':
+          this.addProcessBaseVisible = false
+          this.refreshNodeBy(this.currentNode.key)
+          break
+        case 'AddProcessConfig':
+          this.addProcessConfigVisible = false
+          this.refreshNodeBy(this.currentNode.key)
+          break
+        case 'ConfigDrawer':
+          this.processConfigDrawer = false
+          break
+      }
     },
-    // 添加策略
-    appendTactics (data) {
-      this.refreshNodeBy(data.id)
+    // 新增流程分类
+    addClass () {
+      this.$refs['addClassForm'].validate((valid) => {
+        if (valid) {
+          let data = {
+            fullName: this.addForm.fullName,
+            displayName: this.addForm.displayName,
+            setCode: this.addForm.setCode
+          }
+          this.axios_M4.post(`/processgroup/`, data).then((res) => {
+            if (res.data.code === 'success') {
+              this.$message({
+                type: 'success',
+                message: res.data.msg
+              })
+              this.closeAddClass()
+              this.refreshClass()
+            } else {
+              this.$message({
+                type: 'error',
+                message: res.data.msg
+              })
+            }
+          }).catch((err) => {
+            console.log(err)
+          })
+        }
+      })
     },
-    // 禁用流程
-    stopProcess (data) {
-      this.$confirm(`确定要禁用'${data.text}'流程?`, '提示', {
+    // 删除流程分类
+    deleteClass (item) {
+      this.$confirm(`确定要删除 '${item.displayName}' 流程分类?`, '提示', {
         confirmButtonText: '确定',
         cancelButtonText: '取消',
         type: 'warning'
       }).then(() => {
-        axios.get('/mock/OK.json')
+        this.axios_M4.delete(`/procset/${item.procSetId}`)
           .then((res) => {
-            this.$message({
-              type: 'success',
-              message: '已禁用'
-            })
-            this.refreshNodeBy(data.id)
+            console.log(res)
+            if (res.data.code === 'success') {
+              if (res.data.data === null) {
+                this.$message({
+                  type: 'success',
+                  message: res.data.msg
+                })
+                this.searchClass() // 刷新
+              } else {
+                this.$message({
+                  type: 'error',
+                  message: res.data.data
+                })
+              }
+            }
           })
       }).catch(() => {
         this.$message({
@@ -350,10 +483,432 @@ export default {
         })
       })
     },
+    // 清空addForm
+    clearAddForm () {
+      this.temp = {
+        appName: '',
+        displayName: '',
+        setCode: ''
+      }
+    },
+    // 刷新Class
+    refreshClass () {
+      this.isClass = false
+      this.$nextTick(() => (this.isClass = true))
+    },
+    // 搜索Class
+    searchClass () {
+      if (this.searchValue !== '') {
+        this.axios_M4.get(`/procset/${this.searchValue}/all/10000/1`)
+          .then(res => {
+            let data = res.data
+            console.log(data)
+            if (data.code === 'success') {
+              let arr = data.data
+              if (arr.length > 0) {
+                arr.forEach((row) => {
+                  row.Leaf = true
+                })
+              }
+              this.data = arr
+            }
+          })
+      } else {
+        this.refreshClass()
+      }
+    },
+    // 点击tree Node
+    handleNodeClick (data, node) {
+      if (node.level === 2) {
+        this.Info.processClass = node.parent.label.processClass
+        this.Info.process = node.label.process
+        this.Info.CompanyCode = node.label.CompanyCode
+      } else if (node.level === 3) {
+        this.Info.processClass = node.parent.parent.label.processClass
+        this.Info.process = node.parent.label.process
+        this.Info.CompanyCode = node.parent.label.CompanyCode
+        this.Info.processBase = node.label.processBase
+        this.Info.processBaseDes = node.label.processBaseDes
+      } else if (node.level === 4) {
+        this.Info.processClass = node.parent.parent.parent.label.processClass
+        this.Info.process = node.parent.parent.label.process
+        this.Info.CompanyCode = node.parent.parent.label.CompanyCode
+        this.Info.processBase = node.parent.label.processBase
+        this.Info.processBaseDes = node.parent.label.processBaseDes
+        this.Info.controlPointID = node.label.controlPointID
+        this.Info.controlPointDesc = node.label.controlPointDesc
+      }
+      this.currentNode = node
+      console.log(data)
+      console.log(node)
+    },
+    // 动态加载tree
+    loadNode (node, resolve) {
+      if (node.level === 0) {
+        this.axios_M4.get(`/procset/list`)
+          .then(res => {
+            let data = res.data
+            if (data.code === 'success') {
+              let arr = data.data
+              if (arr.length > 0) {
+                arr.forEach((row) => {
+                  row.Leaf = true
+                  row.treeID = this.getUUID()
+                })
+              }
+              resolve(arr)
+            }
+          })
+      }
+      if (node.level === 1) {
+        this.axios_M4.get(`/process/${node.data.procSetId}/all/100000/1`)
+          .then(res => {
+            let data = res.data
+            if (data.code === 'success') {
+              let arr = data.data
+              if (arr.length > 0) {
+                arr.forEach((row) => {
+                  row.Status ? row.Leaf = true : row.Leaf = false
+                  row.treeID = this.getUUID()
+                })
+              }
+              resolve(arr)
+            }
+          })
+      }
+      if (node.level === 2) {
+        this.axios_M4.get(`/processbase/ByProcess/${node.data.ProcessID}`)
+          .then(res => {
+            let data = res.data
+            if (data.code === 'success') {
+              let arr = data.data
+              if (arr.length > 0) {
+                arr.forEach((row) => {
+                  row.Status ? row.Leaf = true : row.Leaf = false
+                  row.treeID = this.getUUID()
+                })
+              }
+              console.log(arr)
+              resolve(arr)
+            }
+          })
+      }
+      if (node.level === 3) {
+        this.axios_M4.get(`/processconfig/ByProcessBase/${node.data.ProcessBaseID}`)
+          .then(res => {
+            let data = res.data
+            if (data.code === 'success') {
+              let arr = data.data
+              if (arr.length > 0) {
+                arr.forEach((row) => {
+                  row.treeID = this.getUUID()
+                })
+              }
+              console.log(arr)
+              resolve(arr)
+            }
+          })
+      }
+    },
+    // 打开流程属性Drawer
+    openProcessDrawer (type, data = null) {
+      this.ProcessData = data
+      this.activeName = type
+      this.processDrawer = true
+    },
+    // 关闭流程Drawer 回调
+    closeProcessDrawer (done) {
+      this.$refs.attribute.cancel()
+      done()
+    },
+    // 鼠标滑入
+    selectStyle (node, event) {
+      if (!node.isCurrent) {
+        let el = event.currentTarget.childNodes[1]
+        el.classList.add('active')
+        el.classList.remove('noactive')
+      }
+    },
+    // 鼠标滑出
+    outStyle (node, event) {
+      if (!node.isCurrent) {
+        let el = event.currentTarget.childNodes[1]
+        el.classList.add('noactive')
+        el.classList.remove('active')
+      }
+    },
+    // 禁用流程
+    stopProcess (data, node) {
+      this.$confirm(`确定要禁用 '${data.DisplayName}' 流程?`, '提示', {
+        confirmButtonText: '确定',
+        cancelButtonText: '取消',
+        type: 'warning'
+      }).then(() => {
+        this.axios_M4.put(`/process/enable/0/${data.ProcessID}`)
+          .then((res) => {
+            if (res.data.code === 'success') {
+              this.$message({
+                type: 'success',
+                message: '已禁用'
+              })
+              this.refreshNodeBy(node.parent.key)
+            }
+          })
+      }).catch(() => {
+        this.$message({
+          type: 'info',
+          message: '已取消'
+        })
+      })
+    },
+    // 启用流程
+    startProcess (data, node) {
+      this.$confirm(`确定要启用 '${data.DisplayName}' 流程?`, '提示', {
+        confirmButtonText: '确定',
+        cancelButtonText: '取消',
+        type: 'warning'
+      }).then(() => {
+        this.axios_M4.put(`/process/enable/1/${data.ProcessID}/`)
+          .then((res) => {
+            if (res.data.code === 'success') {
+              this.$message({
+                type: 'success',
+                message: '已启用'
+              })
+              this.refreshNodeBy(node.parent.key)
+            }
+          })
+      }).catch(() => {
+        this.$message({
+          type: 'info',
+          message: '已取消'
+        })
+      })
+    },
+    // 删除流程
+    deleteProcess (item) {
+      this.$confirm(`确定要删除 '${item.DisplayName}' 流程?`, '提示', {
+        confirmButtonText: '确定',
+        cancelButtonText: '取消',
+        type: 'warning'
+      }).then(() => {
+        this.axios_M4.delete(`/process/${item.ProcessID}`)
+          .then((res) => {
+            if (res.data.code === 'success') {
+              if (res.data.data === null) {
+                this.$message({
+                  type: 'success',
+                  message: '成功删除流程！'
+                })
+                this.refreshNodeBy(this.currentNode.parent.key)
+              } else {
+                this.$message({
+                  type: 'error',
+                  message: res.data.data
+                })
+              }
+            }
+          })
+      }).catch(() => {
+        this.$message({
+          type: 'info',
+          message: '已取消'
+        })
+      })
+    },
+    // 打开策略组Drawer
+    openProcessBaseDrawer (type, data = null) {
+      this.ProcessBaseData = data
+      this.activeBaseName = type
+      this.processBaseDrawer = true
+    },
+    // 关闭策略组Drawer 回调
+    closeProcessBaseDrawer (done) {
+      this.$refs.ProcessBaseAttribute.cancel()
+      done()
+    },
+    // 删除策略组
+    deleteProcessBase (item) {
+      this.$confirm(`确定要删除 '${item.controlPointTypeCode}' 策略组?`, '提示', {
+        confirmButtonText: '确定',
+        cancelButtonText: '取消',
+        type: 'warning'
+      }).then(() => {
+        this.axios_M4.delete(`/processbase/${item.ProcessBaseID}`)
+          .then((res) => {
+            if (res.data.code === 'success') {
+              if (res.data.data === null) {
+                this.$message({
+                  type: 'success',
+                  message: '成功删除策略组！'
+                })
+                this.refreshNodeBy(this.currentNode.parent.key)
+              } else {
+                this.$message({
+                  type: 'error',
+                  message: res.data.data
+                })
+              }
+            }
+          })
+      }).catch(() => {
+        this.$message({
+          type: 'info',
+          message: '已取消'
+        })
+      })
+    },
+    // 启用策略组
+    startProcessBase (data, node) {
+      this.$confirm(`确定要启用 '${data.controlPointTypeCode}' 策略组?`, '提示', {
+        confirmButtonText: '确定',
+        cancelButtonText: '取消',
+        type: 'warning'
+      }).then(() => {
+        this.axios_M4.put(`/processbase/enable/1/${data.ProcessBaseID}/`)
+          .then((res) => {
+            if (res.data.code === 'success') {
+              this.$message({
+                type: 'success',
+                message: '已启用'
+              })
+              this.refreshNodeBy(node.parent.key)
+            }
+          })
+      }).catch(() => {
+        this.$message({
+          type: 'info',
+          message: '已取消'
+        })
+      })
+    },
+    // 禁用策略组
+    stopProcessBase (data, node) {
+      this.$confirm(`确定要禁用 '${data.controlPointTypeCode}' 策略组?`, '提示', {
+        confirmButtonText: '确定',
+        cancelButtonText: '取消',
+        type: 'warning'
+      }).then(() => {
+        this.axios_M4.put(`/processbase/enable/0/${data.ProcessBaseID}`)
+          .then((res) => {
+            if (res.data.code === 'success') {
+              this.$message({
+                type: 'success',
+                message: '已禁用'
+              })
+              this.refreshNodeBy(node.parent.key)
+            }
+          })
+      }).catch(() => {
+        this.$message({
+          type: 'info',
+          message: '已取消'
+        })
+      })
+    },
+    // 启用策略
+    startProcessConfig (data, node) {
+      this.$confirm(`确定要启用 '${data.controlPointID}' 策略?`, '提示', {
+        confirmButtonText: '确定',
+        cancelButtonText: '取消',
+        type: 'warning'
+      }).then(() => {
+        this.axios_M4.put(`/processconfig/enable/1/${data.processConfigID}/`)
+          .then((res) => {
+            if (res.data.code === 'success') {
+              this.$message({
+                type: 'success',
+                message: '已启用'
+              })
+              this.refreshNodeBy(node.parent.key)
+            }
+          })
+      }).catch(() => {
+        this.$message({
+          type: 'info',
+          message: '已取消'
+        })
+      })
+    },
+    // 禁用策略
+    stopProcessConfig (data, node) {
+      this.$confirm(`确定要禁用 '${data.controlPointID}' 策略?`, '提示', {
+        confirmButtonText: '确定',
+        cancelButtonText: '取消',
+        type: 'warning'
+      }).then(() => {
+        this.axios_M4.put(`/processconfig/enable/0/${data.processConfigID}`)
+          .then((res) => {
+            if (res.data.code === 'success') {
+              this.$message({
+                type: 'success',
+                message: '已禁用'
+              })
+              this.refreshNodeBy(node.parent.key)
+            }
+          })
+      }).catch(() => {
+        this.$message({
+          type: 'info',
+          message: '已取消'
+        })
+      })
+    },
+    // 删除策略
+    deleteProcessConfig (item) {
+      this.$confirm(`确定要删除 '${item.controlPointID}' 策略?`, '提示', {
+        confirmButtonText: '确定',
+        cancelButtonText: '取消',
+        type: 'warning'
+      }).then(() => {
+        this.axios_M4.delete(`/processconfig/${item.processConfigID}`)
+          .then((res) => {
+            if (res.data.code === 'success') {
+              if (res.data.data === null) {
+                this.$message({
+                  type: 'success',
+                  message: '成功删除策略！'
+                })
+                this.refreshNodeBy(this.currentNode.parent.key)
+              } else {
+                this.$message({
+                  type: 'error',
+                  message: res.data.data
+                })
+              }
+            }
+          })
+      }).catch(() => {
+        this.$message({
+          type: 'info',
+          message: '已取消'
+        })
+      })
+    },
+    // 打开策略Drawer
+    openProcessConfigDrawer (type, data = null) {
+      this.ProcessConfigData = data
+      this.activeConfigName = type
+      this.processConfigDrawer = true
+    },
+    // 映射出 setConfigDate方法
+    ...mapMutations('sysStore/processConfig', [
+      'setConfigDate',
+      'setInfo',
+      'startStatus'
+    ]),
+    // 审批节点跳转传参
+    routerNode (data, node) {
+      this.setConfigDate(data)
+      this.setInfo(this.Info)
+      this.startStatus() // 触发流程设计刷新
+      this.$router.push('/work-flow/process-design')
+    },
     // 局部刷新节点
     refreshNodeBy (id) {
       if (this.$refs.ProcessTree.getNode(id) != null) {
         let node = this.$refs.ProcessTree.getNode(id) // 通过节点id找到对应树节点对象
+        node.loaded = false
         node.expand() // 主动调用展开节点方法，重新查询该节点下的所有子节点
       }
     }
@@ -377,6 +932,7 @@ main {
     justify-content: space-between;
     font-size: 14px;
     padding-right: 8px;
+    height: 24px;
     i.process {
       margin-right: 5px;
       font-weight: bold;
@@ -410,15 +966,16 @@ main {
       display: inline-block;
       font-weight: 100;
     }
+    .active {
+      display: inline-block;
+    }
+    .noactive {
+      display: none;
+    }
   }
   ::v-deep .el-button--mini {
     padding: 0;
   }
-}
-.import-tip {
-  font-size: 12px;
-  color: red;
-  margin-left: 5px;
 }
 .drawer {
   ::v-deep .el-tabs--top {
@@ -437,7 +994,7 @@ main {
         margin-bottom: 2px;
         .label {
           display: inline-block;
-          width: 75px;
+          width: 85px;
           text-align: right;
           margin-right: 10px;
         }

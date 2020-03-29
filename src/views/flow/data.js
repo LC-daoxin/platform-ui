@@ -3,7 +3,7 @@ let dataA = {
   nodeList: [
     {
       id: 'nodeA',
-      name: '流程A-节点A',
+      nodeName: '流程A-节点A',
       type: 'task',
       left: '26px',
       top: '161px',
@@ -12,7 +12,7 @@ let dataA = {
     },
     {
       id: 'nodeB',
-      name: '流程A-节点B',
+      nodeName: '流程A-节点B',
       type: 'task',
       left: '340px',
       top: '161px',
@@ -21,7 +21,7 @@ let dataA = {
     },
     {
       id: 'nodeC',
-      name: '流程A-节点C',
+      nodeName: '流程A-节点C',
       type: 'task',
       left: '739px',
       top: '161px',
@@ -42,7 +42,7 @@ let dataB = {
   nodeList: [
     {
       id: 'nodeA',
-      name: '流程B-节点A',
+      nodeName: '流程B-节点A',
       type: 'task',
       left: '18px',
       top: '223px',
@@ -52,7 +52,7 @@ let dataB = {
     {
       id: 'nodeB',
       type: 'task',
-      name: '流程B-节点B',
+      nodeName: '流程B-节点B',
       left: '351px',
       top: '96px',
       ico: 'el-icon-goods',
@@ -60,7 +60,7 @@ let dataB = {
     },
     {
       id: 'nodeC',
-      name: '流程B-节点C',
+      nodeName: '流程B-节点C',
       type: 'task',
       left: '354px',
       top: '351px',
@@ -68,7 +68,7 @@ let dataB = {
       show: true
     }, {
       id: 'nodeD',
-      name: '流程B-节点D',
+      nodeName: '流程B-节点D',
       type: 'task',
       left: '773px',
       top: '215px',
@@ -95,7 +95,7 @@ let dataC = {
   nodeList: [
     {
       id: 'Start',
-      name: '流程开始',
+      nodeName: '流程开始',
       type: 'start',
       left: '200px',
       top: '20px',
@@ -104,7 +104,7 @@ let dataC = {
     },
     {
       id: 'nodeA',
-      name: '审批节点A',
+      nodeName: '审批节点A',
       type: 'node',
       left: '200px',
       top: '80px',
@@ -113,7 +113,7 @@ let dataC = {
     },
     {
       id: 'nodeB',
-      name: '审批节点B',
+      nodeName: '审批节点B',
       type: 'node',
       left: '200px',
       top: '140px',
@@ -122,7 +122,7 @@ let dataC = {
     },
     {
       id: 'nodeC',
-      name: '审批节点C',
+      nodeName: '审批节点C',
       type: 'node',
       left: '200px',
       top: '200px',
@@ -131,7 +131,7 @@ let dataC = {
     },
     {
       id: 'nodeD',
-      name: '审批节点D',
+      nodeName: '审批节点D',
       type: 'node',
       left: '200px',
       top: '260px',
@@ -140,7 +140,7 @@ let dataC = {
     },
     {
       id: 'nodeE',
-      name: '审批节点E',
+      nodeName: '审批节点E',
       type: 'node',
       left: '200px',
       top: '320px',
@@ -149,7 +149,7 @@ let dataC = {
     },
     {
       id: 'End',
-      name: '流程结束',
+      nodeName: '流程结束',
       type: 'end',
       left: '200px',
       top: '380px',
