@@ -46,6 +46,7 @@ export default {
       dialogTitle: '新增',
       tableData: [],
       multipleSelection: [],
+      multipleSelectionName: [],
       editContent: {}
     }
   },
@@ -93,23 +94,42 @@ export default {
         }
       })
     },
+    /**
+     * 删除分类
+     */
     _deleteProcSet () {
       deleteProcSet(this.multipleSelection.join(','))
         .then(({ data }) => {
           const { code, msg } = data
           if (code === 'success') {
-            this.deleteResult(data.data)
-            this.$confirm(data.data, '操作结果', {
-              confirmButtonText: '确定',
-              type: 'warning'
-            })
+            const deleteResult = data.data
+
+            if (deleteResult.length === 0) {
+              this.$message.success('操作成功')
+            } else {
+              this.$alert(
+                this.writeDeleteResult(data.data), '操作结果', {
+                  confirmButtonText: '确定',
+                  type: 'warning'
+                }
+              )
+            }
             this.getTableData()
           } else {
             this.$message.error(msg)
           }
         })
     },
-    deleteResult (data) {
+    writeDeleteResult (data) {
+      return (
+        <ul>
+          {
+            data.map((item, index) => {
+              return <li>{this.multipleSelectionName[index]}，{item.substr(1)}</li>
+            })
+          } 
+        </ul>
+      )
     },
     showDialog (title, row) {
       this.editContent = row
@@ -126,10 +146,13 @@ export default {
     },
     handleSelectionChange (val) {
       const idArr = []
+      const nameArr = []
       for (let item of val) {
         idArr.push(item.procSetId)
+        nameArr.push(item.displayName)
       }
       this.multipleSelection = idArr
+      this.multipleSelectionName = nameArr
     },
     /**
      * 修改显示数量
