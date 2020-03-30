@@ -56,14 +56,14 @@
 
 <script>
 export default {
-  name: "add-process",
+  name: 'add-process',
   props: {
     ProcessClassData: Object,
     addProcessVisible: {
       default: false
     }
   },
-	data () {
+  data () {
     return {
       processForm: {
         ProcSetID: '', // 流程分类Id
@@ -109,18 +109,18 @@ export default {
         ApplicationSystem: []
       }
     }
-	},
-	mounted () {
+  },
+  mounted () {
     this.getInfo()
-	},
-	methods: {
+  },
+  methods: {
     // 获取数据
     getInfo () {
-			this.getSystemId()
-			this.getApplicationSystemId()
+      this.getSystemId()
+      this.getApplicationSystemId()
     },
-		// 获取源系统
-		getSystemId () {
+    // 获取源系统
+    getSystemId () {
       this.axios_M4.get(`/system/all/SAP/10000/1`)
         .then(res => {
           let data = res.data
@@ -128,7 +128,7 @@ export default {
             this.options.System = data.data
           }
         })
-		},
+    },
     // 获取应用系统
     getApplicationSystemId () {
       this.axios_M4.get(`/system/all/EERP/10000/1`)
@@ -179,7 +179,7 @@ export default {
         }
       })
     },
-		// 清空processForm
+    // 清空processForm
     clearAddProcessForm () {
       this.processForm = {
         ProcSetID: '', // 流程分类Id
@@ -204,7 +204,7 @@ export default {
       this.$refs['addProcessForm'].resetFields()
       this.$emit('showDialog', 'AddProcess')
     }
-	}
+  }
 }
 </script>
 

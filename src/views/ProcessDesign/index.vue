@@ -10,7 +10,6 @@
     </main>
     <!-- 策略drawer-弹窗 -->
     <process-config-drawer
-      @updateTree=""
       @showDialog="closeDialog"
       :activeConfigName="activeConfigName"
       :Info="Info"
@@ -69,8 +68,8 @@ import Parameter from './components/Parameter'
 import Operating from './components/Operating'
 import BasicInfo from './components/BasicInfo'
 import Notice from './components/Notice'
-import ConfigInfo from './components/ConfigInfo'
-import BasicInfoTactics from './components/BasicInfoTactics'
+// import ConfigInfo from './components/ConfigInfo'
+// import BasicInfoTactics from './components/BasicInfoTactics'
 import ShowInfo from './components/ShowInfo'
 import panel from '../flow/panel'
 import ProcessConfigDrawer from '../ProcessManagement/components/ProcessConfigDrawer'
@@ -82,8 +81,8 @@ export default {
     Operating,
     BasicInfo,
     Notice,
-    ConfigInfo,
-    BasicInfoTactics,
+    // ConfigInfo,
+    // BasicInfoTactics,
     ShowInfo,
     panel,
     ProcessConfigDrawer

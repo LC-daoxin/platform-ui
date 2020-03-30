@@ -68,7 +68,7 @@ export default {
   mounted () {
     this.getInfo()
   },
-	watch: {
+  watch: {
     ProcessBaseData (data) { // 监听改变
       this.processBaseForm = {
         ProcessBaseID: this.ProcessBaseData.ProcessBaseID, // 策略组ID
@@ -83,7 +83,7 @@ export default {
       }
       this.processBaseFormCopy = Object.assign({}, this.processBaseForm)
     }
-	},
+  },
   methods: {
     // 获取数据
     getInfo () {

@@ -347,11 +347,11 @@ export default {
           if (node.level === 1) {
             return { processClass: data.displayName } // 返回流程分类名
           } else if (node.level === 2) {
-            return { process: data.DisplayName, CompanyCode: data.CompanyCode }  // 返回流程名 所属公司
+            return { process: data.DisplayName, CompanyCode: data.CompanyCode } // 返回流程名 所属公司
           } else if (node.level === 3) {
-            return { processBase: data.controlPointTypeCode, processBaseDes: data.controlPointTypeCodeDesc }  // 返回策略组名称 策略组描述
+            return { processBase: data.controlPointTypeCode, processBaseDes: data.controlPointTypeCodeDesc } // 返回策略组名称 策略组描述
           } else if (node.level === 4) {
-            return { controlPointID: data.controlPointID, controlPointDesc: data.controlPointDesc }  // 返回策略名称 策略描述
+            return { controlPointID: data.controlPointID, controlPointDesc: data.controlPointDesc } // 返回策略名称 策略描述
           }
         },
         isLeaf: function (data) {

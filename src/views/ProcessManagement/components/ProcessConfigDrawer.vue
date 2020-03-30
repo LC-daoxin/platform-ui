@@ -35,7 +35,7 @@ import ProcessConfigAttribute from '../components/ProcessConfigAttribute'
 import Notice from '../../ProcessDesign/components/Notice'
 import UserModify from '../../ProcessDesign/components/UserModify'
 export default {
-  name: "process-config-drawer",
+  name: 'process-config-drawer',
   props: {
     activeConfigName: String,
     Info: Object,
@@ -49,31 +49,31 @@ export default {
     Notice,
     UserModify
   },
-	data () {
+  data () {
     return {
       activeName: '1'
     }
-	},
-	mounted () {
+  },
+  mounted () {
     this.activeName = this.activeConfigName
-	},
-	watch: {
+  },
+  watch: {
     activeConfigName () {
       this.activeName = this.activeConfigName
     }
-	},
-	methods: {
+  },
+  methods: {
     // 关闭策略Drawer
     closeProcessConfigDrawer (done) {
       this.$refs.ProcessConfigAttribute.cancel()
       // done()
       this.$emit('showDialog', 'ConfigDrawer')
     },
-		// 刷新Tree
+    // 刷新Tree
     updateTree () {
       this.$emit('updateTree')
     }
-	}
+  }
 }
 </script>
 

@@ -50,7 +50,7 @@ export default {
   mounted () {
     this.getInfo()
   },
-	watch: {
+  watch: {
     ProcessConfigData (data) { // 监听改变
       this.processConfigForm = {
         processConfigID: this.ProcessConfigData.processConfigID, // 策略ID
@@ -60,7 +60,7 @@ export default {
       }
       this.processConfigFormCopy = Object.assign({}, this.processConfigForm)
     }
-	},
+  },
   methods: {
     // 获取数据
     getInfo () {
