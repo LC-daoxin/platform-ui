@@ -31,14 +31,14 @@
 
 <script>
 export default {
-  name: "add-process-base",
+  name: 'add-process-base',
   props: {
     ProcessData: Object,
     addProcessBaseVisible: {
       default: false
     }
   },
-	data () {
+  data () {
     return {
       processBaseForm: {
         controlPointTypeCode: '', // 策略组名称
@@ -65,17 +65,17 @@ export default {
         System: []
       }
     }
-	},
-	mounted () {
+  },
+  mounted () {
     this.getInfo()
-	},
-	methods: {
+  },
+  methods: {
     // 获取数据
     getInfo () {
-			this.getSystemId()
+      this.getSystemId()
     },
-		// 获取源系统
-		getSystemId () {
+    // 获取源系统
+    getSystemId () {
       this.axios_M4.get(`/system/all/SAP/10000/1`)
         .then(res => {
           let data = res.data
@@ -83,7 +83,7 @@ export default {
             this.options.System = data.data
           }
         })
-		},
+    },
     // 新增策略组
     addProcessBase () {
       this.$refs['addProcessBaseForm'].validate((valid) => {
@@ -119,7 +119,7 @@ export default {
         }
       })
     },
-		// 清空processBaseForm
+    // 清空processBaseForm
     clearAddProcessBaseForm () {
       this.processBaseForm = {
         controlPointTypeCode: '', // 策略组名称
@@ -138,7 +138,7 @@ export default {
       this.$refs['addProcessBaseForm'].resetFields()
       this.$emit('showDialog', 'AddProcessBase')
     }
-	}
+  }
 }
 </script>
 

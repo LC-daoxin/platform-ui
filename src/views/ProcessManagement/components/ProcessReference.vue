@@ -171,7 +171,7 @@ export default {
             processBaseId: this.ProcessBaseData.ProcessBaseID,
             referenceCode: this.addForm.referenceCode,
             referenceType: this.addForm.referenceType,
-            referenceTypeDesc: this.addForm.referenceTypeDesc,
+            referenceTypeDesc: this.addForm.referenceTypeDesc
           }
           console.log(data)
           this.axios_M4.post(`/processreference/`, data)

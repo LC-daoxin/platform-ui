@@ -21,14 +21,14 @@
 
 <script>
 export default {
-  name: "add-process-base",
+  name: 'add-process-base',
   props: {
     ProcessBaseData: Object,
     addProcessConfigVisible: {
       default: false
     }
   },
-	data () {
+  data () {
     return {
       processConfigForm: {
         processBaseId: this.ProcessBaseData.ProcessBaseID, // 策略组id
@@ -44,8 +44,8 @@ export default {
         ]
       }
     }
-	},
-	methods: {
+  },
+  methods: {
     // 新增策略
     addProcessConfig () {
       this.$refs['addProcessConfigForm'].validate((valid) => {
@@ -76,7 +76,7 @@ export default {
         }
       })
     },
-		// 清空 processConfigForm
+    // 清空 processConfigForm
     clearAddProcessConfigForm () {
       this.processConfigForm = {
         processBaseId: this.ProcessBaseData.ProcessBaseID, // 策略组id
@@ -90,7 +90,7 @@ export default {
       this.$refs['addProcessConfigForm'].resetFields()
       this.$emit('showDialog', 'AddProcessConfig')
     }
-	}
+  }
 }
 </script>
 

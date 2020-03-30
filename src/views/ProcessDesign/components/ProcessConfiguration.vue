@@ -66,6 +66,7 @@ export default {
               arr.forEach((row) => {
                 row.Edit = false
                 if (row.featureType === 'Bool') {
+                  // eslint-disable-next-line
                   row.featureValue = eval(row.featureValue.toLowerCase())
                 }
               })

@@ -39,7 +39,7 @@ import { easyFlowMixin } from '@/views/flow/mixins/easy_flow_mixin'
 import flowNode from '@/views/flow/node'
 import nodeMenu from '@/views/flow/node_menu'
 import lodash from 'lodash'
-import dataAll from './data'
+// import dataAll from './data'
 export default {
   props: {
     ProcessConfigData: Object,
@@ -58,7 +58,8 @@ export default {
       // 数据
       data: {},
       processData: null,
-      tempData: null // 存储初始化数据
+      tempData: null, // 存储初始化数据
+      a: ''
     }
   },
   // 一些基础配置移动该文件中
@@ -89,7 +90,7 @@ export default {
           obj.nodeList.push(item)
         })
         for (let i = 0; i < this.NodeData.length - 1; i++) {
-          if (i < this.NodeData.length -1) {
+          if (i < this.NodeData.length - 1) {
             let line = {
               from: this.NodeData[i].id,
               to: this.NodeData[i + 1].id

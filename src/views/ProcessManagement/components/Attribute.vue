@@ -112,7 +112,7 @@ export default {
   mounted () {
     this.getInfo()
   },
-	watch: {
+  watch: {
     ProcessData (data) { // 监听改变
       this.processForm = {
         ProcessID: this.ProcessData.ProcessID, // 流程ID
@@ -133,7 +133,7 @@ export default {
       }
       this.processFormCopy = Object.assign({}, this.processForm)
     }
-	},
+  },
   methods: {
     // 获取数据
     getInfo () {
