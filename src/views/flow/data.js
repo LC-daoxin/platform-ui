@@ -94,6 +94,7 @@ let dataC = {
   name: '流程C',
   nodeList: [
     {
+      nodeId: '1001',
       id: 'Start',
       nodeName: '流程开始',
       type: 'start',
@@ -103,6 +104,7 @@ let dataC = {
       show: true
     },
     {
+      nodeId: '1001',
       id: 'nodeA',
       nodeName: '审批节点A',
       type: 'node',
@@ -112,6 +114,7 @@ let dataC = {
       show: true
     },
     {
+      nodeId: '1001',
       id: 'nodeB',
       nodeName: '审批节点B',
       type: 'node',
@@ -121,6 +124,7 @@ let dataC = {
       show: true
     },
     {
+      nodeId: '1001',
       id: 'nodeC',
       nodeName: '审批节点C',
       type: 'node',
@@ -130,6 +134,7 @@ let dataC = {
       show: true
     },
     {
+      nodeId: '1001',
       id: 'nodeD',
       nodeName: '审批节点D',
       type: 'node',
@@ -139,6 +144,7 @@ let dataC = {
       show: true
     },
     {
+      nodeId: '1001',
       id: 'nodeE',
       nodeName: '审批节点E',
       type: 'node',
@@ -148,6 +154,7 @@ let dataC = {
       show: true
     },
     {
+      nodeId: '1001',
       id: 'End',
       nodeName: '流程结束',
       type: 'end',

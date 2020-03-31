@@ -4,7 +4,7 @@
     :style="nodeContainerStyle"
     @mouseenter="mouseEnter=true"
     @mouseleave="mouseEnter=false"
-    @click="clickNode"
+    @click.capture="clickNode"
     @mouseup="changeNodePosition"
     class="flow-node-container"
   >
@@ -28,7 +28,7 @@
 export default {
   props: {
     node: Object,
-    processData: Object
+    processData: Array
   },
   data () {
     return {
@@ -54,28 +54,18 @@ export default {
     }
   },
   methods: {
-    // 获取当前nodeData
-    getNodeData (Data, id) {
-      for (let index of Data) {
-        if (index.id === id) {
-          this.currentNode = index
-          break
-        }
-      }
+    // 节点属性
+    openNode () {
+      // this.$emit('openNode', this.node.id)
+      this.$emit('openNode', this.node)
+    },
+    // 点击节点
+    clickNode () {
+      // this.$emit('clickNode', this.currentNode.nodeId)
     },
     // 删除节点
     deleteNode () {
       this.$emit('deleteNode', this.node)
-    },
-    // 节点属性
-    openNode () {
-      this.$emit('openNode', this.node.id)
-    },
-    // 点击节点
-    clickNode () {
-      this.$emit('clickNode', this.node.id)
-      this.getNodeData(this.processData.nodeList, this.node.id)
-      console.log(this.currentNode)
     },
     // 鼠标移动后抬起
     changeNodePosition () {

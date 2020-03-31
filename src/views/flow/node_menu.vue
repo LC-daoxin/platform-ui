@@ -29,6 +29,9 @@
         <el-row>
           <el-button class="buttonSty" icon="el-icon-refresh" size="small" @click="refresh">重置</el-button>
         </el-row>
+        <el-row>
+          <el-button class="buttonSty" icon="el-icon-refresh" size="small" @click="show">数据(临时)</el-button>
+        </el-row>
         <!--<el-row>-->
           <!--<el-button class="buttonSty" icon="el-icon-edit-outline" size="small" @click="changeLabel">设置连线</el-button>-->
         <!--</el-row>-->
@@ -107,9 +110,12 @@ export default {
     }
   },
   methods: {
+    show () {
+      this.$emit('show')
+    },
     // 刷新
     refresh () {
-      this.$emit('dataReloadC')
+      this.$emit('dataReload')
     },
     // 设置连线
     changeLabel () {
