@@ -19,7 +19,7 @@ import './icons'
 import './icons/iconfont/iconfont.css'
 
 // 富文本编辑器
-import CKEditor from 'ckeditor4-vue'
+import CKEditor from '@ckeditor/ckeditor5-vue'
 Vue.use(CKEditor)
 
 // 核心插件

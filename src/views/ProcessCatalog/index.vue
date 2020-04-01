@@ -126,7 +126,7 @@ export default {
             data.map((item, index) => {
               return <li>{this.multipleSelectionName[index]}，{item.substr(1)}</li>
             })
-          } 
+          }
         </ul>
       )
     },

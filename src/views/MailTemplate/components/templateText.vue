@@ -7,25 +7,52 @@
       </div>
       <div>
         <span>模版样式</span>
-        <el-select v-model="templateStyle" size="mini"></el-select>
+        <el-select v-model="templateStyle" size="mini" @change="selectTemplate">
+          <el-option v-for="(item, index) of templateData" :key="index" :label="item.title" :value="index"></el-option>
+        </el-select>
       </div>
+      <el-button @click="insertValue">插入文本</el-button>
       <!-- <div>
         <span>编辑模式</span>
         <el-select size="mini"></el-select>
       </div> -->
     </header>
     <main>
-      <ckeditor v-model="editorData" :value="editorData"></ckeditor>
+      <ckeditor :editor="editor" v-model="editorData" @ready="onReady" ref="editor"></ckeditor>
     </main>
   </div>
 </template>
 
 <script>
+import DecoupledEditor from '@ckeditor/ckeditor5-build-decoupled-document'
+import templateData from '../templateData/data'
+
 export default {
   data () {
     return {
+      templateData,
       templateStyle: '',
-      editorData: ''
+      editorData: '',
+      editor: DecoupledEditor
+    }
+  },
+  methods: {
+    onReady (editor) {
+      // Insert the toolbar before the editable area.
+      editor.ui.getEditableElement().parentElement.insertBefore(
+        editor.ui.view.toolbar.element,
+        editor.ui.getEditableElement()
+      )
+    },
+    selectTemplate (index) {
+      this.editorData = this.templateData[index].data
+    },
+    insertValue () {
+      const editor = this.$refs.editor.instance
+      editor.model.change(writer => {
+        const insertPosition = editor.model.document.selection.getFirstPosition()
+        writer.insertText('foo', insertPosition)
+      })
     }
   }
 }
@@ -44,4 +71,5 @@ export default {
     font-size: 12px;
     margin-right: 10px;
   }
+  main /deep/ .ck-editor__editable { min-height: 300px; }
 </style>
