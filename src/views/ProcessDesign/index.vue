@@ -1,12 +1,17 @@
 <template>
   <div class="dashboard-editor-container">
     <header>
-      <el-button icon="el-icon-upload" type="success" size="mini">保存</el-button>
+      <!--<el-button icon="el-icon-upload" type="success" size="mini" @click="save">保存</el-button>-->
       <el-button icon="el-icon-document-checked" type="warning" size="mini">校验</el-button>
       <el-button icon="el-icon-setting" type="primary" size="mini" @click="processConfigDrawer = true">策略属性</el-button>
     </header>
     <main>
-      <panel :ProcessConfigData="configDate" :NodeData="NodeData" @openNode="openNode"/>
+      <panel
+        :ProcessConfigData="configDate"
+        @openNode="openNode"
+        @updataNode="init"
+        ref="panel"
+      />
     </main>
     <!-- 策略drawer-弹窗 -->
     <process-config-drawer
@@ -17,6 +22,7 @@
       :processConfigDrawer="processConfigDrawer"
     />
     <!-- 策略drawer-弹窗 -->
+    <!-- 节点drawer-弹窗 -->
     <el-drawer
       title="节点属性"
       :visible.sync="nodeDrawer"
@@ -36,15 +42,15 @@
           <div class="content-row"><span class="label">策略组描述：</span><span class="text">{{ Info.processBaseDes }}</span></div>
           <div class="content-row"><span class="label">策略：</span><span class="text">{{ Info.controlPointID }}</span></div>
           <div class="content-row"><span class="label">策略描述：</span><span class="text">{{ Info.controlPointDesc }}</span></div>
-          <div class="content-row"><span class="label">节点：</span><span class="text">{{ Node }}</span></div>
+          <div class="content-row"><span class="label">节点：</span><span class="text">{{ nodeName }}</span></div>
         </div>
       </el-card>
       <el-tabs class="drawer-content">
         <el-tab-pane label="基本信息">
-          <basic-info/>
+          <NodeBasicInfo @updatePanel="init" ref="NodeBasicInfo"/>
         </el-tab-pane>
         <el-tab-pane label="配置信息">
-          <!--<config-info/>-->
+          <config-info/>
         </el-tab-pane>
         <el-tab-pane label="通知">
           <notice/>
@@ -53,23 +59,24 @@
           <operating/>
         </el-tab-pane>
         <el-tab-pane label="参数">
-          <parameter/>
+          <process-configuration ref="configuration" Type="node"/>
         </el-tab-pane>
         <el-tab-pane label="显示设置">
-          <show-info ref="nodeForm"/>
+          <show-info ref="nodeForm" @Reload="ReloadJSON"/>
         </el-tab-pane>
       </el-tabs>
     </el-drawer>
+    <!-- 节点drawer-弹窗 -->
   </div>
 </template>
 
 <script>
-import Parameter from './components/Parameter'
+import axios from 'axios'
 import Operating from './components/Operating'
-import BasicInfo from './components/BasicInfo'
 import Notice from './components/Notice'
-// import ConfigInfo from './components/ConfigInfo'
-// import BasicInfoTactics from './components/BasicInfoTactics'
+import ProcessConfiguration from './components/ProcessConfiguration'
+import NodeBasicInfo from './components/NodeBasicInfo'
+import ConfigInfo from './components/ConfigInfo'
 import ShowInfo from './components/ShowInfo'
 import panel from '../flow/panel'
 import ProcessConfigDrawer from '../ProcessManagement/components/ProcessConfigDrawer'
@@ -77,27 +84,28 @@ import { mapState, mapMutations } from 'vuex'
 export default {
   name: 'process-design',
   components: {
-    Parameter,
     Operating,
-    BasicInfo,
+    NodeBasicInfo,
     Notice,
-    // ConfigInfo,
-    // BasicInfoTactics,
+    ConfigInfo,
     ShowInfo,
     panel,
-    ProcessConfigDrawer
+    ProcessConfigDrawer,
+    ProcessConfiguration
   },
   data () {
     return {
       processConfigDrawer: false, // 策略Drawer
       activeConfigName: '1', // 策略属性Tabs
       nodeDrawer: false,
-      Node: '审批节点',
-      NodeData: [] // 节点列表
+      nodeName: '',
+      NodeID: null,
+      NodeData: [], // 节点数据
+      NodeJson: null // 节点JSON
     }
   },
   mounted () {
-    this.getInfo()
+    this.init()
     this.endStatus()
   },
   computed: {
@@ -111,7 +119,7 @@ export default {
     refreshStatus (val) {
       if (val) {
         this.endStatus()
-        this.getInfo()
+        this.init()
       }
     }
   },
@@ -121,16 +129,35 @@ export default {
       'startStatus',
       'endStatus'
     ]),
-    // 获取数据
-    getInfo (type = 'ProcessApproval') {
-      this.axios_M4.get(`/node/ByProcessConfig/${type}/${this.configDate.processConfigID}`)
-        .then(res => {
-          let data = res.data
-          if (data.code === 'success') {
-            this.NodeData = data.data
-            console.log(this.NodeData)
+    // 数据赋值 初始化
+    init () {
+      console.log('画布初始化')
+      let me = this
+      axios.all([me.getNode(), me.getNodeJSON()])
+        .then(axios.spread(function (Node, NodeJSON) {
+          if (Node.data.code === 'success') {
+            me.NodeData = Node.data.data
           }
-        })
+          if (NodeJSON.data.code === 'success') {
+            console.log(NodeJSON)
+            try {
+              me.NodeJson = JSON.parse(NodeJSON.data.data)
+            } catch (err) {
+              me.NodeJson = {}
+            }
+          }
+          me.$nextTick(() => {
+            me.$refs.panel.init(me.NodeData, me.NodeJson) // 画布init
+          })
+        }))
+    },
+    // 用获取node数据接口
+    getNode () {
+      return this.axios_M4.get(`/node/ByProcessConfig/ProcessApproval/${this.configDate.processConfigID}`)
+    },
+    // 用获取nodeJSON接口
+    getNodeJSON () {
+      return this.axios_M4.get(`/node/getNodeJsonByProcessConfig/${this.configDate.processConfigID}/`)
     },
     // 关闭对话框
     closeDialog (name) {
@@ -140,13 +167,28 @@ export default {
           break
       }
     },
-    // 打开节点属性
-    openNode (data, nodeId) {
-      this.nodeDrawer = true
-      console.log(data)
-      console.log(nodeId)
+    // 更新JSON
+    ReloadJSON (node) {
+      for (let i in this.NodeJson.nodeList) {
+        if (this.NodeJson.nodeList[i].nodeId === node.nodeId) {
+          this.NodeJson.nodeList[i] = node
+          break
+        }
+      }
       this.$nextTick(() => {
-        this.$refs.nodeForm.init(data, nodeId)
+        this.$refs.panel.init(this.NodeData, this.NodeJson) // 画布init
+      })
+    },
+    // 打开节点属性
+    openNode (data, node) {
+      this.nodeDrawer = true
+      this.nodeName = node.nodeName
+      console.log(data)
+      console.log(node)
+      this.$nextTick(() => {
+        this.$refs.nodeForm.init(node) // 显示设置
+        this.$refs.configuration.init(node) // 参数
+        this.$refs.NodeBasicInfo.init(node) // 基本信息
       })
     }
   }
@@ -154,6 +196,9 @@ export default {
 </script>
 
 <style lang="scss" scoped>
+  ::v-deep .el-drawer {
+    overflow: auto;
+  }
   ::v-deep .el-tabs--top {
     border-top: none !important;
   }

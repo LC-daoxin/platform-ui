@@ -200,7 +200,7 @@
       </el-card>
       <el-tabs class="drawer-content" v-model="activeName">
         <el-tab-pane label="属性" name="1"><attribute ref="attribute" @updateTree="refreshNodeBy(currentNode.parent.key)" :ProcessData="ProcessData"/></el-tab-pane>
-        <el-tab-pane label="功能调用" name="2"><process-configuration :Data="ProcessData" Type="process"/></el-tab-pane>
+        <el-tab-pane label="功能调用" name="2"><process-configuration ref="configuration" Type="process"/></el-tab-pane>
         <el-tab-pane label="流程变量" name="3"><process-variable/></el-tab-pane>
         <el-tab-pane label="邮件模版" name="4"><notice/></el-tab-pane>
       </el-tabs>
@@ -288,6 +288,7 @@
 <script>
 import ProcessConfiguration from '../ProcessDesign/components/ProcessConfiguration'
 import ProcessVariable from '../ProcessDesign/components/ProcessVariable'
+import Notice from '../ProcessDesign/components/Notice'
 import Attribute from './components/Attribute'
 import AddProcess from './components/AddProcess'
 import AddProcessBase from './components/AddProcessBase'
@@ -307,7 +308,8 @@ export default {
     ProcessBaseAttribute,
     AddProcessConfig,
     ProcessReference,
-    ProcessConfigDrawer
+    ProcessConfigDrawer,
+    Notice
   },
   data () {
     return {
@@ -588,7 +590,7 @@ export default {
                   row.treeID = this.getUUID()
                 })
               }
-              console.log(arr)
+              // console.log(arr)
               resolve(arr)
             }
           })
@@ -604,7 +606,7 @@ export default {
                   row.treeID = this.getUUID()
                 })
               }
-              console.log(arr)
+              // console.log(arr)
               resolve(arr)
             }
           })
@@ -615,6 +617,9 @@ export default {
       this.ProcessData = data
       this.activeName = type
       this.processDrawer = true
+      this.$nextTick(() => {
+        this.$refs.configuration.init(data, data.ProcessID) // 功能调用初始化
+      })
     },
     // 关闭流程Drawer 回调
     closeProcessDrawer (done) {
@@ -978,6 +983,9 @@ main {
   }
 }
 .drawer {
+  ::v-deep .el-drawer {
+    overflow: auto;
+  }
   ::v-deep .el-tabs--top {
     border-top: none !important;
   }

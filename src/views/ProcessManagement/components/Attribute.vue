@@ -196,7 +196,7 @@ export default {
     },
     // 取消属性
     cancel () {
-      this.processFormCopy = this.processForm
+      this.processFormCopy = Object.assign({}, this.processForm)
       this.editShow = false
       this.disabled = true
     }

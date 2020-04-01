@@ -43,22 +43,21 @@
 export default {
   name: 'process-configuration',
   props: {
-    Type: String,
-    Data: Object
+    Type: String
   },
   data () {
     return {
       tableData: [],
-      tempData: '' // 临时存储
+      tempData: '', // 临时存储
+      tempNode: null
     }
   },
-  mounted () {
-    this.getInfo()
-  },
   methods: {
-    getInfo () {
-      this.axios_M4.get(`/featureconfig/${this.Type}/${this.Data.ProcessID}`)
+    init (node = this.tempNode) {
+      this.tempNode = node
+      this.axios_M4.get(`/featureconfig/${this.Type}/${node.nodeId}`)
         .then(res => {
+          console.log(res)
           let data = res.data
           if (data.code === 'success') {
             let arr = data.data
@@ -71,7 +70,6 @@ export default {
                 }
               })
             }
-            console.log(arr)
             this.tableData = arr
           }
         })
@@ -102,7 +100,7 @@ export default {
               message: res.data.msg
             })
           }
-          this.getInfo()
+          this.init() // 刷新列表
           row.Edit = false
         })
     },
@@ -118,7 +116,7 @@ export default {
 
 <style lang="scss" scoped>
 .process {
-  // padding: 8px;
+  padding-bottom: 10px;
   .bar:not(:first-child) {
     margin-top: 5px;
   }
