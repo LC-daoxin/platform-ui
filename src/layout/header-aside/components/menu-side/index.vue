@@ -94,7 +94,7 @@ export default {
               path: '/work-flow/my-initiate'
             },
             {
-              icon: '',
+              icon: 'pl-renzheng',
               iconSvg: '',
               title: '应用认证注册',
               path: '/work-flow/app-certification-reg'

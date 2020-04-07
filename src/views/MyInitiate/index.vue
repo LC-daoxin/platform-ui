@@ -1,7 +1,7 @@
 <template>
   <div class="dashboard-editor-container">
     <!-- accordion -->
-    <el-collapse>
+    <el-collapse v-model="expand">
       <el-collapse-item v-for="(flow, flowIndex) of flows" :key="flowIndex" :name="flow.name">
         <template slot="title">
           <span class="title">{{ flow.name }}</span>
@@ -36,6 +36,7 @@
 export default {
   data () {
     return {
+      expand: ['测试流程', '质量流程', '销售流程'],
       flows: [
         {
           name: '测试流程',

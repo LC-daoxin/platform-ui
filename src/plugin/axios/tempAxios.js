@@ -10,7 +10,7 @@ let configM2 = {
   baseURL: 'http://121.41.118.246:8002'
 }
 let configM3 = {
-  baseURL: 'http://121.41.118.246:8003'
+  baseURL: 'http://111.231.20.187:8003'
 }
 
 let configM4 = {
