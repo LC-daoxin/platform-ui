@@ -45,23 +45,23 @@
           <div class="content-row"><span class="label">节点：</span><span class="text">{{ nodeName }}</span></div>
         </div>
       </el-card>
-      <el-tabs class="drawer-content">
-        <el-tab-pane label="基本信息">
+      <el-tabs class="drawer-content" v-model="activeNodeName">
+        <el-tab-pane label="基本信息" name="1">
           <NodeBasicInfo @updatePanel="init" ref="NodeBasicInfo"/>
         </el-tab-pane>
-        <el-tab-pane label="配置信息">
-          <config-info/>
+        <el-tab-pane label="配置信息" name="2">
+          <config-info ref="config"/>
         </el-tab-pane>
-        <el-tab-pane label="通知">
+        <el-tab-pane label="通知" name="3">
           <notice/>
         </el-tab-pane>
-        <el-tab-pane label="操作">
+        <el-tab-pane label="操作" name="4">
           <operating/>
         </el-tab-pane>
-        <el-tab-pane label="参数">
+        <el-tab-pane label="参数" name="5">
           <process-configuration ref="configuration" Type="node"/>
         </el-tab-pane>
-        <el-tab-pane label="显示设置">
+        <el-tab-pane label="显示设置" name="6">
           <show-info ref="nodeForm" @Reload="ReloadJSON"/>
         </el-tab-pane>
       </el-tabs>
@@ -97,6 +97,7 @@ export default {
     return {
       processConfigDrawer: false, // 策略Drawer
       activeConfigName: '1', // 策略属性Tabs
+      activeNodeName: '1',
       nodeDrawer: false,
       nodeName: '',
       NodeID: null,
@@ -183,12 +184,14 @@ export default {
     openNode (data, node) {
       this.nodeDrawer = true
       this.nodeName = node.nodeName
+      this.activeNodeName = '1'
       console.log(data)
       console.log(node)
       this.$nextTick(() => {
         this.$refs.nodeForm.init(node) // 显示设置
         this.$refs.configuration.init(node) // 参数
         this.$refs.NodeBasicInfo.init(node) // 基本信息
+        this.$refs.config.init(node) // 配置信息
       })
     }
   }
