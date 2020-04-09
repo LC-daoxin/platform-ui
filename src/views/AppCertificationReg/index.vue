@@ -1,5 +1,5 @@
 <template>
-  <div class="dashboard-editor-container">
+  <div>
     <el-dialog
       :title="dialogTitle"
       :visible.sync="dialogVisible"
@@ -7,24 +7,31 @@
     >
       <dialog-form></dialog-form>
     </el-dialog>
-    <header>
-      <el-button size="mini" type="primary" @click="showDialog('新增')">添加</el-button>
-      <el-button size="mini">刷新</el-button>
-    </header>
-    <main-table :tableData="tableData"></main-table>
-    <el-pagination
-      @size-change="handleSizeChange"
-      @current-change="handleCurrentChange"
-      :current-page="currentPage"
-      :page-sizes="[5, 20, 30, 50]"
-      :page-size="20"
-      layout="total, sizes, prev, pager, next, jumper"
-      :total="pageTotal">
-    </el-pagination>
+    <currency-table-page headerLayout="left">
+      <template slot="header">
+        <el-button size="mini" type="primary" @click="showDialog('新增')">添加</el-button>
+        <el-button size="mini">刷新</el-button>
+      </template>
+      <template slot="main">
+        <main-table :tableData="tableData" @edit="showDialog"></main-table>
+      </template>
+      <template slot="footer">
+        <el-pagination
+          @size-change="handleSizeChange"
+          @current-change="handleCurrentChange"
+          :current-page="currentPage"
+          :page-sizes="[5, 20, 30, 50]"
+          :page-size="20"
+          layout="total, sizes, prev, pager, next, jumper"
+          :total="pageTotal">
+        </el-pagination>
+      </template>
+    </currency-table-page>
   </div>
 </template>
 
 <script>
+import CurrencyTablePage from '@/components/currency-table-page'
 import MainTable from './components/MainTable'
 import DialogForm from './components/DialogForm'
 
@@ -72,14 +79,9 @@ export default {
     }
   },
   components: {
+    CurrencyTablePage,
     MainTable,
     DialogForm
   }
 }
 </script>
-
-<style scoped>
-  main {
-    margin: 10px 0;
-  }
-</style>

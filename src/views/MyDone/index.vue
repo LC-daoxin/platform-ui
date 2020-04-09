@@ -25,7 +25,7 @@
       <search-item label="流程名称">
         <el-select v-model="searchData.flowName" size="mini"></el-select>
       </search-item>
-      <search-item label="申请时间">
+      <search-item label="操作时间">
         <el-date-picker
           type="datetimerange"
           range-separator="至"

@@ -439,7 +439,7 @@ export default {
         },{
           value: 10,
           label: 'Not'
-        }],
+        }]
       },
       value: ''
     }

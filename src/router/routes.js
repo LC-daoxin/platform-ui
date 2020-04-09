@@ -481,7 +481,7 @@ const frameIn = [
           auth: true,
           title: '我的代理'
         },
-        component: () => import('@/views/MyTodo')
+        component: () => import('@/views/MyProxy')
       },
       {
         path: 'my-done',
@@ -490,7 +490,7 @@ const frameIn = [
           auth: true,
           title: '我的已办'
         },
-        component: () => import('@/views/MyTodo')
+        component: () => import('@/views/MyDone')
       },
       {
         path: 'my-request',
@@ -499,7 +499,7 @@ const frameIn = [
           auth: true,
           title: '我的申请'
         },
-        component: () => import('@/views/MyTodo')
+        component: () => import('@/views/MyRequest')
       },
       {
         path: 'my-initiate',

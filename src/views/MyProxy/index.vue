@@ -7,6 +7,9 @@
       <search-item label="申请人">
         <el-input  size="mini"></el-input>
       </search-item>
+      <search-item label="被代理人">
+        <el-input  size="mini"></el-input>
+      </search-item>
       <search-item label="主题">
         <el-input  size="mini"></el-input>
       </search-item>
