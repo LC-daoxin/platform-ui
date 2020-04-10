@@ -29,7 +29,7 @@ export default {
   },
   data () {
     return {
-      tableHeight: window.innerHeight - 177
+      tableHeight: window.innerHeight - 205
     }
   },
   methods: {
@@ -40,7 +40,3 @@ export default {
   }
 }
 </script>
-
-<style>
-
-</style>
