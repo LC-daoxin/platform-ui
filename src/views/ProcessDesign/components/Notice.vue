@@ -25,8 +25,11 @@ export default {
   data () {
     return {
       tableData: [],
-      mailTemplateType: '1'
+      mailTemplateType: '1',
+      loading: false
     }
+  },
+  methods: {
   }
 }
 </script>

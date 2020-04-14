@@ -13,7 +13,7 @@ export default {
   state: {
     // 策略数据
     configDate: defaultConfigDate || {},
-    Info: defaultInfo || {},
+    Info: defaultInfo || {}, // 信息板数据
     refreshStatus: false
   },
   mutations: {
