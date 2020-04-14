@@ -1,5 +1,6 @@
 import request from '@/plugin/axios'
 
+
 export const deleteTemplate = data => {
   return request({
     url: '',

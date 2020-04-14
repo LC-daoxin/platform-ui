@@ -8,22 +8,11 @@
       @selection-change="selectChange"
       border
       stripe>
-      <el-table-column
-        type="selection"
-        align="center"
-        width="40">
-      </el-table-column>
-      <el-table-column
-        fixed
-        align="center"
-        v-for="(item, index) of columns"
-        :key="index"
-        :prop="item.prop"
-        :label="item.label">
-        <template slot-scope="scope">
-          <el-button v-if="item.label === '操作'" type="primary" size="mini" @click="edit('修改', scope.row)">编辑</el-button>
-          <span v-else>{{ scope['row'][item.prop] }}</span>
-        </template>
+      <el-table-column type="selection" align="center" width="40"></el-table-column>
+      <el-table-column fixed align="center" prop="displayName" label="流程分类名称"></el-table-column>
+      <el-table-column fixed align="center" prop="setCode" label="流程分类编码"></el-table-column>
+      <el-table-column fixed align="center" label="操作">
+        <el-button type="primary" size="mini" @click="edit('修改', scope.row)">编辑</el-button>
       </el-table-column>
     </el-table>
   </main>
