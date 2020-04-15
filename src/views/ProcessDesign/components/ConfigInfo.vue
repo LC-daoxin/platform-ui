@@ -12,10 +12,10 @@
       <div class="bar">
         <el-row>
           <el-col :span="24">
-            <el-button class="filter-item btnMini" type="primary" size="mini" icon="el-icon-plus" :loading="addloading1" @click="addRule((PrecedingData.length + 1), 1)">添加一条</el-button>
-            <el-button class="filter-item btnMini" type="primary" size="mini" icon="el-icon-plus" :loading="insertloading1" @click="insertRule(1)">向前插入一条</el-button>
-            <!--<el-button class="filter-item btnMini" type="success" size="mini" icon="el-icon-lock">保存表达式</el-button>-->
-            <el-button class="filter-item btnMini" type="danger" size="mini" icon="el-icon-minus" @click="deleteRule('all', 1)">删除全部</el-button>
+            <el-button class="filter-item" type="primary" size="mini" icon="el-icon-plus" :loading="addloading1" @click="addRule((PrecedingData.length + 1), 1)">添加一条</el-button>
+            <el-button class="filter-item" type="primary" size="mini" icon="el-icon-plus" :loading="insertloading1" @click="insertRule(1)">向前插入一条</el-button>
+            <!--<el-button class="filter-item" type="success" size="mini" icon="el-icon-lock">保存表达式</el-button>-->
+            <el-button class="filter-item" type="danger" size="mini" icon="el-icon-minus" @click="deleteRule('all', 1)">删除全部</el-button>
           </el-col>
         </el-row>
       </div>
@@ -142,10 +142,10 @@
       <div class="bar">
         <el-row>
           <el-col :span="24">
-            <el-button class="filter-item btnMini" type="primary" size="mini" icon="el-icon-plus" :loading="addloading2" @click="addRule((EndingData.length + 1), 2)">添加一条</el-button>
-            <el-button class="filter-item btnMini" type="primary" size="mini" icon="el-icon-plus" :loading="insertloading2" @click="insertRule(2)">向前插入一条</el-button>
-            <!--<el-button class="filter-item btnMini" type="success" size="mini" icon="el-icon-lock">保存表达式</el-button>-->
-            <el-button class="filter-item btnMini" type="danger" size="mini" icon="el-icon-minus" @click="deleteRule('all', 2)">删除全部</el-button>
+            <el-button class="filter-item" type="primary" size="mini" icon="el-icon-plus" :loading="addloading2" @click="addRule((EndingData.length + 1), 2)">添加一条</el-button>
+            <el-button class="filter-item" type="primary" size="mini" icon="el-icon-plus" :loading="insertloading2" @click="insertRule(2)">向前插入一条</el-button>
+            <!--<el-button class="filter-item" type="success" size="mini" icon="el-icon-lock">保存表达式</el-button>-->
+            <el-button class="filter-item" type="danger" size="mini" icon="el-icon-minus" @click="deleteRule('all', 2)">删除全部</el-button>
           </el-col>
         </el-row>
       </div>
@@ -317,9 +317,9 @@
         <div class="bar">
           <el-row>
             <el-col :span="24">
-              <el-button class="filter-item btnMini" type="primary" size="mini" icon="el-icon-plus" @click="addDestinationRule">添加一条</el-button>
-              <el-button class="filter-item btnMini" type="primary" size="mini" icon="el-icon-plus" @click="insertDestinationRule">向前插入一条</el-button>
-              <el-button class="filter-item btnMini" type="danger" size="mini" icon="el-icon-minus" @click="DestinationData = []">删除全部</el-button>
+              <el-button class="filter-item" type="primary" size="mini" icon="el-icon-plus" @click="addDestinationRule">添加一条</el-button>
+              <el-button class="filter-item" type="primary" size="mini" icon="el-icon-plus" @click="insertDestinationRule">向前插入一条</el-button>
+              <el-button class="filter-item" type="danger" size="mini" icon="el-icon-minus" @click="DestinationData = []">删除全部</el-button>
             </el-col>
           </el-row>
         </div>
@@ -446,7 +446,7 @@
         <div class="bar">
           <el-row>
             <el-col :span="24">
-              <el-button class="filter-item btnMini" type="primary" size="mini" icon="el-icon-plus" @click="openApprover">添加审批人</el-button>
+              <el-button class="filter-item" type="primary" size="mini" icon="el-icon-plus" @click="openApprover">添加审批人</el-button>
             </el-col>
           </el-row>
         </div>
@@ -483,9 +483,9 @@
         <div class="footer">
           <el-row>
             <el-col :span="24" class="col">
-              <el-button v-if="!showString" class="filter-item btnMini" type="primary" size="mini" @click="affirmDestination">确认</el-button>
-              <el-button v-else class="filter-item btnMini" type="primary" size="mini" @click="updataDestination">确认</el-button>
-              <el-button class="filter-item btnMini" size="mini" @click="closeDestination" >取消</el-button>
+              <el-button v-if="!showString" class="filter-item" type="primary" size="mini" @click="affirmDestination">确认</el-button>
+              <el-button v-else class="filter-item" type="primary" size="mini" @click="updataDestination">确认</el-button>
+              <el-button class="filter-item" size="mini" @click="closeDestination" >取消</el-button>
             </el-col>
           </el-row>
         </div>

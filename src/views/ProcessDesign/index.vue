@@ -3,7 +3,7 @@
     <header>
       <!--<el-button icon="el-icon-upload" type="success" size="mini" @click="save">保存</el-button>-->
       <el-button icon="el-icon-document-checked" type="warning" size="mini">校验</el-button>
-      <el-button icon="el-icon-setting" type="primary" size="mini" @click="processConfigDrawer = true">策略属性</el-button>
+      <el-button icon="el-icon-setting" type="primary" size="mini" @click="openProcessConfigDrawer">策略属性</el-button>
     </header>
     <main>
       <panel
@@ -15,6 +15,7 @@
     </main>
     <!-- 策略drawer-弹窗 -->
     <process-config-drawer
+      ref="processConfig"
       @showDialog="closeDialog"
       :activeConfigName="activeConfigName"
       :Info="Info"
@@ -54,10 +55,10 @@
           <config-info ref="config"/>
         </el-tab-pane>
         <el-tab-pane label="通知" name="3">
-          <notice ref="notice"/>
+          <notice ref="notice" mailCategory="2"/>
         </el-tab-pane>
         <el-tab-pane label="操作" name="4">
-          <operating ref="operating" mailCategory="2"/>
+          <operating ref="operating"/>
         </el-tab-pane>
         <el-tab-pane label="参数" name="5">
           <process-configuration ref="configuration" Type="node"/>
@@ -194,15 +195,23 @@ export default {
         this.$refs.NodeBasicInfo.init(node) // 基本信息
         this.$refs.config.init(node) // 配置信息
         this.$refs.operating.init(node) // 操作
+        this.$refs.notice.init(node) // 通知 邮件配置
       })
     },
     // 关闭节点Drawer
     closeDrawer (done) {
       this.$refs.NodeBasicInfo.cancel()
       this.$refs.config.closeDestination()
+      this.$refs.operating.closeMail()
       done()
+    },
+    // 打开策略Drawer
+    openProcessConfigDrawer () {
+      this.processConfigDrawer = true
+      this.$nextTick(() => {
+        this.$refs.processConfig.init()
+      })
     }
-
   }
 }
 </script>

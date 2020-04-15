@@ -202,7 +202,7 @@
         <el-tab-pane label="属性" name="1"><attribute ref="attribute" @updateTree="refreshNodeBy(currentNode.parent.key)" :ProcessData="ProcessData"/></el-tab-pane>
         <el-tab-pane label="功能调用" name="2"><process-configuration ref="configuration" Type="process"/></el-tab-pane>
         <el-tab-pane label="流程变量" name="3"><process-variable/></el-tab-pane>
-        <el-tab-pane label="邮件模版" name="4"><notice/></el-tab-pane>
+        <el-tab-pane label="邮件模版" name="4">邮件模版</el-tab-pane>
       </el-tabs>
     </el-drawer>
     <el-drawer
@@ -253,6 +253,7 @@
     </el-dialog>
     <!-- 策略drawer-弹窗 -->
     <process-config-drawer
+      ref="processConfig"
       @updateTree="refreshNodeBy(currentNode.parent.key)"
       @showDialog="closeDialog"
       :activeConfigName="activeConfigName"
@@ -288,7 +289,6 @@
 <script>
 import ProcessConfiguration from '../ProcessDesign/components/ProcessConfiguration'
 import ProcessVariable from '../ProcessDesign/components/ProcessVariable'
-import Notice from '../ProcessDesign/components/Notice'
 import Attribute from './components/Attribute'
 import AddProcess from './components/AddProcess'
 import AddProcessBase from './components/AddProcessBase'
@@ -308,8 +308,7 @@ export default {
     ProcessBaseAttribute,
     AddProcessConfig,
     ProcessReference,
-    ProcessConfigDrawer,
-    Notice
+    ProcessConfigDrawer
   },
   data () {
     return {
@@ -618,7 +617,7 @@ export default {
       this.activeName = type
       this.processDrawer = true
       this.$nextTick(() => {
-        this.$refs.configuration.init(data, data.ProcessID) // 功能调用初始化
+        this.$refs.configuration.init(data) // 功能调用初始化
       })
     },
     // 关闭流程Drawer 回调
@@ -895,6 +894,9 @@ export default {
       this.ProcessConfigData = data
       this.activeConfigName = type
       this.processConfigDrawer = true
+      this.$nextTick(() => {
+        this.$refs.processConfig.init()
+      })
     },
     // 映射出 setConfigDate方法
     ...mapMutations('sysStore/processConfig', [
