@@ -25,18 +25,20 @@ export default {
     headerLayout: String
   },
   computed: {
-      leftLayout () {
-          return this.headerLayout === 'left'
-      }
+    leftLayout () {
+      return this.headerLayout === 'left'
+    }
   }
 }
 </script>
 
-<style lang="scss"scoped>
+<style lang="scss" scoped>
     header {
         display: flex;
         flex-wrap: wrap;
+        align-items: center;
         justify-content: space-between;
+        margin-bottom: 10px;
 
         .header-section {
             display: flex;
@@ -50,6 +52,6 @@ export default {
         justify-content: flex-start;
     }
     main {
-        margin: 10px 0;
+        margin-bottom: 10px;
     }
 </style>

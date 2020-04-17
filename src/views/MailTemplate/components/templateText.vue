@@ -37,37 +37,37 @@
 </template>
 
 <script>
-import DecoupledEditor from "@ckeditor/ckeditor5-build-decoupled-document"
-import templateData from "../templateData/data"
-import { svcCate, svcMethod, svcParam } from "@/api/svc-controller"
+import DecoupledEditor from '@ckeditor/ckeditor5-build-decoupled-document'
+import templateData from '../templateData/data'
+import { svcCate, svcMethod, svcParam } from '@/api/svc-controller'
 
 export default {
-  data() {
+  data () {
     return {
       templateData,
-      templateStyle: "",
-      editorData: "",
+      templateStyle: '',
+      editorData: '',
       editor: DecoupledEditor,
       props: {
-        label: "displayName",
-        children: "zones",
-        isLeaf: "leaf"
+        label: 'displayName',
+        children: 'zones',
+        isLeaf: 'leaf'
       },
       svcParams: [],
-      dragPad: ""
+      dragPad: ''
     }
   },
   methods: {
-    drag(name) {
+    drag (name) {
       this.dragPad = name
     },
-    onDrop() {
+    onDrop () {
       this.insertValue(this.dragPad)
     },
-    dragOver(e) {
+    dragOver (e) {
       e.target.focus()
     },
-    onReady(editor) {
+    onReady (editor) {
       // Insert the toolbar before the editable area.
       editor.ui
         .getEditableElement()
@@ -76,17 +76,17 @@ export default {
           editor.ui.getEditableElement()
         )
     },
-    selectTemplate(index) {
+    selectTemplate (index) {
       this.editorData = this.templateData[index].data
     },
-    insertValue(param) {
+    insertValue (param) {
       const editor = this.$refs.editor.instance
       editor.model.change(writer => {
         const insertPosition = editor.model.document.selection.getFirstPosition()
         writer.insertText(`[$${param}$]`, insertPosition)
       })
     },
-    loadNode(node, resolve) {
+    loadNode (node, resolve) {
       if (node.level === 0) {
         this._svcCate(resolve)
       }
@@ -94,35 +94,35 @@ export default {
         this._svcMethod(resolve, node.data.bizSvcId)
       }
     },
-    _svcCate(resolve) {
+    _svcCate (resolve) {
       svcCate(`all/20/1`).then(res => {
         res = res.data
         const { code, data, msg } = res
-        if (code === "success") {
+        if (code === 'success') {
           resolve(data)
         } else {
           this.$message({
             showClose: true,
             message: msg,
-            type: "error"
+            type: 'error'
           })
         }
       })
     },
-    _svcMethod(resolve, cateId) {
+    _svcMethod (resolve, cateId) {
       svcMethod(`${cateId}/20/1`).then(res => {
         res = res.data
         const { code, data, msg } = res
-        if (code === "success") {
+        if (code === 'success') {
           for (let item of data) {
-            item["leaf"] = true
+            item['leaf'] = true
           }
           resolve(data)
         } else {
           this.$message({
             showClose: true,
             message: msg,
-            type: "error"
+            type: 'error'
           })
         }
       })

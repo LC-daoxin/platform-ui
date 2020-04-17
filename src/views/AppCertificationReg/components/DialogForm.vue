@@ -1,13 +1,13 @@
 <template>
-  <el-form :model="form" :rules="rules" label-width="90px" size="mini">
-    <el-form-item label="应用名称">
-      <el-input size="mini"></el-input>
+  <el-form :model="form" :rules="rules" label-width="95px" ref="form" size="mini">
+    <el-form-item label="应用名称" prop="appName">
+      <el-input size="mini" v-model="form.appName"></el-input>
     </el-form-item>
-    <el-form-item label="应用密钥">
-      <el-input size="mini"></el-input>
+    <el-form-item label="应用密钥" prop="clientSecret">
+      <el-input size="mini" v-model="form.clientSecret"></el-input>
     </el-form-item>
-    <el-form-item label="授权类型">
-      <el-select v-model="form.type" size="mini">
+    <el-form-item label="授权类型" prop="authorizedGrantTypes">
+      <el-select v-model="form.authorizedGrantTypes" size="mini" multiple>
         <el-option
           v-for="(item, index) of authorizationType"
           :key="index"
@@ -16,8 +16,8 @@
         ></el-option>
       </el-select>
     </el-form-item>
-    <el-form-item label="权限范围">
-      <el-select v-model="form.range" size="mini">
+    <el-form-item label="权限范围" prop="scope">
+      <el-select v-model="form.scope" size="mini" multiple>
         <el-option
           v-for="(item, index) of scopeOfAuthority"
           :key="index"
@@ -26,10 +26,15 @@
         ></el-option>
       </el-select>
     </el-form-item>
-    <el-form-item label="重定向地址">
-      <el-input size="mini"></el-input>
+    <el-form-item label="重定向地址" prop="webServerRedirectUri">
+      <el-input size="mini" v-model="form.webServerRedirectUri"></el-input>
     </el-form-item>
     <el-form-item label="自动认证">
+      <el-switch
+        v-model="form.autoapprove"
+        active-color="#13ce66"
+        inactive-color="#ff4949">
+      </el-switch>
     </el-form-item>
   </el-form>
 </template>
@@ -39,10 +44,30 @@ export default {
   data () {
     return {
       form: {
-        type: '',
-        range: ''
+        appName: '',
+        clientSecret: '',
+        authorizedGrantTypes: [],
+        scope: [],
+        webServerRedirectUri: '',
+        autoapprove: false
       },
-      rules: {},
+      rules: {
+        appName: [
+          { required: true, message: '请输入应用名称', trigger: 'blur' }
+        ],
+        clientSecret: [
+          { required: true, message: '应用密钥', trigger: 'blur' }
+        ],
+        authorizedGrantTypes: [
+          { required: true, message: '请选择授权类型', trigger: 'blur' }
+        ],
+        scope: [
+          { required: true, message: '请选择权限范围', trigger: 'blur' }
+        ],
+        webServerRedirectUri: [
+          { required: true, message: '请选输入重定向地址', trigger: 'blur' }
+        ]
+      },
       authorizationType: [
         {
           lable: 'password',
@@ -90,6 +115,9 @@ export default {
 
 <style scoped>
   .el-input {
-    width: 173px;
+    width: 200px;
+  }
+  .el-select {
+    width: 200px;
   }
 </style>

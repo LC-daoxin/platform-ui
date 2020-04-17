@@ -1,7 +1,7 @@
 <template>
   <div class="search-item">
     <p>{{ label }}</p>
-    <div class="container">
+    <div class="container" :style="{width:coWidth}">
       <slot></slot>
     </div>
   </div>
@@ -10,7 +10,8 @@
 <script>
 export default {
   props: {
-    label: String
+    label: String,
+    coWidth: String
   }
 }
 </script>
@@ -18,18 +19,18 @@ export default {
 <style lang="scss" scoped>
   .search-item {
     display: flex;
-      align-items: center;
-      margin: 0 10px 10px 0;
+    align-items: center;
+    margin-right: 10px;
+    padding: 5px 0;
 
-      p {
-        font-size: 12px;
-        white-space: nowrap;
-        margin: 0 10px 0 0;
-      }
+    p {
+      font-size: 12px;
+      white-space: nowrap;
+      margin: 0 10px 0 0;
+    }
 
-      .container
-        .el-input, .el-select {
-          width: 130px;
-        }
+    .container {
+      width: 150px;
+    }
   }
 </style>

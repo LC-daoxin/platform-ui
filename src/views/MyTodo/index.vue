@@ -2,44 +2,57 @@
   <currency-table-page headerLayout="left">
     <template slot="header">
       <search-item label="流水号">
-        <el-input  size="mini"></el-input>
+        <el-input v-model="searchData.applicationNumber" size="mini"></el-input>
       </search-item>
       <search-item label="申请人">
-        <el-input  size="mini"></el-input>
+        <el-input v-model="searchData.applicantName" size="mini"></el-input>
       </search-item>
       <search-item label="主题">
-        <el-input  size="mini"></el-input>
+        <el-input v-model="searchData.applicationSubject" size="mini"></el-input>
       </search-item>
-      <search-item label="SAP单号">
+      <!-- <search-item label="SAP单号">
         <el-input  size="mini"></el-input>
-      </search-item>
+      </search-item> -->
       <search-item label="状态">
-        <el-select v-model="searchData.status" size="mini"></el-select>
+        <el-select v-model="searchData.applicationStatus" size="mini">
+          <el-option
+           v-for="status of statusOptions"
+           :key="status.value"
+           :label="status.label"
+           :value="status.value"
+          ></el-option>
+        </el-select>
       </search-item>
-      <search-item label="流程分组">
+      <!-- <search-item label="流程分组">
         <el-select v-model="searchData.flowGroup" size="mini"></el-select>
       </search-item>
       <search-item label="流程类型">
         <el-select v-model="searchData.flowType" size="mini"></el-select>
-      </search-item>
+      </search-item> -->
       <search-item label="流程名称">
-        <el-select v-model="searchData.flowName" size="mini"></el-select>
+        <el-select v-model="searchData.processName" size="mini"></el-select>
       </search-item>
-      <search-item label="申请时间">
+      <search-item label="操作时间" coWidth="auto">
         <el-date-picker
-          type="datetimerange"
-          range-separator="至"
-          start-placeholder="开始日期"
-          end-placeholder="结束日期"
-          size="small">
+          v-model="searchData.operateStartDate"
+          type="datetime"
+          placeholder="开始日期"
+          size="mini">
+        </el-date-picker>
+        <p style="margin:0 10px;display: inline-block;">至</p>
+        <el-date-picker
+          v-model="searchData.operateEndDate"
+          type="datetime"
+          placeholder="结束日期"
+          size="mini">
         </el-date-picker>
       </search-item>
       <search-item>
-        <el-button type="primary" size="mini" @click="tableList">搜索</el-button>
+        <el-button type="primary" size="mini" @click="getTableData">搜索</el-button>
       </search-item>
     </template>
     <template slot="main">
-      <table-list></table-list>
+      <table-list :tableData="tableData"></table-list>
     </template>
     <template slot="footer">
       <el-pagination
@@ -59,41 +72,64 @@
 import CurrencyTablePage from '@/components/currency-table-page'
 import TableList from './components/TableList'
 import SearchItem from './components/SearchItem'
-import { myRequestList } from '@/api/myPages'
+import statusOptions from '@/assets/options/application-status-options'
 
 export default {
   data () {
     return {
+      statusOptions,
       currentPage: 1,
       pageSize: 20,
-      pageTotal: 100,
+      pageTotal: 0,
+      applicant: '',
+      tableData: [],
       searchData: {
-        status: '',
-        flowGroup: '',
-        flowType: '',
-        flowName: ''
+        applicationNumber: '',
+        applicantName: '',
+        applicationSubject: '',
+        applicationStatus: '',
+        processName: '',
+        operateStartDate: '',
+        operateEndDate: ''
       }
     }
   },
   methods: {
     handleSizeChange (val) {
       this.pageSize = val
-      this.tableList()
+      this.getTableData()
     },
     handleCurrentChange (val) {
       this.currentPage = val
-      this.tableList()
+      this.getTableData()
     },
-    tableList () {
-      this._myRequestList()
-    },
-    _myRequestList () {
-      myRequestList().then(res => {
-        this.getListResult(res)
-      })
+    getTableData () {
+      const data = {
+        pageNum: this.currentPage,
+        pagesize: this.pageSize,
+        userName: this.applicant
+      }
+      Object.assign(data, this.searchData)
+      this.axios_M4.post('/process/pendingTask', data)
+        .then(res => {
+          res = res.data
+          const { code, data, msg, total } = res
+          if (code === 'success') {
+            this.tableData = data
+            this.pageTotal = total
+          } else {
+            this.$message({
+              showClose: true,
+              message: msg,
+              type: 'error'
+            })
+          }
+        })
     }
   },
-  mounted () {},
+  mounted () {
+    // this.getTableData()
+  },
   components: {
     CurrencyTablePage,
     SearchItem,
