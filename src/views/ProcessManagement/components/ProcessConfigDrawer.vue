@@ -24,8 +24,8 @@
 		</el-card>
 		<el-tabs class="drawer-content" v-model="activeName">
 			<el-tab-pane label="属性" name="1"><process-config-attribute ref="ProcessConfigAttribute" @updateTree="updateTree" :ProcessConfigData="ProcessConfigData"/></el-tab-pane>
-			<el-tab-pane label="邮件" name="2"><notice/></el-tab-pane>
-			<el-tab-pane label="用户修改" name="3"><user-modify/></el-tab-pane>
+			<el-tab-pane label="邮件" name="2"><notice ref="notice" mailCategory="1"/></el-tab-pane>
+			<el-tab-pane label="用户修改" name="3"><user-modify ref="user"/></el-tab-pane>
 		</el-tabs>
 	</el-drawer>
 </template>
@@ -63,6 +63,13 @@ export default {
     }
   },
   methods: {
+    // 策略Drawer初始化
+    init () {
+      this.$nextTick(() => {
+        this.$refs.notice.init() // 邮件
+        this.$refs.user.init() // 用户修改
+      })
+    },
     // 关闭策略Drawer
     closeProcessConfigDrawer (done) {
       this.$refs.ProcessConfigAttribute.cancel()

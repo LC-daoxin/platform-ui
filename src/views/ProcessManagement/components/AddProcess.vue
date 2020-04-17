@@ -48,9 +48,9 @@
 			</el-form-item>
 		</el-form>
 		<span slot="footer" class="dialog-footer">
-        <el-button type="primary" @click="addProcess" size="mini">提交</el-button>
-        <el-button @click="handleDialog" size="mini">取消</el-button>
-      </span>
+      <el-button type="primary" @click="addProcess" size="mini">提交</el-button>
+      <el-button @click="handleDialog" size="mini">取消</el-button>
+    </span>
 	</el-dialog>
 </template>
 

@@ -48,16 +48,20 @@ export default {
   data () {
     return {
       tableData: [],
-      tempData: '', // 临时存储
-      tempNode: null
+      tempData: '' // 临时存储
     }
   },
   methods: {
-    init (node = this.tempNode) {
-      this.tempNode = node
-      this.axios_M4.get(`/featureconfig/${this.Type}/${node.nodeId}`)
+    init (data) {
+      let id
+      if (this.Type === 'node') {
+        id = data.nodeId
+      } else if (this.Type === 'process') {
+        id = data.ProcessID
+      }
+      this.axios_M4.get(`/featureconfig/${this.Type}/${id}`)
         .then(res => {
-          console.log(res)
+          console.log('流程功能调用', res)
           let data = res.data
           if (data.code === 'success') {
             let arr = data.data
