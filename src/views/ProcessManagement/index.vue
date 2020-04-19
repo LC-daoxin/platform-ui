@@ -147,14 +147,19 @@
                   <i class="iconfont pl-bianji warning"></i>
                 </el-button>
               </el-tooltip>
-              <el-tooltip class="item" effect="dark" content="审批节点" placement="bottom" :enterable="false">
-                <el-button size="mini" type="text" @click="routerNode(data, node)">
-                  <i class="iconfont pl-changyongtubiao_liuchengguanli"></i>
-                </el-button>
-              </el-tooltip>
               <el-tooltip class="item" effect="dark" content="邮件" placement="bottom" :enterable="false">
                 <el-button size="mini" type="text" @click="openProcessConfigDrawer('2', data)">
                   <i class="iconfont pl-youjian"></i>
+                </el-button>
+              </el-tooltip>
+              <el-tooltip class="item" effect="dark" content="用户修改" placement="bottom" :enterable="false">
+                <el-button size="mini" type="text" @click="openProcessConfigDrawer('3', data)">
+                  <i class="iconfont pl-jiaoseguanli"></i>
+                </el-button>
+              </el-tooltip>
+              <el-tooltip class="item" effect="dark" content="审批节点" placement="bottom" :enterable="false">
+                <el-button size="mini" type="text" @click="routerNode(data, node)">
+                  <i class="iconfont pl-changyongtubiao_liuchengguanli"></i>
                 </el-button>
               </el-tooltip>
               <el-tooltip class="item" effect="dark" content="禁用" placement="bottom" :enterable="false">
@@ -540,8 +545,8 @@ export default {
         this.Info.controlPointDesc = node.label.controlPointDesc
       }
       this.currentNode = node
-      console.log(data)
-      console.log(node)
+      console.log('策略数据', data)
+      console.log('策略tree node数据', node)
     },
     // 动态加载tree
     loadNode (node, resolve) {

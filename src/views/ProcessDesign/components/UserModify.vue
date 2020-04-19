@@ -28,7 +28,10 @@
       </el-table-column>
       <el-table-column label="名称" min-width="110" align="center" :show-overflow-tooltip="true">
         <template slot-scope="scope">
-          <span>{{ scope.row.nodeName }}</span>
+          <template v-if="scope.row.edit">
+            <el-input v-model="scope.row.nodeName" size="mini" />
+          </template>
+          <span v-else>{{ scope.row.nodeName }}</span>
         </template>
       </el-table-column>
       <el-table-column label="类型" min-width="90" align="center" :show-overflow-tooltip="true">
@@ -37,9 +40,11 @@
         </template>
       </el-table-column>
       <el-table-column label="操作" min-width="100" align="center" :show-overflow-tooltip="true">
-        <template>
-          <el-button size="mini" type="primary" icon="el-icon-edit">编辑</el-button>
-          <el-button size="mini" type="danger" icon="el-icon-delete">删除</el-button>
+        <template slot-scope="scope">
+          <el-button v-if="!scope.row.edit" size="mini" type="primary" icon="el-icon-edit" @click="edit(scope.row)">编辑</el-button>
+          <el-button v-if="!scope.row.edit" size="mini" type="danger" icon="el-icon-delete" @click="deleteNode(scope.row)">删除</el-button>
+          <el-button v-if="scope.row.edit" type="success" size="mini" @click="saveEdit(scope.row)">保存</el-button>
+          <el-button v-if="scope.row.edit" type="primary" plain size="mini" @click="cancelEdit(scope.row)">取消</el-button>
         </template>
       </el-table-column>
     </el-table>
@@ -54,7 +59,11 @@ export default {
   data () {
     return {
       tableData: [],
-      nodeName: ''
+      nodeName: '',
+      tempArr: { // 临时存放row 原数据
+        nodeName: '',
+        nodeGroupType: ''
+      }
     }
   },
   computed: {
@@ -82,7 +91,13 @@ export default {
           console.log('用户修改', res.data)
           let data = res.data
           if (data.code === 'success') {
-            this.tableData = data.data // table
+            let addEditData = data.data
+            if (addEditData.length > 0) {
+              addEditData.forEach((row) => {
+                row.edit = false
+              })
+            }
+            this.tableData = addEditData
           }
         })
     },
@@ -104,12 +119,11 @@ export default {
           precedingRuleExpression: null, // 前置表达式
           endRuleExpression: null // 后置表达式
         }
-        console.log(data)
         this.axios_M4.post(`/node/UserModify/`, data).then((res) => {
           if (res.data.code === 'success') {
             this.$message({
               type: 'success',
-              message: '成功新增用户修改节点'
+              message: '新增成功'
             })
             this.nodeName = ''
             this.getNode() // 刷新table
@@ -123,6 +137,74 @@ export default {
           console.log(err)
         })
       }
+    },
+    // 编辑
+    edit (row) {
+      row.edit = true
+      this.tempArr.nodeName = row.nodeName
+      this.tempArr.nodeGroupType = row.nodeGroupType
+    },
+    // 保存编辑
+    saveEdit (row) {
+      let data = {
+        nodeId: row.nodeId,
+        processConfigID: row.processConfigID,
+        nodeActivityID: row.nodeActivityID,
+        nodeName: row.nodeName,
+        nodeOrder: row.nodeOrder,
+        nodeGroupType: row.nodeGroupType,
+        parentNodeID: row.parentNodeID,
+        precedingRuleExpression: row.precedingRuleExpression,
+        endRuleExpression: row.endRuleExpression
+      }
+      this.updateNode(data)
+      row.edit = false
+    },
+    // 取消编辑
+    cancelEdit (row) {
+      row.nodeName = this.tempArr.nodeName
+      row.nodeGroupType = this.tempArr.nodeGroupType
+      row.edit = false
+    },
+    // 调用更新接口 api
+    updateNode (data) {
+      this.axios_M4.put('/node/', data)
+        .then((res) => {
+          if (res.data.code === 'success') {
+            this.getNode() // 列表刷新
+            this.$message({
+              type: 'success',
+              message: res.data.msg
+            })
+          }
+        })
+        .catch((err) => {
+          console.log(err)
+        })
+    },
+    // 删除节点
+    deleteNode (row) {
+      this.$confirm(`确定要删除选择的用户修改节点?`, '提示', {
+        confirmButtonText: '确定',
+        cancelButtonText: '取消',
+        type: 'warning'
+      }).then(() => {
+        this.axios_M4.delete(`/node/${row.nodeId}`)
+          .then((res) => {
+            if (res.data.code === 'success') {
+              this.getNode() // 刷新
+              this.$message({
+                type: 'success',
+                message: '已删除'
+              })
+            }
+          })
+      }).catch(() => {
+        this.$message({
+          type: 'info',
+          message: '已取消'
+        })
+      })
     }
   }
 }

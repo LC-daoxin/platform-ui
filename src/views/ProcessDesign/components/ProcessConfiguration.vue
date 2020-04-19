@@ -48,11 +48,13 @@ export default {
   data () {
     return {
       tableData: [],
-      tempData: '' // 临时存储
+      tempData: '', // 临时存储
+      currentData: null
     }
   },
   methods: {
     init (data) {
+      this.currentData = data
       let id
       if (this.Type === 'node') {
         id = data.nodeId
@@ -104,7 +106,7 @@ export default {
               message: res.data.msg
             })
           }
-          this.init() // 刷新列表
+          this.init(this.currentData) // 刷新列表
           row.Edit = false
         })
     },

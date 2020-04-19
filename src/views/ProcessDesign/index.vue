@@ -10,6 +10,7 @@
         :ProcessConfigData="configDate"
         @openNode="openNode"
         @updataNode="init"
+        @NodeJson="saveJson"
         ref="panel"
       />
     </main>
@@ -63,7 +64,10 @@
         <el-tab-pane label="参数" name="5">
           <process-configuration ref="configuration" Type="node"/>
         </el-tab-pane>
-        <el-tab-pane label="显示设置" name="6">
+        <el-tab-pane label="变量设置" name="6">
+          <svc-config @updateSvc="updateSvc" ref="svcConfig"/>
+        </el-tab-pane>
+        <el-tab-pane label="显示设置" name="7">
           <show-info ref="nodeForm" @Reload="ReloadJSON"/>
         </el-tab-pane>
       </el-tabs>
@@ -75,6 +79,7 @@
 <script>
 import axios from 'axios'
 import Operating from './components/Operating'
+import SvcConfig from './components/SvcConfig'
 import Notice from './components/Notice'
 import ProcessConfiguration from './components/ProcessConfiguration'
 import NodeBasicInfo from './components/NodeBasicInfo'
@@ -87,6 +92,7 @@ export default {
   name: 'process-design',
   components: {
     Operating,
+    SvcConfig,
     NodeBasicInfo,
     Notice,
     ConfigInfo,
@@ -104,7 +110,9 @@ export default {
       nodeName: '',
       NodeID: null,
       NodeData: [], // 节点数据
-      NodeJson: null // 节点JSON
+      NodeJson: null, // 节点JSON
+      node: null,
+      JSON: {} // 画布JSON
     }
   },
   mounted () {
@@ -142,7 +150,6 @@ export default {
             me.NodeData = Node.data.data
           }
           if (NodeJSON.data.code === 'success') {
-            console.log(NodeJSON)
             try {
               me.NodeJson = JSON.parse(NodeJSON.data.data)
             } catch (err) {
@@ -182,6 +189,10 @@ export default {
         this.$refs.panel.init(this.NodeData, this.NodeJson) // 画布init
       })
     },
+    // 保存JSON
+    saveJson (data) {
+      this.JSON = data
+    },
     // 打开节点属性
     openNode (data, node) {
       this.nodeDrawer = true
@@ -189,12 +200,14 @@ export default {
       this.activeNodeName = '1'
       console.log('节点data', data)
       console.log('节点node', node)
+      this.node = node
       this.$nextTick(() => {
         this.$refs.nodeForm.init(node) // 显示设置
         this.$refs.configuration.init(node) // 参数
-        this.$refs.NodeBasicInfo.init(node) // 基本信息
+        this.$refs.NodeBasicInfo.init(node, this.JSON) // 基本信息
         this.$refs.config.init(node) // 配置信息
         this.$refs.operating.init(node) // 操作
+        this.$refs.svcConfig.init(3, node) // 变量设置 服务类型 1: Process 2: ProcessBase 3.:Node 4: Email
         this.$refs.notice.init(node) // 通知 邮件配置
       })
     },
@@ -210,6 +223,12 @@ export default {
       this.processConfigDrawer = true
       this.$nextTick(() => {
         this.$refs.processConfig.init()
+      })
+    },
+    // 关联关系 -- 方法替换了，重新刷新节点字段
+    updateSvc () {
+      this.$nextTick(() => {
+        this.$refs.config.getNodeString('all', 3, this.node.nodeId)
       })
     }
   }

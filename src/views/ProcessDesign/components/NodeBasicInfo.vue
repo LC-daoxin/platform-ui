@@ -7,8 +7,11 @@
 		  <el-form-item label="节点类型：" prop="nodeGroupType">
 			  <el-select v-model="NodeFormCopy.nodeGroupType" placeholder="请选择" :disabled="disabled">
 				  <el-option label="单项节点" :value="1"></el-option>
-				  <el-option label="会签节点" :value="2"></el-option>
+				  <el-option label="会签节点" disabled :value="2"></el-option>
 			  </el-select>
+		  </el-form-item>
+		  <el-form-item label="节点顺序：" prop="nodeName">
+			  <el-input class="input" v-model.number="NodeFormCopy.nodeOrder" :disabled="disabled"></el-input>
 		  </el-form-item>
 		  <el-form-item>
 			  <el-button v-if="!editShow" type="primary" size="mini" icon="el-icon-edit" @click="edit">编辑</el-button>
@@ -49,16 +52,22 @@ export default {
         ],
         nodeGroupType: [
           { required: true, message: '请输入节点类型', trigger: 'blur' }
+        ],
+        nodeOrder: [
+          { required: true, message: '请输入节点顺序', trigger: 'blur' }
         ]
       },
       editShow: false,
-      disabled: true // 编辑状态
+      disabled: true, // 编辑状态
+	    JSON: null,
+	    currentOrder: null // 原始排序
     }
   },
   methods: {
     // 初始化
-    init (node) {
-      console.log(node)
+    init (node, json) {
+      this.JSON = json
+	    this.currentOrder = node.nodeOrder
       this.NodeForm.nodeId = node.nodeId // 节点id
       this.NodeForm.processConfigID = node.processConfigID // 策略ID
       this.NodeForm.nodeActivityID = node.nodeActivityID // 活动Id
@@ -79,29 +88,46 @@ export default {
     save () {
       this.$refs['addNodeForm'].validate((valid) => {
         if (valid) {
-          let data = this.NodeFormCopy
-          console.log('更新基本信息', data)
-          this.axios_M4.put(`/node/`, data).then((res) => {
-            console.log(res)
-            if (res.data.code === 'success') {
-              this.$message({
-                type: 'success',
-                message: res.data.msg
-              })
-              this.editShow = false
-              this.disabled = true
-              this.$emit('updatePanel') // 刷新画布
-            } else {
-              this.$message({
-                type: 'error',
-                message: res.data.msg
-              })
-            }
-          }).catch((err) => {
-            console.log(err)
-          })
+          if (this.equalOrder()) {
+            this.$message.error('该节点顺序已存在,不允许重复')
+          } else {
+            let data = this.NodeFormCopy
+            console.log('更新基本信息', data)
+            this.axios_M4.put(`/node/`, data).then((res) => {
+              console.log(res)
+              if (res.data.code === 'success') {
+                this.$message({
+                  type: 'success',
+                  message: res.data.msg
+                })
+                this.editShow = false
+                this.disabled = true
+                this.$emit('updatePanel') // 刷新画布
+              } else {
+                this.$message({
+                  type: 'error',
+                  message: res.data.msg
+                })
+              }
+            }).catch((err) => {
+              console.log(err)
+            })
+          }
         }
       })
+    },
+	  // 判断是否存在相同排序
+    equalOrder () {
+	    let flag = false
+	    if (this.JSON) {
+	      let currentOrder = this.NodeFormCopy.nodeOrder
+        this.JSON.nodeList.forEach(item => {
+          if (currentOrder === item.nodeOrder && currentOrder !== this.currentOrder) {
+            flag = true
+          }
+        })
+	    }
+	    return flag
     },
     // 取消属性
     cancel () {

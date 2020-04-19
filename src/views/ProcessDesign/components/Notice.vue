@@ -22,7 +22,7 @@
               :value="item.value">
             </el-option>
           </el-select>
-          <el-button type="primary" size="mini" @click="addMail">添加</el-button>
+          <el-button type="primary" icon="el-icon-plus" size="mini" @click="addMail">添加</el-button>
         </el-col>
       </el-row>
     </div>
@@ -92,7 +92,7 @@ export default {
         }, {
           value: 3,
           label: '模版3'
-        }],
+        }]
       },
       actionType: 'Approved', // 邮件模板类型
       mailTemplateID: '', // 邮件模板名称ID
@@ -178,7 +178,7 @@ export default {
         mailTemplateID: this.mailTemplateID, // 邮件模板Id
         nodeActionID: this.mailCategory === '3' ? this.nodeAction.nodeActionID : null, // 节点动作Id
         nodeID: this.mailCategory === '2' ? this.node.nodeId : null, // 节点Id
-        processConfigID: this.configDate.processConfigID, // 策略Id
+        processConfigID: this.configDate.processConfigID // 策略Id
       }
       console.log(data)
       this.axios_M4.post(`/mailconfig/`, data).then((res) => {

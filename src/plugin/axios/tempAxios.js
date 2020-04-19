@@ -10,11 +10,11 @@ let configM2 = {
   baseURL: 'http://121.41.118.246:8002'
 }
 let configM3 = {
-  baseURL: 'http://111.231.20.187:8003'
+  baseURL: 'http://121.36.33.18:8003'
 }
 
 let configM4 = {
-  baseURL: 'http://111.231.20.187:8004'
+  baseURL: 'http://121.36.33.18:8004'
 }
 
 const _axios = axios.create(configM1)
