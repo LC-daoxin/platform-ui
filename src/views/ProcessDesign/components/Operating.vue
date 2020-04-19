@@ -26,7 +26,7 @@
       <el-table-column label="操作名称" align="center" min-width="100">
         <template slot-scope="scope">
           <template v-if="scope.row.edit">
-            <el-input v-model="scope.row.actionName" class="edit-input" size="mini" />
+            <el-input v-model="scope.row.actionName" size="mini" />
           </template>
           <span v-else>{{ scope.row.actionName }}</span>
         </template>
@@ -34,24 +34,24 @@
       <el-table-column label="自定义名称" align="center" min-width="100">
         <template slot-scope="scope">
           <template v-if="scope.row.edit">
-            <el-input v-model="scope.row.displayName" class="edit-input" size="mini" />
+            <el-input v-model="scope.row.displayName" size="mini" />
           </template>
           <span v-else>{{ scope.row.displayName }}</span>
         </template>
       </el-table-column>
-      <el-table-column label="启用状态" align="center" min-width="80">
+      <el-table-column label="启用状态" align="center" width="80">
         <template slot-scope="scope">
           <el-tag :type="scope.row.isEnable ? 'success' : 'danger'" size="mini">{{ scope.row.isEnable | Status }}</el-tag>
         </template>
       </el-table-column>
-      <el-table-column label="操作" align="center" width="240">
+      <el-table-column label="操作" align="center" width="250">
         <template slot-scope="scope">
-          <el-button v-if="!scope.row.edit && scope.row.isEnable === 1" type="primary" size="mini" @click="edit(scope.row)">编辑</el-button>
-          <el-button v-if="!scope.row.edit && scope.row.isEnable === 1" type="primary" size="mini" @click="mailEdit(scope.row)">配置邮件</el-button>
-          <el-button v-if="!scope.row.edit && scope.row.isEnable === 1" type="danger" size="mini" @click="stop(scope.row)">禁用</el-button>
+          <el-button v-if="!scope.row.edit && scope.row.isEnable === 1" type="primary" icon="el-icon-edit" size="mini" @click="edit(scope.row)">编辑</el-button>
+          <el-button v-if="!scope.row.edit && scope.row.isEnable === 1" type="primary" icon="el-icon-setting" size="mini" @click="mailEdit(scope.row)">配置邮件</el-button>
+          <el-button v-if="!scope.row.edit && scope.row.isEnable === 1" type="danger" icon="el-icon-remove-outline" size="mini" @click="stop(scope.row)">禁用</el-button>
           <el-button v-if="scope.row.edit && scope.row.isEnable === 1" type="success" size="mini" @click="saveEdit(scope.row)">保存</el-button>
           <el-button v-if="scope.row.edit && scope.row.isEnable === 1" type="primary" plain size="mini" @click="cancelEdit(scope.row)">取消</el-button>
-          <el-button v-if="scope.row.isEnable === 0" type="success" size="mini" @click="start(scope.row)">启用</el-button>
+          <el-button v-if="scope.row.isEnable === 0" type="success" size="mini" icon="el-icon-video-play" @click="start(scope.row)">启用</el-button>
         </template>
       </el-table-column>
     </el-table>

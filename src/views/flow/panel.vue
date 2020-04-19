@@ -78,8 +78,8 @@ export default {
     init (Node, NodeJSON) {
       this.processData = Node
       this.processDataJSON = NodeJSON
-      console.log(Node)
-      console.log(NodeJSON)
+      console.log('节点数据接口获取', Node)
+      console.log('节点JSON接口获取：', NodeJSON)
       let obj = {
         name: Node.controlPointID, // 策略名称
         nodeList: [],
@@ -105,7 +105,7 @@ export default {
           })
           this.processDataJSON = NodeJSON
           this.dataReload(NodeJSON) // 按照画布JSON绘制
-          this.saveJSON(NodeJSON)
+          this.saveJSON(NodeJSON) // 保存新绘制的画布JSON
         } else { // 如果不一致说明画布有问题需要初始化一下
           Node.forEach((item, index) => {
             item.id = this.getUUID()
@@ -128,6 +128,7 @@ export default {
           this.processDataJSON = obj // 初始化后的JSON
           this.$nextTick(() => {
             this.dataReload(this.processDataJSON) // 绘制画布
+            this.saveJSON(NodeJSON) // 保存新绘制的画布JSON
           })
         }
       } else { // 如果没有节点，就绘制空画布
@@ -203,7 +204,25 @@ export default {
             return false
           }
           if (this.hasOtherLine(from, to)) {
-            this.$message.error('不允许节点连多个节点')
+            this.$message.error('单向节点不允许连多个节点')
+            return false
+          }
+          if (this.hasOneLine(from, to)) {
+            this.$message.error('不允许多个节点连同一个节点')
+            return false
+          }
+          let fromData
+          let toData
+          this.data.nodeList.forEach(item => {
+            if (item.id === evt.sourceId) {
+              fromData = item
+            }
+            if (item.id === evt.targetId) {
+              toData = item
+            }
+          })
+          if (fromData.nodeOrder >= toData.nodeOrder) {
+            this.$message.error('节点只能连接节点排序靠后的节点，请自行修改节点排序！')
             return false
           }
           this.$message.success('连接成功')
@@ -250,7 +269,7 @@ export default {
     },
     // 改变节点的位置
     changeNodeSite (data) {
-      for (var i = 0; i < this.data.nodeList.length; i++) {
+      for (let i = 0; i < this.data.nodeList.length; i++) {
         let node = this.data.nodeList[i]
         if (node.id === data.nodeId) {
           node.left = data.left
@@ -278,7 +297,7 @@ export default {
       }
       const node = {
         id: nodeId,
-        nodeName: '审批节点',
+        nodeName: '审批节点' + this.order(),
         type: nodeMenu.type,
         left: left + 'px',
         top: top + 'px',
@@ -289,6 +308,13 @@ export default {
        * 这里可以进行业务判断、是否能够添加该节点
        */
       this.data.nodeList.push(node)
+      // 自动增加 新增节点与末尾排序节点的连线
+      this.data.nodeList.sort((a, b)=>{ return a.nodeOrder - b.nodeOrder })
+      let len = this.data.nodeList.length - 2 // 倒数第二
+      this.data.lineList.push({
+        from: this.data.nodeList[len].id,
+        to: nodeId
+      })
       this.$nextTick(function () {
         this.jsPlumb.makeSource(nodeId, this.jsplumbSourceOptions)
         this.jsPlumb.makeTarget(nodeId, this.jsplumbTargetOptions)
@@ -300,7 +326,8 @@ export default {
     },
     // 保存JSON
     saveJSON (data = this.data) {
-      console.log(data)
+      console.log('保存时节点JSON：', data)
+      this.$emit('NodeJson', data)
       return this.axios_M4.put(`/node/putNodeJsonData/${this.ProcessConfigData.processConfigID}/`, data)
     },
     // 新增审批节点
@@ -308,8 +335,8 @@ export default {
       let data = {
         processConfigID: this.ProcessConfigData.processConfigID, // 策略id
         nodeActivityID: null, // 活动Id
-        nodeName: '审批节点',
-        nodeOrder: 1, // 节点排序
+        nodeName: '审批节点' + this.order(),
+        nodeOrder: this.order(), // 节点排序
         nodeGroupType: 1, // 节点类型 1.单项节点 2.会签节点
         parentNodeID: 0, // 父节点Id
         precedingRuleExpression: null, // 前置表达式
@@ -333,6 +360,18 @@ export default {
       }).catch((err) => {
         console.log(err)
       })
+    },
+    // 节点排序
+    order () {
+      let orderArr = []
+      if (this.processData.length === 0) {
+        return 1
+      } else {
+        this.processData.forEach(item => {
+          orderArr.push(item.nodeOrder)
+        })
+        return Math.max(...orderArr) + 1
+      }
     },
     /**
      * 删除节点
@@ -397,8 +436,8 @@ export default {
     clickNode (nodeId) {},
     // 是否具有该线
     hasLine (from, to) {
-      for (var i = 0; i < this.data.lineList.length; i++) {
-        var line = this.data.lineList[i]
+      for (let i = 0; i < this.data.lineList.length; i++) {
+        let line = this.data.lineList[i]
         if (line.from === from && line.to === to) {
           return true
         }
@@ -407,9 +446,19 @@ export default {
     },
     // 是否一节点连多节点
     hasOtherLine (from, to) {
-      for (var i = 0; i < this.data.lineList.length; i++) {
-        var line = this.data.lineList[i]
+      for (let i = 0; i < this.data.lineList.length; i++) {
+        let line = this.data.lineList[i]
         if (line.from === from) {
+          return true
+        }
+      }
+      return false
+    },
+    // 是否多节点连一多节点
+    hasOneLine (from, to) {
+      for (let i = 0; i < this.data.lineList.length; i++) {
+        let line = this.data.lineList[i]
+        if (line.to === to) {
           return true
         }
       }

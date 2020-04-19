@@ -540,13 +540,7 @@ export default {
           value: 2,
           label: 'Constant'
         }],
-        leftContent: [{ // 左值表达式
-          value: "'申请人AD'",
-          label: '申请人AD'
-        }, {
-          value: "'申请人公司ID'",
-          label: '申请人公司ID'
-        }],
+        leftContent: [], // 左值表达式
         compareFormula: [{ // 比较公式
           value: 1,
           label: '='
@@ -585,13 +579,7 @@ export default {
           value: 2,
           label: 'Constant'
         }],
-        rightContent: [{ // 右值表达式
-          value: "'申请人AD'",
-          label: '申请人AD'
-        }, {
-          value: "'申请人公司ID'",
-          label: '申请人公司ID'
-        }],
+        rightContent: [], // 右值表达式
         rightBracket: [{ // 右括号
           value: 1,
           label: ')'
@@ -664,6 +652,7 @@ export default {
       this.getInfo('NodePrecedingRule', node) // 节点前置规则
       this.getInfo('NodeEndingRule', node) // 节点后置规则
       this.getDestinationData(node) // 审批人规则
+      this.getNodeString('all', 3, this.node.nodeId) // 获取流程（节点）字段
     },
     // 根据节点Id查询规则接口  NodePrecedingRule 节点前置规则  NodeEndingRule 节点后置规则  DestinationRule 选人规则
     getInfo (type, node) {
@@ -701,6 +690,28 @@ export default {
           let data = res.data
           if (data.code === 'success') {
             this.NodeApproverData = data.data // table
+          }
+        })
+    },
+    // 获取流程（节点）字段
+    getNodeString (type = 'all', bizType = 3, businessId) { // bizType业务类型 1: Process 2: ProcessBase 3.:Node 4: Email
+      this.axios_M4.get(`/processParam/fieldList/${type}/${bizType}/${businessId}`)
+        .then(res => {
+          console.log('获取流程（节点）字段', res.data)
+          let data = res.data
+          if (data.code === 'success') {
+            let Arr = data.data
+            let NewArr = []
+            if (Arr.length > 0) {
+              Arr.forEach(item => {
+                NewArr.push({
+                  value: `'${item}'`,
+                  label: item
+                })
+              })
+            }
+            this.options.leftContent = NewArr
+            this.options.rightContent = NewArr
           }
         })
     },
@@ -1135,7 +1146,7 @@ export default {
     // 加载审批人列表
     getApproverList (data) {
       console.log(data)
-      this.ApproverData = [...this.ApproverData,...data]
+      this.ApproverData = [...this.ApproverData, ...data]
       if (data.length > 0) {
         data.forEach(item => {
           this.userIdList.push(item.ID)
